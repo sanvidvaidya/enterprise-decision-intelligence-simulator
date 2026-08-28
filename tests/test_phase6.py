@@ -13,12 +13,18 @@ def test_invalid_foreign_key_is_reported():
 def test_warning_is_distinct_from_error():
     data=frames(); data["product_usage_events.csv"].loc[0,"active_users"] = 999999
     issues=validate_extracts(data); assert any(issue.severity=="WARNING" for issue in issues)
-def test_schema_enforces_foreign_keys(tmp_path):
-    db=tmp_path/"test.db"; create_database(db)
-    with connect(db) as con:
-        try: con.execute("INSERT INTO customers VALUES ('C','Name','Tech','SMB',1,'NA','missing','Active','2026-01-01')")
-        except Exception: pass
-        else: raise AssertionError("foreign key should reject missing manager")
+def test_schema_enforces_foreign_keys():
+    import sqlite3
+    schema = Path("data/schema.sql").read_text(encoding="utf-8")
+    con = sqlite3.connect(":memory:")
+    con.execute("PRAGMA foreign_keys = ON")
+    con.executescript(schema)
+    try:
+        con.execute("INSERT INTO customers VALUES ('C','Name','Tech','SMB',1,'NA','missing','Active','2026-01-01')")
+    except sqlite3.IntegrityError:
+        pass
+    else:
+        raise AssertionError("foreign key should reject missing manager")
 def test_generated_usage_volume(): assert len(build_extracts()["product_usage_events.csv"]) == 180
 def test_risk_score_has_evidence_for_high_risk_customer():
     from decision_intelligence.risk_engine import assess_all_customers
