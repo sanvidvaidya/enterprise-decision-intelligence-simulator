@@ -1,6 +1,6 @@
 # Enterprise Decision Simulator
 
-A local-first renewal command center for a fictional enterprise SaaS company. It integrates CRM, contract, product-usage, and support data to answer:
+Hi I'm Sanvid and I created this local-first renewal command center for a fictional enterprise SaaS company, which integrates CRM, contract, product-usage, and support data to answer:
 
 > Which customers are least likely to renew, what exact evidence explains the risk, and what should the account team do next?
 
