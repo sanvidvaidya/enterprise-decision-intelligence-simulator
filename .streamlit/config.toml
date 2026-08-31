@@ -1,2 +1,13 @@
 [browser]
 gatherUsageStats = false
+
+[server]
+maxUploadSize = 50
+
+[theme]
+base = "light"
+primaryColor = "#175CD3"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F5F8FF"
+textColor = "#101828"
+font = "sans serif"

@@ -1,10 +1,21 @@
 # Limitations
 
-- All data is synthetic and designed for demonstration, not forecasting real customers.
-- The weighted policy model is transparent but not statistically calibrated or causal.
-- Usage data is monthly rather than event-level; the generator intentionally keeps the project small.
-- SQLite is appropriate for a portfolio project but not concurrent enterprise production workloads.
-- The app has no authentication, role-based access, PII handling, or audit retention policy.
-- Warning approval is an explicit command-line governance mechanism, not an enterprise workflow engine.
-- Incremental ingestion currently detects unchanged files and skips no-op reloads. A production system would add CDC, source timestamps, and conflict resolution.
-- Recommendations are operational prompts, not legal, financial, or contractual advice.
+- The bundled demonstration organizations and records are synthetic. Businesses may import authorized data, but the score still does not forecast renewal probability.
+- The score is an expert policy, not a statistically calibrated probability or causal model.
+- Scenario results are conditional rule evaluations, not predictions of intervention success.
+- High contract value represents business exposure and can raise priority even when behavioral risk is unchanged.
+- Usage is monthly rather than event-level to keep the repository compact.
+- Source files are full snapshots. Ingestion performs file-level incremental upserts, not event-stream CDC.
+- Historical workflow for a customer is removed if a replacement customer snapshot removes that customer ID; an enterprise archive would retain it under a formal retention policy.
+- SQLite is well suited to a portable demonstration, not highly concurrent enterprise workloads.
+- The local app has no authentication, role-based access, encryption key management, automated PII discovery, or multi-tenant isolation.
+- Public Demo is intentionally read-only and disposable. It does not retain visitor-created workflow records when the process is replaced.
+- The onboarding flow supports one active organization per local database. It does not create independent tenant workspaces.
+- Import registration history is retained, but prior operational snapshots are not archived automatically. Restoring an earlier dataset requires a governed reupload or a separately managed database backup.
+- Worldwide synthetic demonstration access is supported through Public Demo. Worldwide shared use of real business data is not included and requires HTTPS, authenticated identities, role enforcement, tenant isolation, a production database, encrypted backups, monitoring, retention controls, and incident response.
+- HTML and CSV exports are intentionally portable; there is no scheduled distribution or approval workflow.
+- Recommendations support human judgment and are not legal, financial, or contractual advice.
+- Policy replay measures mechanical effects on the active portfolio; it does not establish that the proposed policy is fair, calibrated, or causally valid.
+- Maker-checker governance uses entered identities rather than authenticated users in this local demonstration.
+- Timeline factor differences explain what changed in stored calculations, not why customer behavior changed causally.
+- Capacity planning uses a deterministic greedy heuristic and estimated effort/cost; it does not guarantee a globally optimal allocation or predicted risk reduction.

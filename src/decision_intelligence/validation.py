@@ -15,6 +15,13 @@ SOURCE_SPECS = {
     "support_tickets.csv": {"table": "support_tickets", "id": "ticket_id", "required": ["ticket_id", "customer_id", "opened_at", "resolved_at", "priority", "ticket_status", "ticket_category", "csat_score", "ticket_summary", "source_system"]},
 }
 
+REQUIRED_NONEMPTY_SOURCES = {
+    "account_managers.csv",
+    "customers.csv",
+    "contracts.csv",
+    "product_usage_events.csv",
+}
+
 
 @dataclass(frozen=True)
 class ValidationIssue:
@@ -43,6 +50,17 @@ def _validate_required_and_ids(filename: str, frame: pd.DataFrame, issues: list[
         _issue(issues, filename, None, None, column, "required_column", f"Required column '{column}' is missing.")
     if missing:
         return
+    if frame.empty and filename in REQUIRED_NONEMPTY_SOURCES:
+        _issue(
+            issues,
+            filename,
+            None,
+            None,
+            None,
+            "source_rows",
+            "Source file must contain at least one business record.",
+        )
+        return
     identifier = spec["id"]
     for index, value in frame.loc[~_nonempty(frame[identifier]), identifier].items():
         _issue(issues, filename, index + 2, None, identifier, "required_value", "Primary identifier must not be blank.", value)
@@ -58,9 +76,9 @@ def _validate_required_and_ids(filename: str, frame: pd.DataFrame, issues: list[
 
 
 def _validate_numeric(filename: str, frame: pd.DataFrame, column: str, minimum: float, maximum: float | None, issues: list[ValidationIssue]) -> None:
-    if column not in frame:
-        return
     identifier = SOURCE_SPECS[filename]["id"]
+    if column not in frame or identifier not in frame:
+        return
     values = pd.to_numeric(frame[column], errors="coerce")
     invalid = (_nonempty(frame[column]) & values.isna()) | (values < minimum)
     if maximum is not None:
@@ -71,6 +89,8 @@ def _validate_numeric(filename: str, frame: pd.DataFrame, column: str, minimum: 
 
 def _validate_dates(filename: str, frame: pd.DataFrame, columns: list[str], issues: list[ValidationIssue]) -> None:
     identifier = SOURCE_SPECS[filename]["id"]
+    if identifier not in frame:
+        return
     for column in columns:
         if column not in frame:
             continue
@@ -80,9 +100,9 @@ def _validate_dates(filename: str, frame: pd.DataFrame, columns: list[str], issu
 
 
 def _validate_allowed(filename: str, frame: pd.DataFrame, column: str, allowed: set[str], issues: list[ValidationIssue]) -> None:
-    if column not in frame:
-        return
     identifier = SOURCE_SPECS[filename]["id"]
+    if column not in frame or identifier not in frame:
+        return
     invalid = ~frame[column].isin(allowed)
     for index, value in frame.loc[invalid, column].items():
         _issue(issues, filename, index + 2, str(frame.at[index, identifier]), column, "allowed_value", f"Value must be one of: {', '.join(sorted(allowed))}.", value)
@@ -119,17 +139,51 @@ def validate_extracts(extracts: dict[str, pd.DataFrame]) -> list[ValidationIssue
         if filename in extracts:
             _validate_allowed(filename, extracts[filename], column, allowed, issues)
 
-    if "account_managers.csv" in extracts and "customers.csv" in extracts:
+    if (
+        "account_managers.csv" in extracts
+        and "customers.csv" in extracts
+        and {"account_manager_id"}.issubset(extracts["account_managers.csv"].columns)
+        and {"account_manager_id", "customer_id"}.issubset(extracts["customers.csv"].columns)
+    ):
         manager_ids = set(extracts["account_managers.csv"]["account_manager_id"])
         for index, value in extracts["customers.csv"].loc[~extracts["customers.csv"]["account_manager_id"].isin(manager_ids), "account_manager_id"].items():
             _issue(issues, "customers.csv", index + 2, str(extracts["customers.csv"].at[index, "customer_id"]), "account_manager_id", "foreign_key", "Account manager does not exist in account_managers.csv.", value)
-    if "customers.csv" in extracts:
+    if "customers.csv" in extracts and "customer_id" in extracts["customers.csv"].columns:
         customer_ids = set(extracts["customers.csv"]["customer_id"])
         for filename in ("contracts.csv", "product_usage_events.csv", "support_tickets.csv"):
-            if filename in extracts:
+            required = {"customer_id", SOURCE_SPECS[filename]["id"]}
+            if filename in extracts and required.issubset(extracts[filename].columns):
                 for index, value in extracts[filename].loc[~extracts[filename]["customer_id"].isin(customer_ids), "customer_id"].items():
                     _issue(issues, filename, index + 2, str(extracts[filename].at[index, SOURCE_SPECS[filename]["id"]]), "customer_id", "foreign_key", "Customer does not exist in customers.csv.", value)
-    if "product_usage_events.csv" in extracts:
+        coverage_rules = [
+            ("contracts.csv", 1, "Every customer must have at least one contract record."),
+            (
+                "product_usage_events.csv",
+                2,
+                "Every customer must have at least two usage observations for trend scoring.",
+            ),
+        ]
+        for filename, minimum_rows, message in coverage_rules:
+            if filename in extracts and "customer_id" in extracts[filename].columns:
+                counts = extracts[filename]["customer_id"].value_counts()
+                for customer_id in sorted(customer_ids):
+                    if counts.get(customer_id, 0) < minimum_rows:
+                        _issue(
+                            issues,
+                            filename,
+                            None,
+                            str(customer_id),
+                            "customer_id",
+                            "customer_coverage",
+                            message,
+                            customer_id,
+                        )
+    if (
+        "product_usage_events.csv" in extracts
+        and {"usage_event_id", "active_users", "seats_purchased"}.issubset(
+            extracts["product_usage_events.csv"].columns
+        )
+    ):
         frame = extracts["product_usage_events.csv"]
         mask = pd.to_numeric(frame["active_users"], errors="coerce") > pd.to_numeric(frame["seats_purchased"], errors="coerce")
         for index, row in frame.loc[mask].iterrows():

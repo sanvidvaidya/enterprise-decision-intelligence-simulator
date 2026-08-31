@@ -59,13 +59,51 @@ def _prepare_for_load(frame: pd.DataFrame) -> pd.DataFrame:
     return prepared
 
 
-def _load_extract(connection, filename: str, frame: pd.DataFrame) -> None:
+def _upsert_extract(connection, filename: str, frame: pd.DataFrame) -> None:
+    """Insert new records and update existing records for one changed source."""
+
     table_name = SOURCE_SPECS[filename]["table"]
-    prepared = _prepare_for_load(frame).where(pd.notna(frame), None)
+    identifier = SOURCE_SPECS[filename]["id"]
+    prepared = _prepare_for_load(frame)
+    prepared = prepared.where(pd.notna(prepared), None)
     columns = list(prepared.columns)
     placeholders = ", ".join("?" for _ in columns)
-    statement = f"INSERT INTO {table_name} ({', '.join(columns)}) VALUES ({placeholders})"
+    updates = ", ".join(f"{column} = excluded.{column}" for column in columns if column != identifier)
+    statement = (
+        f"INSERT INTO {table_name} ({', '.join(columns)}) VALUES ({placeholders}) "
+        f"ON CONFLICT({identifier}) DO UPDATE SET {updates}"
+    )
     connection.executemany(statement, prepared.itertuples(index=False, name=None))
+
+
+def _delete_records_missing_from_snapshot(connection, filename: str, frame: pd.DataFrame) -> None:
+    """Remove stale rows because each CSV represents a complete source snapshot."""
+
+    table_name = SOURCE_SPECS[filename]["table"]
+    identifier = SOURCE_SPECS[filename]["id"]
+    record_ids = frame[identifier].tolist()
+    if not record_ids:
+        connection.execute(f"DELETE FROM {table_name}")
+        return
+    placeholders = ", ".join("?" for _ in record_ids)
+    connection.execute(
+        f"DELETE FROM {table_name} WHERE {identifier} NOT IN ({placeholders})",
+        record_ids,
+    )
+
+
+def _remove_workflow_for_deleted_customers(connection, customers: pd.DataFrame) -> None:
+    """Keep workflow history for retained IDs and safely remove orphan-bound rows."""
+
+    customer_ids = customers["customer_id"].tolist()
+    placeholders = ", ".join("?" for _ in customer_ids)
+    predicate = f"customer_id NOT IN ({placeholders})" if customer_ids else "1 = 1"
+    parameters = customer_ids if customer_ids else []
+    connection.execute(f"DELETE FROM capacity_plan_items WHERE {predicate}", parameters)
+    connection.execute(f"DELETE FROM decision_events WHERE {predicate}", parameters)
+    connection.execute(f"DELETE FROM account_actions WHERE {predicate}", parameters)
+    connection.execute(f"DELETE FROM scenario_runs WHERE {predicate}", parameters)
+    connection.execute(f"DELETE FROM risk_assessments WHERE {predicate}", parameters)
 
 
 def ingest(source_directory: Path = DEFAULT_SOURCE_DIR, database_path: Path = DEFAULT_DATABASE_PATH, approve_warnings: bool = False, approved_by: str | None = None) -> dict[str, object]:
@@ -96,18 +134,22 @@ def ingest(source_directory: Path = DEFAULT_SOURCE_DIR, database_path: Path = DE
             previous_rows = connection.execute("""SELECT source_file, sha256 FROM source_file_manifest
                 WHERE ingestion_run_id = (SELECT ingestion_run_id FROM ingestion_runs WHERE run_status = 'COMPLETED' ORDER BY started_at DESC LIMIT 1)""").fetchall()
             previous = {row["source_file"]: row["sha256"] for row in previous_rows}
-            unchanged = previous and all(previous.get(name) == digest for name, digest in checksums.items())
+            changed_files = [name for name in LOAD_ORDER if previous.get(name) != checksums[name]]
+            unchanged = bool(previous) and not changed_files
             connection.executemany(
                 "INSERT INTO source_file_manifest (ingestion_run_id, source_file, sha256, row_count) VALUES (?, ?, ?, ?)",
                 [(run_id, name, checksums[name], len(frame)) for name, frame in extracts.items()],
             )
             if warnings:
+                _record_issues(connection, run_id, warnings)
                 connection.execute("INSERT INTO data_quality_warning_approvals (ingestion_run_id, approved_by, approved_at) VALUES (?, ?, ?)", (run_id, approved_by or "command-line approval", utc_timestamp()))
             if not unchanged:
-                for filename in reversed(LOAD_ORDER):
-                    connection.execute(f"DELETE FROM {SOURCE_SPECS[filename]['table']}")
-                for filename in LOAD_ORDER:
-                    _load_extract(connection, filename, extracts[filename])
+                if "customers.csv" in changed_files:
+                    _remove_workflow_for_deleted_customers(connection, extracts["customers.csv"])
+                for filename in changed_files:
+                    _upsert_extract(connection, filename, extracts[filename])
+                for filename in reversed(changed_files):
+                    _delete_records_missing_from_snapshot(connection, filename, extracts[filename])
         except Exception:
             connection.execute(
                 "UPDATE ingestion_runs SET completed_at = ?, run_status = 'FAILED_LOAD' WHERE ingestion_run_id = ?",
@@ -117,9 +159,10 @@ def ingest(source_directory: Path = DEFAULT_SOURCE_DIR, database_path: Path = DE
 
         connection.execute(
             "UPDATE ingestion_runs SET completed_at = ?, run_status = 'COMPLETED', records_loaded = ? WHERE ingestion_run_id = ?",
-            (utc_timestamp(), 0 if unchanged else received, run_id),
-        )
-    return {"run_id": run_id, "status": "SKIPPED_UNCHANGED" if unchanged else "COMPLETED", "issues": 0, "loaded": 0 if unchanged else received}
+            (utc_timestamp(), 0 if unchanged else sum(len(extracts[name]) for name in changed_files), run_id),
+            )
+    loaded = 0 if unchanged else sum(len(extracts[name]) for name in changed_files)
+    return {"run_id": run_id, "status": "SKIPPED_UNCHANGED" if unchanged else "COMPLETED", "issues": len(warnings), "loaded": loaded, "changed_files": changed_files}
 
 
 def main() -> None:

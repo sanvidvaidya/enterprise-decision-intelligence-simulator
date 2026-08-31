@@ -1,46 +1,1115 @@
-"""Streamlit decision-support dashboard."""
-from __future__ import annotations
-import streamlit as st
-import pandas as pd
-from decision_intelligence.database import connect
-from decision_intelligence.risk_engine import assess_customer
+"""Streamlit command center for explainable renewal decisions."""
 
-st.set_page_config(page_title="Renewal Intelligence", page_icon="📈", layout="wide")
-st.title("Enterprise Renewal Decision Intelligence")
-st.caption("Transparent, local decision support powered by deterministic business rules.")
-with connect() as con:
-    customers = pd.read_sql_query("SELECT customer_id, customer_name FROM customers ORDER BY customer_name", con)
-if customers.empty:
-    st.error("No integrated data found. Run the data generator and ingestion pipeline first.")
+from __future__ import annotations
+
+import json
+import tempfile
+from dataclasses import asdict
+from datetime import date, timedelta
+from html import escape
+from pathlib import Path
+
+import pandas as pd
+import streamlit as st
+
+from decision_intelligence.database import DEFAULT_DATABASE_PATH, connect, create_database
+from decision_intelligence.deployment import (
+    deployment_mode,
+    initialize_public_demo_database,
+    require_private_mode,
+)
+from decision_intelligence.ingestion import ingest
+from decision_intelligence.onboarding import (
+    MAX_SOURCE_FILE_BYTES,
+    active_business_dataset,
+    data_dictionary,
+    list_business_datasets,
+    profile_extracts,
+    register_business_dataset,
+    template_bundle,
+)
+from decision_intelligence.planner import list_capacity_plans, plan_interventions, save_capacity_plan
+from decision_intelligence.policy import (
+    create_policy_draft,
+    decide_policy,
+    ensure_default_policy,
+    get_active_policy,
+    get_policy_parameters,
+    list_policy_versions,
+    policy_editor_rows,
+    preview_policy_impact,
+    validate_policy,
+)
+from decision_intelligence.reports import executive_html, portfolio_csv, portfolio_dataframe
+from decision_intelligence.risk_engine import assess_customer, simulate_customer
+from decision_intelligence.timeline import customer_event_timeline, risk_change_history
+from decision_intelligence.validation import SOURCE_SPECS, validate_extracts
+from decision_intelligence.workflow import (
+    assessment_history,
+    create_action,
+    evidence_records,
+    list_actions,
+    list_decisions,
+    list_scenarios,
+    log_decision,
+    save_scenario,
+    snapshot_portfolio,
+    update_action_status,
+)
+
+
+st.set_page_config(page_title="Enterprise Decision Simulator", page_icon="◈", layout="wide")
+st.markdown(
+    """<style>
+    .block-container {padding-top: 1.8rem; padding-bottom: 3rem;}
+    [data-testid="stMetric"] {border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px;}
+    .eyebrow {font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:#667085; font-weight:700;}
+    .hero {font-size:2.35rem; line-height:1.1; font-weight:760; margin:.3rem 0 .5rem;}
+    .subtle {color:#667085; max-width:850px;}
+    .home-hero {background:linear-gradient(135deg,#101828 0%,#1d2939 56%,#1849a9 100%); color:white; border-radius:22px; padding:3.2rem 3.4rem; margin-bottom:1.2rem; box-shadow:0 18px 50px rgba(16,24,40,.16);}
+    .home-kicker {font-size:.75rem; letter-spacing:.16em; text-transform:uppercase; color:#b2ccff; font-weight:750;}
+    .home-title {font-size:3.35rem; line-height:1.02; letter-spacing:-.035em; font-weight:780; max-width:900px; margin:.7rem 0 1rem;}
+    .home-copy {font-size:1.08rem; line-height:1.65; color:#d0d5dd; max-width:800px;}
+    .trust-pill {display:inline-block; margin-top:1.4rem; margin-right:.5rem; padding:.42rem .72rem; border:1px solid rgba(255,255,255,.22); border-radius:999px; color:#e4e7ec; font-size:.78rem;}
+    .section-kicker {font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:#175cd3; font-weight:750; margin-bottom:.2rem;}
+    .journey-card {border:1px solid #e4e7ec; border-radius:16px; padding:1.15rem 1.15rem .8rem; min-height:165px; background:#fff;}
+    .journey-number {color:#175cd3; font-size:.75rem; font-weight:800; letter-spacing:.08em;}
+    .journey-title {font-size:1.05rem; font-weight:750; margin:.45rem 0; color:#101828;}
+    .journey-copy {font-size:.88rem; line-height:1.5; color:#667085;}
+    .brief-card {border:1px solid #d0d5dd; border-radius:16px; padding:1.3rem; background:#f9fafb;}
+    .brief-name {font-size:1.35rem; font-weight:760; color:#101828;}
+    .lifecycle {text-align:center; border-top:3px solid #84adff; background:#f5f8ff; border-radius:10px; padding:1rem .55rem; min-height:112px;}
+    .lifecycle strong {display:block; color:#1849a9; margin-bottom:.35rem;}
+    @media (max-width: 800px) {.home-hero{padding:2rem 1.5rem}.home-title{font-size:2.35rem}}
+    </style>""",
+    unsafe_allow_html=True,
+)
+
+DEPLOYMENT = deployment_mode()
+
+
+@st.cache_resource(show_spinner="Preparing isolated synthetic demonstration data...")
+def public_demo_database() -> Path:
+    return initialize_public_demo_database()
+
+
+DATABASE_PATH = public_demo_database() if DEPLOYMENT.is_public_demo else DEFAULT_DATABASE_PATH
+create_database(DATABASE_PATH)
+ensure_default_policy(DATABASE_PATH)
+business_profile = active_business_dataset(DATABASE_PATH)
+with connect(DATABASE_PATH) as connection:
+    customers = pd.read_sql_query(
+        """SELECT c.customer_id, c.customer_name, c.segment, c.region,
+                  am.full_name AS account_manager_name
+             FROM customers c JOIN account_managers am USING (account_manager_id)
+            ORDER BY c.customer_name""",
+        connection,
+    )
+
+st.sidebar.markdown("### ◈ Enterprise Decision Simulator")
+page = st.sidebar.radio(
+    "Workspace",
+    [
+        "Home",
+        "Data Onboarding",
+        "Command Center",
+        "Customer 360",
+        "Change Timeline",
+        "Scenario Lab",
+        "Capacity Planner",
+        "Actions & Decisions",
+        "Policy Studio",
+        "Data Health",
+    ],
+    label_visibility="collapsed",
+    key="workspace",
+)
+with st.sidebar.expander("90-second guided demo", expanded=False):
+    st.markdown(
+        """1. Start at **Home** for the executive briefing.
+2. Use **Command Center** to identify high-risk ACV.
+3. Open **Customer 360** and trace every point to its source row.
+4. Explain movement in **Change Timeline** and test an intervention.
+5. Allocate resources in **Capacity Planner**.
+6. Govern rules in **Policy Studio** and verify lineage in **Data Health**."""
+    )
+st.sidebar.caption(business_profile["organization_name"])
+st.sidebar.caption(f"{DEPLOYMENT.label} mode")
+st.sidebar.caption("Local by design · Rules, not guesses · No LLM")
+
+if DEPLOYMENT.is_public_demo:
+    st.info(
+        "Public Demo mode: this instance uses an isolated synthetic dataset. "
+        "Uploads and persistent workflow changes are disabled."
+    )
+else:
+    st.success(
+        "Private Business mode: governed uploads and persistent workflow changes are enabled "
+        "for this local installation."
+    )
+
+if customers.empty and page != "Data Onboarding":
+    st.error(
+        "No integrated data found. Open Data Onboarding to activate business data, "
+        "or run `python -m decision_intelligence.bootstrap` for the synthetic demonstration."
+    )
     st.stop()
-choice = st.selectbox("Select customer", customers["customer_name"].tolist())
-customer_id = customers.loc[customers.customer_name.eq(choice), "customer_id"].iloc[0]
-assessment = assess_customer(customer_id)
-customer, contract = assessment["customer"], assessment["contract"]
-col1,col2,col3 = st.columns(3)
-col1.metric("Renewal risk", assessment["risk_level"])
-col2.metric("Weighted score", f"{assessment['risk_score']} / 100")
-col3.metric("Annual contract value", f"${contract['annual_contract_value']:,.0f}" if contract else "No contract")
-st.subheader("Customer summary")
-st.write(f"**{customer['customer_name']}** · {customer['segment']} · {customer['industry']} · {customer['region']}")
-st.write(f"Account manager: **{customer['account_manager_name']}** ({customer['account_manager_email']})")
-if contract:
-    st.subheader("Contract")
-    st.dataframe(pd.DataFrame([contract]), use_container_width=True, hide_index=True)
-st.subheader("Why this customer has this risk")
-if not assessment["factors"]: st.success("No configured renewal-risk factors are currently triggered.")
-for factor in assessment["factors"]:
-    with st.expander(f"{factor['points']} points — {factor['name']}", expanded=True):
-        st.write(factor["explanation"])
-        st.caption("Source records: " + ", ".join(factor["evidence_record_ids"]))
-        st.info("Recommended action: " + factor["recommended_action"])
-st.subheader("Recommended next actions")
-for action in assessment["recommended_actions"]: st.write("• " + action)
-with connect() as con:
-    usage = pd.read_sql_query("SELECT event_date, active_users, seats_purchased, sessions, feature_adoption_pct FROM product_usage_events WHERE customer_id=? ORDER BY event_date", con, params=(customer_id,))
-    tickets = pd.read_sql_query("SELECT ticket_id, opened_at, resolved_at, priority, ticket_status, ticket_category, csat_score, ticket_summary FROM support_tickets WHERE customer_id=? ORDER BY opened_at DESC", con, params=(customer_id,))
-st.subheader("Product usage trend")
-st.line_chart(usage.set_index("event_date")[["active_users", "seats_purchased"]])
-st.dataframe(usage, use_container_width=True, hide_index=True)
-st.subheader("Support history")
-st.dataframe(tickets, use_container_width=True, hide_index=True)
+
+
+def customer_selector(label: str, key: str) -> tuple[str, str]:
+    names = customers["customer_name"].tolist()
+    selected = st.selectbox(label, names, key=key)
+    customer_id = customers.loc[customers.customer_name.eq(selected), "customer_id"].iloc[0]
+    return customer_id, selected
+
+
+def risk_message(level: str, message: str) -> None:
+    if level == "High":
+        st.error(message)
+    elif level == "Medium":
+        st.warning(message)
+    else:
+        st.success(message)
+
+
+def page_heading(eyebrow: str, title: str, subtitle: str) -> None:
+    st.markdown(f'<div class="eyebrow">{eyebrow}</div><div class="hero">{title}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="subtle">{subtitle}</div>', unsafe_allow_html=True)
+    st.write("")
+
+
+def navigate_to(workspace: str) -> None:
+    """Navigation callback used by homepage calls to action."""
+
+    st.session_state["workspace"] = workspace
+
+
+def navigate_to_customer(customer_name: str) -> None:
+    """Open Customer 360 with the briefing account already selected."""
+
+    st.session_state["customer_360"] = customer_name
+    st.session_state["workspace"] = "Customer 360"
+
+
+if page == "Home":
+    today = date.today()
+    home_portfolio = portfolio_dataframe(today, DATABASE_PATH)
+    home_high = home_portfolio[home_portfolio.risk_level.eq("High")]
+    home_due = home_portfolio[home_portfolio.days_to_renewal.le(90)]
+    top_account = home_portfolio.sort_values(
+        ["risk_score", "annual_contract_value"], ascending=False
+    ).iloc[0]
+    home_actions = pd.DataFrame(list_actions(database_path=DATABASE_PATH))
+    home_overdue = 0
+    if not home_actions.empty:
+        home_overdue = int(
+            ((pd.to_datetime(home_actions.due_date).dt.date < today) & ~home_actions.action_status.eq("Completed")).sum()
+        )
+    active_policy_id, _ = get_active_policy(DATABASE_PATH)
+    policy_versions = list_policy_versions(DATABASE_PATH)
+    active_policy = next(
+        (item for item in policy_versions if item["policy_version_id"] == active_policy_id), None
+    )
+    active_policy_label = f"v{active_policy['version_number']}" if active_policy else "Baseline"
+    with connect(DATABASE_PATH) as connection:
+        latest_run = connection.execute(
+            """SELECT completed_at, run_status, records_loaded FROM ingestion_runs
+                ORDER BY started_at DESC LIMIT 1"""
+        ).fetchone()
+        snapshot_count = connection.execute("SELECT COUNT(*) FROM risk_assessments").fetchone()[0]
+        quality_issue_count = connection.execute("SELECT COUNT(*) FROM data_quality_issues").fetchone()[0]
+
+    st.markdown(
+        """<div class="home-hero">
+        <div class="home-kicker">Enterprise Decision Simulator</div>
+        <div class="home-title">Turn fragmented customer signals into decisions people can defend.</div>
+        <div class="home-copy">Judge renewal exposure, understand the evidence, negotiate intervention scenarios, allocate scarce capacity, and govern the rules, all inside one local, explainable decision system.</div>
+        <span class="trust-pill">No LLM</span><span class="trust-pill">No paid API</span><span class="trust-pill">Source-linked evidence</span><span class="trust-pill">Local SQLite</span>
+        </div>""",
+        unsafe_allow_html=True,
+    )
+    hero_left, hero_data, hero_mid, hero_right = st.columns([1.3, 1, 1, 1])
+    hero_left.button(
+        "Open the Renewal Command Center",
+        type="primary",
+        use_container_width=True,
+        on_click=navigate_to,
+        args=("Command Center",),
+    )
+    hero_data.button(
+        "Onboard business data",
+        use_container_width=True,
+        on_click=navigate_to,
+        args=("Data Onboarding",),
+    )
+    hero_mid.button(
+        "Review highest-risk account",
+        use_container_width=True,
+        on_click=navigate_to_customer,
+        args=(top_account.customer_name,),
+    )
+    hero_right.button(
+        "Plan this week's capacity",
+        use_container_width=True,
+        on_click=navigate_to,
+        args=("Capacity Planner",),
+    )
+
+    st.markdown('<div class="section-kicker">Live portfolio pulse</div>', unsafe_allow_html=True)
+    st.subheader("What needs attention right now")
+    m1, m2, m3, m4, m5 = st.columns(5)
+    m1.metric("Customers monitored", len(home_portfolio))
+    m2.metric("High-risk accounts", len(home_high))
+    m3.metric("High-risk ACV", f"${home_high.annual_contract_value.sum():,.0f}")
+    m4.metric("Renewals ≤90 days", len(home_due))
+    m5.metric("Overdue actions", home_overdue)
+
+    st.markdown('<div class="section-kicker">Executive briefing</div>', unsafe_allow_html=True)
+    briefing, readiness = st.columns([1.8, 1])
+    top_assessment = assess_customer(top_account.customer_id, today, DATABASE_PATH)
+    with briefing:
+        factor_names = ", ".join(factor["name"] for factor in top_assessment["factors"]) or "No factors triggered"
+        st.markdown(
+            f"""<div class="brief-card"><div class="section-kicker">Highest-priority account</div>
+            <div class="brief-name">{escape(str(top_account.customer_name))}</div>
+            <p><strong>{escape(str(top_account.risk_level))} risk · {int(top_account.risk_score)}/100 · ${float(top_account.annual_contract_value):,.0f} ACV</strong></p>
+            <p>{escape(factor_names)}</p>
+            <p><strong>Recommended move:</strong> {escape(str(top_account.next_action))}</p></div>""",
+            unsafe_allow_html=True,
+        )
+        b1, b2 = st.columns(2)
+        b1.button(
+            "Inspect every source record",
+            use_container_width=True,
+            on_click=navigate_to_customer,
+            args=(top_account.customer_name,),
+            key="home_to_customer",
+        )
+        b2.button(
+            "Negotiate a what-if scenario",
+            use_container_width=True,
+            on_click=navigate_to,
+            args=("Scenario Lab",),
+            key="home_to_scenario",
+        )
+    with readiness:
+        st.markdown("#### System readiness")
+        st.write(f"**Active organization:** {business_profile['organization_name']}")
+        st.write(f"**Data classification:** {business_profile['data_classification']}")
+        st.write(f"**Active scoring policy:** {active_policy_label}")
+        st.write(f"**Latest ingestion:** {latest_run['run_status'] if latest_run else 'Not run'}")
+        st.write(f"**Historical assessments:** {snapshot_count:,}")
+        st.write(f"**Recorded quality issues:** {quality_issue_count:,}")
+        st.write("**Source systems integrated:** CRM, contracts, product analytics, support")
+        if latest_run and latest_run["completed_at"]:
+            st.caption("Last ingestion completed " + latest_run["completed_at"])
+
+    st.markdown('<div class="section-kicker">Decision journeys</div>', unsafe_allow_html=True)
+    st.subheader("Move from signal to accountable action")
+    journey_columns = st.columns(4)
+    journeys = [
+        ("01 · JUDGE", "Prioritize exposure", "Rank accounts by evidence-backed risk, renewal urgency, commercial exposure, and accountable next action.", "Command Center", "Open portfolio"),
+        ("02 · UNDERSTAND", "Trace the reason", "Move from score to factor to the exact usage event, ticket, or contract record, and see what changed over time.", "Change Timeline", "Explain change"),
+        ("03 · NEGOTIATE", "Test the intervention", "Change explicit assumptions and compare current versus simulated policy outcomes without touching source data.", "Scenario Lab", "Open Scenario Lab"),
+        ("04 · ALLOCATE", "Commit scarce resources", "Fund the highest-value interventions within hours, budget, escalation, and enablement constraints.", "Capacity Planner", "Build capacity plan"),
+    ]
+    for index, (number, title, copy, destination, button_label) in enumerate(journeys):
+        with journey_columns[index]:
+            st.markdown(
+                f"""<div class="journey-card"><div class="journey-number">{number}</div>
+                <div class="journey-title">{title}</div><div class="journey-copy">{copy}</div></div>""",
+                unsafe_allow_html=True,
+            )
+            st.button(
+                button_label,
+                use_container_width=True,
+                on_click=navigate_to,
+                args=(destination,),
+                key=f"journey_{index}",
+            )
+
+    st.markdown('<div class="section-kicker">Operating model</div>', unsafe_allow_html=True)
+    st.subheader("One governed decision lifecycle")
+    lifecycle = [
+        ("1", "Integrate", "Connect four operational domains"),
+        ("2", "Validate", "Block errors and record provenance"),
+        ("3", "Score", "Apply versioned deterministic policy"),
+        ("4", "Explain", "Trace factors and temporal change"),
+        ("5", "Simulate", "Compare explicit interventions"),
+        ("6", "Act & govern", "Allocate, assign, approve, audit"),
+    ]
+    for column, (number, title, copy) in zip(st.columns(6), lifecycle):
+        column.markdown(
+            f'<div class="lifecycle"><strong>{number} · {title}</strong><span>{copy}</span></div>',
+            unsafe_allow_html=True,
+        )
+
+    trust_data = (
+        "isolated synthetic data and blocked persistent changes"
+        if DEPLOYMENT.is_public_demo
+        else "an authorized local dataset, explicit approvals, and human-owned decisions"
+    )
+    st.info(
+        f"Trust boundary: {trust_data}, deterministic rules, and source-linked evidence. "
+        "This system supports judgment. It does not pretend to replace it."
+    )
+
+elif page == "Data Onboarding":
+    page_heading(
+        "Bring your own business data",
+        "Data Onboarding",
+        "Replace the synthetic demonstration with governed customer, owner, contract, usage, and support data from your organization.",
+    )
+    o1, o2, o3 = st.columns(3)
+    o1.metric("Active organization", business_profile["organization_name"])
+    o2.metric("Classification", business_profile["data_classification"])
+    o3.metric("Required source files", len(SOURCE_SPECS))
+    if DEPLOYMENT.is_public_demo:
+        st.info(
+            "Public boundary: this process uses a temporary synthetic database and cannot open the private business database."
+        )
+        st.warning(
+            "This public instance is a safe onboarding preview. You can download the templates and inspect the data contract, "
+            "but uploads and activation are available only in Private Business mode."
+        )
+    else:
+        st.info(
+            "Privacy boundary: uploads are processed by this local Streamlit process and stored in the local SQLite database. "
+            "Only upload data you are authorized to use, and remove unnecessary personal data before importing."
+        )
+
+    upload_tab, contract_tab, history_tab, access_tab = st.tabs(
+        ["Upload business data", "Data contract", "Import history", "Shared access boundary"]
+    )
+    with upload_tab:
+        intro_left, intro_right = st.columns([1.6, 1])
+        with intro_left:
+            st.markdown("#### Start with the governed templates")
+            st.write(
+                "The bundle contains five blank CSV templates, complete synthetic examples, and preparation instructions. "
+                "Your stable IDs connect the five business domains."
+            )
+        with intro_right:
+            st.download_button(
+                "Download onboarding kit",
+                data=template_bundle(),
+                file_name="enterprise_decision_simulator_onboarding_kit.zip",
+                mime="application/zip",
+                use_container_width=True,
+            )
+
+        organization_name = st.text_input(
+            "Organization or workspace name",
+            placeholder="Enter your organization or workspace name",
+            disabled=not DEPLOYMENT.data_uploads_enabled,
+        )
+        meta1, meta2 = st.columns(2)
+        imported_by = meta1.text_input(
+            "Data steward", disabled=not DEPLOYMENT.data_uploads_enabled
+        )
+        classification = meta2.selectbox(
+            "Data classification",
+            ["Anonymized", "Confidential internal", "Synthetic demo"],
+            disabled=not DEPLOYMENT.data_uploads_enabled,
+        )
+        uploaded = st.file_uploader(
+            "Upload all five CSV source snapshots",
+            type="csv",
+            accept_multiple_files=True,
+            help="Required filenames: " + ", ".join(SOURCE_SPECS),
+            key="business_onboarding_upload",
+            disabled=not DEPLOYMENT.data_uploads_enabled,
+        )
+        extracts: dict[str, pd.DataFrame] = {}
+        file_bytes: dict[str, bytes] = {}
+        parse_errors: list[str] = []
+        unknown_files: list[str] = []
+        for upload in uploaded:
+            if upload.name not in SOURCE_SPECS:
+                unknown_files.append(upload.name)
+                continue
+            if upload.name in file_bytes:
+                parse_errors.append(f"{upload.name}: duplicate filename")
+                continue
+            if upload.size > MAX_SOURCE_FILE_BYTES:
+                parse_errors.append(f"{upload.name}: file exceeds the 50 MB local upload limit")
+                continue
+            file_bytes[upload.name] = upload.getvalue()
+            try:
+                upload.seek(0)
+                extracts[upload.name] = pd.read_csv(upload, dtype=str, keep_default_na=False)
+            except Exception as error:
+                parse_errors.append(f"{upload.name}: {error}")
+        if unknown_files:
+            st.warning("Ignored unrecognized files: " + ", ".join(sorted(unknown_files)))
+        for error in parse_errors:
+            st.error("Could not read " + error)
+
+        if uploaded:
+            st.subheader("Upload profile")
+            st.dataframe(pd.DataFrame(profile_extracts(extracts)), use_container_width=True, hide_index=True)
+            validation_issues = validate_extracts(extracts)
+            issue_frame = pd.DataFrame([asdict(issue) for issue in validation_issues])
+            error_count = sum(issue.severity == "ERROR" for issue in validation_issues) + len(parse_errors)
+            warning_count = sum(issue.severity == "WARNING" for issue in validation_issues)
+            if error_count:
+                st.error(f"Import blocked: {error_count} error(s) and {warning_count} warning(s).")
+            elif warning_count:
+                st.warning(f"Validation passed with {warning_count} warning(s) requiring approval.")
+            else:
+                st.success("Validation passed. Structural, domain, numeric, date, uniqueness, and relationship checks succeeded.")
+            if not issue_frame.empty:
+                st.dataframe(issue_frame, use_container_width=True, hide_index=True)
+            with st.expander("Preview uploaded records"):
+                for filename, frame in extracts.items():
+                    st.markdown(f"**{filename}** ({len(frame):,} rows)")
+                    st.dataframe(frame.head(10), use_container_width=True, hide_index=True)
+            approve_warnings = st.checkbox(
+                "I reviewed and approve warning-level exceptions",
+                disabled=warning_count == 0,
+                key="onboarding_warning_approval",
+            )
+            confirm_replace = st.checkbox(
+                "I understand that changed source snapshots update the active local operational dataset",
+                key="onboarding_replace_confirmation",
+            )
+            ready = (
+                len(extracts) == len(SOURCE_SPECS)
+                and error_count == 0
+                and (warning_count == 0 or approve_warnings)
+                and confirm_replace
+                and bool(organization_name.strip())
+                and bool(imported_by.strip())
+                and DEPLOYMENT.data_uploads_enabled
+            )
+            if st.button("Activate validated business dataset", type="primary", disabled=not ready):
+                require_private_mode(DEPLOYMENT, "Business data activation")
+                with tempfile.TemporaryDirectory(prefix="decision-data-import-") as temporary:
+                    temporary_path = Path(temporary)
+                    for filename, content in file_bytes.items():
+                        (temporary_path / filename).write_bytes(content)
+                    result = ingest(
+                        temporary_path,
+                        database_path=DATABASE_PATH,
+                        approve_warnings=approve_warnings,
+                        approved_by=imported_by,
+                    )
+                if result["status"] in {"COMPLETED", "SKIPPED_UNCHANGED"}:
+                    registration_id = register_business_dataset(
+                        organization_name,
+                        imported_by,
+                        classification,
+                        result["run_id"],
+                        DATABASE_PATH,
+                    )
+                    st.success(
+                        f"{organization_name} is now the active local workspace. Registration ID: {registration_id}"
+                    )
+                    st.button(
+                        "Open Home with this dataset",
+                        on_click=navigate_to,
+                        args=("Home",),
+                    )
+                else:
+                    st.error("The governed ingestion did not complete, so the dataset was not activated.")
+
+    with contract_tab:
+        st.markdown("#### Required upload contract")
+        st.write(
+            "All five files are evaluated together because customer, owner, contract, usage, and support relationships must remain consistent."
+        )
+        dictionary = data_dictionary()
+        st.dataframe(dictionary, use_container_width=True, hide_index=True)
+        st.download_button(
+            "Download data dictionary (CSV)",
+            dictionary.to_csv(index=False).encode("utf-8"),
+            file_name="enterprise_decision_simulator_data_dictionary.csv",
+            mime="text/csv",
+        )
+    with history_tab:
+        registrations = pd.DataFrame(list_business_datasets(DATABASE_PATH))
+        if registrations.empty:
+            st.info("No external business dataset has been registered. The synthetic demonstration is active.")
+        else:
+            st.dataframe(registrations, use_container_width=True, hide_index=True)
+    with access_tab:
+        if DEPLOYMENT.is_public_demo:
+            st.success(
+                "This mode is designed for public portfolio access. Its database is synthetic, temporary, and isolated from Private Business data."
+            )
+            st.write(
+                "Public visitors can explore evidence and calculate scenarios, but they cannot upload data or persist snapshots, actions, decisions, plans, scenarios, or policy changes."
+            )
+        else:
+            st.warning(
+                "Do not expose Private Business mode directly to the public internet. This project does not include authentication, authorization, encrypted secrets, tenant isolation, or production concurrency controls."
+            )
+            st.write(
+                "A business can run this privately on an approved laptop or controlled local environment. Worldwide access to real business data requires identity management, HTTPS, backups, monitoring, and a production database."
+            )
+
+elif page == "Command Center":
+    page_heading(
+        "Portfolio workspace",
+        "Renewal Command Center",
+        "A prioritized operating view of revenue exposure, renewal timing, evidence, and accountable next actions.",
+    )
+    as_of = st.date_input("Assessment date", value=date.today(), key="portfolio_as_of")
+    portfolio = portfolio_dataframe(as_of, DATABASE_PATH)
+    action_rows = list_actions(database_path=DATABASE_PATH)
+    actions = pd.DataFrame(action_rows)
+    high = portfolio[portfolio.risk_level.eq("High")]
+    due_soon = portfolio[portfolio.days_to_renewal.le(90)]
+    overdue = 0
+    if not actions.empty:
+        overdue = int(
+            ((pd.to_datetime(actions.due_date).dt.date < as_of) & ~actions.action_status.eq("Completed")).sum()
+        )
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("High-risk customers", len(high), f"of {len(portfolio)}")
+    col2.metric("High-risk ACV", f"${high.annual_contract_value.sum():,.0f}")
+    col3.metric("Renewals in 90 days", len(due_soon))
+    col4.metric("Overdue actions", overdue)
+
+    st.subheader("Priority queue")
+    f1, f2, f3 = st.columns(3)
+    risk_filter = f1.multiselect("Risk level", ["High", "Medium", "Low"], default=["High", "Medium", "Low"])
+    segment_filter = f2.multiselect("Segment", sorted(portfolio.segment.unique()), default=sorted(portfolio.segment.unique()))
+    owner_filter = f3.multiselect("Account manager", sorted(portfolio.account_manager.unique()), default=sorted(portfolio.account_manager.unique()))
+    visible = portfolio[
+        portfolio.risk_level.isin(risk_filter)
+        & portfolio.segment.isin(segment_filter)
+        & portfolio.account_manager.isin(owner_filter)
+    ].sort_values(["risk_score", "annual_contract_value"], ascending=False)
+    st.dataframe(
+        visible.rename(
+            columns={
+                "customer_name": "Customer",
+                "risk_level": "Risk",
+                "risk_score": "Score",
+                "annual_contract_value": "ACV",
+                "renewal_date": "Renewal",
+                "days_to_renewal": "Days",
+                "account_manager": "Owner",
+                "risk_factors": "Triggered evidence",
+                "next_action": "Recommended next action",
+            }
+        )[["Customer", "Risk", "Score", "ACV", "Renewal", "Days", "Owner", "Triggered evidence", "Recommended next action"]],
+        use_container_width=True,
+        hide_index=True,
+        column_config={"ACV": st.column_config.NumberColumn(format="$%.0f"), "Score": st.column_config.ProgressColumn(min_value=0, max_value=100)},
+    )
+
+    left, right = st.columns([1, 2])
+    with left:
+        st.subheader("Risk distribution")
+        distribution = portfolio.risk_level.value_counts().reindex(["High", "Medium", "Low"], fill_value=0)
+        st.bar_chart(distribution)
+    with right:
+        st.subheader("Revenue exposure by segment")
+        segment_risk = high.groupby("segment", as_index=True).annual_contract_value.sum()
+        st.bar_chart(segment_risk)
+
+    d1, d2, d3 = st.columns([1, 1, 1])
+    if d1.button(
+        "Create portfolio snapshot",
+        use_container_width=True,
+        disabled=not DEPLOYMENT.writes_enabled,
+        help="Persistent snapshots are available in Private Business mode.",
+    ):
+        require_private_mode(DEPLOYMENT, "Portfolio snapshot creation")
+        result = snapshot_portfolio(as_of, DATABASE_PATH)
+        st.success(f"Saved {result['customers_assessed']} explainable assessments as of {result['as_of_date']}.")
+    d2.download_button(
+        "Download operating queue (CSV)",
+        data=portfolio_csv(as_of, DATABASE_PATH),
+        file_name=f"renewal_queue_{as_of.isoformat()}.csv",
+        mime="text/csv",
+        use_container_width=True,
+    )
+    d3.download_button(
+        "Download executive brief (HTML)",
+        data=executive_html(as_of, DATABASE_PATH),
+        file_name=f"renewal_brief_{as_of.isoformat()}.html",
+        mime="text/html",
+        use_container_width=True,
+    )
+
+elif page == "Customer 360":
+    page_heading(
+        "Evidence workspace",
+        "Customer 360",
+        "One integrated customer record, one explainable score, and an exact path back to every operational fact.",
+    )
+    customer_id, selected_name = customer_selector("Customer", "customer_360")
+    assessment = assess_customer(customer_id, database_path=DATABASE_PATH)
+    customer, contract = assessment["customer"], assessment["contract"]
+    days = (date.fromisoformat(contract["renewal_date"]) - date.today()).days if contract else None
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Renewal risk", assessment["risk_level"])
+    col2.metric("Weighted score", f"{assessment['risk_score']} / 100")
+    col3.metric("Annual contract value", f"${contract['annual_contract_value']:,.0f}" if contract else "Not available")
+    col4.metric("Days to renewal", days if days is not None else "Not available")
+    risk_message(assessment["risk_level"], f"{selected_name} is {assessment['risk_level'].lower()} risk under the documented policy.")
+
+    summary, contract_tab, usage_tab, support_tab = st.tabs(["Decision context", "Contract", "Usage", "Support"])
+    with summary:
+        st.markdown(
+            f"**{customer['customer_name']}** · {customer['segment']} · {customer['industry']} · {customer['region']}  \n"
+            f"Account manager: **{customer['account_manager_name']}** ({customer['account_manager_email']})"
+        )
+        if assessment["factors"]:
+            waterfall = pd.DataFrame(assessment["factors"])[["name", "points"]].set_index("name")
+            st.subheader("Score contribution")
+            st.bar_chart(waterfall)
+        else:
+            st.success("No configured renewal-risk factors are currently triggered.")
+        st.subheader("Why this score exists")
+        for factor in assessment["factors"]:
+            with st.expander(f"+{factor['points']} · {factor['name']}", expanded=True):
+                st.write(factor["explanation"])
+                st.info("Recommended intervention: " + factor["recommended_action"])
+                records = evidence_records(factor["evidence_record_ids"], DATABASE_PATH)
+                st.caption("Exact source records: " + ", ".join(factor["evidence_record_ids"]))
+                st.dataframe(pd.DataFrame(records), use_container_width=True, hide_index=True)
+        history = pd.DataFrame(assessment_history(customer_id, DATABASE_PATH))
+        if not history.empty:
+            st.subheader("Persisted risk history")
+            st.line_chart(history.set_index("assessed_at")["risk_score"])
+            st.caption("Each point is a stored decision-time assessment, not a reconstruction.")
+    with contract_tab:
+        st.dataframe(pd.DataFrame([contract]) if contract else pd.DataFrame(), use_container_width=True, hide_index=True)
+    with connect(DATABASE_PATH) as connection:
+        usage = pd.read_sql_query(
+            """SELECT usage_event_id, event_date, active_users, seats_purchased, sessions,
+                      feature_adoption_pct, source_system
+                 FROM product_usage_events WHERE customer_id = ? ORDER BY event_date""",
+            connection,
+            params=(customer_id,),
+        )
+        tickets = pd.read_sql_query(
+            """SELECT ticket_id, opened_at, resolved_at, priority, ticket_status,
+                      ticket_category, csat_score, ticket_summary, source_system
+                 FROM support_tickets WHERE customer_id = ? ORDER BY opened_at DESC""",
+            connection,
+            params=(customer_id,),
+        )
+    with usage_tab:
+        if not usage.empty:
+            st.line_chart(usage.set_index("event_date")[["active_users", "seats_purchased"]])
+        st.dataframe(usage, use_container_width=True, hide_index=True)
+    with support_tab:
+        st.dataframe(tickets, use_container_width=True, hide_index=True)
+
+elif page == "Change Timeline":
+    page_heading(
+        "Temporal intelligence",
+        "Risk Change Timeline",
+        "See when an account moved, which factors were added, removed, or reweighted, and which operational or human events surrounded the change.",
+    )
+    customer_id, selected_name = customer_selector("Customer", "timeline_customer")
+    if st.button(
+        "Capture a current portfolio snapshot",
+        disabled=not DEPLOYMENT.writes_enabled,
+        help="Persistent snapshots are available in Private Business mode.",
+    ):
+        require_private_mode(DEPLOYMENT, "Portfolio snapshot creation")
+        captured = snapshot_portfolio(date.today(), DATABASE_PATH)
+        st.success(f"Captured {captured['customers_assessed']} policy-linked assessments.")
+        st.rerun()
+    changes = risk_change_history(customer_id, DATABASE_PATH)
+    if not changes:
+        st.info("No persisted assessments yet. Capture a snapshot to establish the baseline.")
+    else:
+        change_frame = pd.DataFrame(changes)
+        c1, c2, c3 = st.columns(3)
+        latest = changes[-1]
+        c1.metric("Latest score", latest["risk_score"], latest["risk_level"])
+        c2.metric("Stored assessments", len(changes))
+        c3.metric("Latest policy", latest["policy"])
+        st.subheader("Score trajectory")
+        st.line_chart(change_frame.set_index("assessed_at")["risk_score"])
+        st.subheader("Explain every transition")
+        for change in reversed(changes):
+            delta_text = "baseline" if change["score_delta"] is None else f"{change['score_delta']:+d} points"
+            with st.expander(
+                f"{change['as_of_date']} · {change['risk_level']} {change['risk_score']}/100 · {delta_text}",
+                expanded=change is changes[-1],
+            ):
+                st.write(change["change_explanation"])
+                st.caption("Policy: " + change["policy"])
+                if change["evidence_record_ids"]:
+                    st.caption("Evidence involved: " + ", ".join(change["evidence_record_ids"]))
+                    st.dataframe(
+                        pd.DataFrame(evidence_records(change["evidence_record_ids"], DATABASE_PATH)),
+                        use_container_width=True,
+                        hide_index=True,
+                    )
+
+    st.subheader(f"Unified account history · {selected_name}")
+    events = pd.DataFrame(customer_event_timeline(customer_id, DATABASE_PATH))
+    if not events.empty:
+        event_types = sorted(events.event_type.unique())
+        visible_types = st.multiselect("Event types", event_types, default=event_types)
+        st.dataframe(
+            events[events.event_type.isin(visible_types)],
+            use_container_width=True,
+            hide_index=True,
+        )
+    else:
+        st.info("No events are available for this customer.")
+
+elif page == "Scenario Lab":
+    page_heading(
+        "What-if workspace",
+        "Intervention Scenario Lab",
+        "Test explicit business interventions against the same rules. Scenarios never alter source records and are not forecasts.",
+    )
+    customer_id, selected_name = customer_selector("Customer", "scenario_customer")
+    a1, a2, a3 = st.columns(3)
+    recovery = a1.slider("Recover inactive seats", 0, 100, 25, 5, format="%d%%")
+    resolve_critical = a2.checkbox("Resolve all open critical tickets", value=False)
+    extension = a3.slider("Renewal extension", 0, 180, 0, 15, format="%d days")
+    scenario = simulate_customer(
+        customer_id,
+        usage_recovery_pct=recovery,
+        resolve_critical=resolve_critical,
+        renewal_extension_days=extension,
+        database_path=DATABASE_PATH,
+    )
+    baseline, simulated = scenario["baseline"], scenario["simulated"]
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Current score", baseline["risk_score"], baseline["risk_level"])
+    col2.metric("Scenario score", simulated["risk_score"], simulated["risk_level"])
+    col3.metric("Risk reduction", baseline["risk_score"] - simulated["risk_score"], "points")
+    comparison = pd.DataFrame(
+        [
+            {"Factor": factor["name"], "Current points": factor["points"], "Scenario points": 0}
+            for factor in baseline["factors"]
+        ]
+    )
+    for factor in simulated["factors"]:
+        if comparison.empty or factor["name"] not in comparison.Factor.values:
+            comparison.loc[len(comparison)] = [factor["name"], 0, factor["points"]]
+        else:
+            comparison.loc[comparison.Factor.eq(factor["name"]), "Scenario points"] = factor["points"]
+    st.subheader("Rule-by-rule impact")
+    st.dataframe(comparison, use_container_width=True, hide_index=True)
+    st.caption(
+        f"Assumption: activate {recovery}% of currently inactive seats; "
+        f"critical-ticket resolution = {resolve_critical}; renewal extension = {extension} days."
+    )
+    if st.button(
+        "Save this governed scenario",
+        type="primary",
+        disabled=not DEPLOYMENT.writes_enabled,
+        help="The simulation remains interactive. Saving is available in Private Business mode.",
+    ):
+        require_private_mode(DEPLOYMENT, "Scenario persistence")
+        scenario_id = save_scenario(customer_id, scenario, DATABASE_PATH)
+        st.success(f"Scenario saved with audit ID {scenario_id}.")
+    saved = pd.DataFrame(list_scenarios(customer_id, DATABASE_PATH))
+    if not saved.empty:
+        st.subheader(f"Saved scenarios for {selected_name}")
+        st.dataframe(saved, use_container_width=True, hide_index=True)
+
+elif page == "Capacity Planner":
+    page_heading(
+        "Resource allocation",
+        "Capacity-Aware Intervention Planner",
+        "Allocate limited hours, budget, escalation slots, and enablement capacity to the highest-value evidence-backed interventions.",
+    )
+    as_of = st.date_input("Planning date", value=date.today(), key="planner_as_of")
+    p1, p2, p3, p4 = st.columns(4)
+    available_hours = p1.number_input("Team hours", min_value=0.0, value=40.0, step=4.0)
+    available_budget = p2.number_input("Intervention budget", min_value=0.0, value=5_000.0, step=250.0)
+    support_slots = p3.number_input("Support escalation slots", min_value=0, value=3, step=1)
+    enablement_slots = p4.number_input("Enablement slots", min_value=0, value=4, step=1)
+    max_per_customer = st.slider("Maximum interventions per customer", 1, 3, 2)
+    plan = plan_interventions(
+        available_hours=available_hours,
+        available_budget=available_budget,
+        support_slots=int(support_slots),
+        enablement_slots=int(enablement_slots),
+        as_of=as_of,
+        max_interventions_per_customer=max_per_customer,
+        database_path=DATABASE_PATH,
+    )
+    summary = plan["summary"]
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Interventions funded", summary["selected_count"])
+    c2.metric("Customers covered", summary["customers_covered"])
+    c3.metric("High-priority ACV covered", f"${summary['acv_covered']:,.0f}")
+    c4.metric("Addressable rule points", summary["addressable_points"])
+    st.caption(
+        f"Allocated {summary['hours_allocated']:,.1f}/{available_hours:,.1f} hours and "
+        f"${summary['budget_allocated']:,.0f}/${available_budget:,.0f}."
+    )
+    items = pd.DataFrame(plan["items"])
+    selected_items = items[items.selected] if not items.empty else items
+    deferred_items = items[~items.selected] if not items.empty else items
+    st.subheader("Funded intervention portfolio")
+    if selected_items.empty:
+        st.warning("No intervention fits the current constraints. Increase at least one constrained resource.")
+    else:
+        display_columns = [
+            "priority_rank", "customer_name", "risk_level", "risk_score",
+            "annual_contract_value", "factor_name", "intervention", "delivery_team",
+            "estimated_hours", "estimated_cost", "addressable_points", "decision_value",
+        ]
+        st.dataframe(selected_items[display_columns], use_container_width=True, hide_index=True)
+        st.download_button(
+            "Download funded plan (CSV)",
+            selected_items.to_csv(index=False).encode("utf-8"),
+            file_name=f"capacity_plan_{as_of.isoformat()}.csv",
+            mime="text/csv",
+        )
+    owner = st.text_input("Plan owner", value="Revenue Operations")
+    if st.button(
+        "Save allocation decision",
+        type="primary",
+        disabled=not DEPLOYMENT.writes_enabled,
+        help="Saving allocation decisions is available in Private Business mode.",
+    ):
+        require_private_mode(DEPLOYMENT, "Capacity plan persistence")
+        try:
+            plan_id = save_capacity_plan(plan, owner, DATABASE_PATH)
+            st.success(f"Capacity plan saved with audit ID {plan_id}.")
+        except ValueError as error:
+            st.error(str(error))
+    with st.expander(f"Deferred interventions ({len(deferred_items)})"):
+        if not deferred_items.empty:
+            st.dataframe(
+                deferred_items[["priority_rank", "customer_name", "intervention", "decision_value", "deferral_reason"]],
+                use_container_width=True,
+                hide_index=True,
+            )
+    with st.expander("How prioritization works"):
+        st.code("decision value = addressable rule points × ACV × renewal urgency ÷ estimated hours ÷ 1,000")
+        st.write(
+            "Candidates are ranked deterministically, then selected in order while enforcing every capacity constraint. "
+            "This is a transparent allocation heuristic. It is not a predicted financial return or a claim of mathematical optimality."
+        )
+    saved_plans = pd.DataFrame(list_capacity_plans(DATABASE_PATH))
+    if not saved_plans.empty:
+        st.subheader("Saved allocation decisions")
+        st.dataframe(saved_plans, use_container_width=True, hide_index=True)
+
+elif page == "Actions & Decisions":
+    page_heading(
+        "Execution workspace",
+        "Actions & Decision Log",
+        "Turn evidence into accountable work, then retain the human judgment that followed.",
+    )
+    customer_id, selected_name = customer_selector("Customer", "action_customer")
+    assessment = assess_customer(customer_id, database_path=DATABASE_PATH)
+    suggested = assessment["recommended_actions"][0] if assessment["recommended_actions"] else "Schedule a routine customer health review."
+    owner = assessment["customer"]["account_manager_name"]
+    evidence = [record_id for factor in assessment["factors"] for record_id in factor["evidence_record_ids"]]
+    with st.form("new_action", clear_on_submit=True):
+        st.subheader("Assign an intervention")
+        action_text = st.text_area("Action", value=suggested)
+        c1, c2, c3 = st.columns(3)
+        action_owner = c1.text_input("Owner", value=owner)
+        priority = c2.selectbox("Priority", ["High", "Critical", "Medium", "Low"])
+        due = c3.date_input("Due date", value=date.today() + timedelta(days=7))
+        submitted = st.form_submit_button(
+            "Create action",
+            type="primary",
+            disabled=not DEPLOYMENT.writes_enabled,
+            help="Creating actions is available in Private Business mode.",
+        )
+        if submitted:
+            require_private_mode(DEPLOYMENT, "Action creation")
+            action_id = create_action(
+                customer_id, action_text, action_owner, priority, due, evidence, DATABASE_PATH
+            )
+            log_decision(
+                customer_id,
+                "Action assigned",
+                action_owner,
+                action_text,
+                action_id,
+                DATABASE_PATH,
+            )
+            st.success(f"Action created: {action_id}")
+
+    customer_actions = pd.DataFrame(list_actions(customer_id, DATABASE_PATH))
+    if not customer_actions.empty:
+        st.subheader("Action register")
+        st.dataframe(customer_actions, use_container_width=True, hide_index=True)
+        open_actions = customer_actions.action_id.tolist()
+        c1, c2, c3 = st.columns([2, 1, 1])
+        action_choice = c1.selectbox("Action to update", open_actions, format_func=lambda value: customer_actions.loc[customer_actions.action_id.eq(value), "action_text"].iloc[0])
+        new_status = c2.selectbox("New status", ["Open", "In Progress", "Blocked", "Completed"])
+        if c3.button(
+            "Update status",
+            use_container_width=True,
+            disabled=not DEPLOYMENT.writes_enabled,
+            help="Updating workflow records is available in Private Business mode.",
+        ):
+            require_private_mode(DEPLOYMENT, "Action status update")
+            update_action_status(action_choice, new_status, DATABASE_PATH)
+            st.success("Action status updated. Refreshing the register…")
+            st.rerun()
+    else:
+        st.info("No actions have been assigned to this customer yet.")
+
+    with st.form("decision_log", clear_on_submit=True):
+        st.subheader("Record a human decision")
+        d1, d2 = st.columns(2)
+        event_type = d1.selectbox("Decision type", ["Customer meeting", "Escalation", "Commercial decision", "Risk accepted", "Executive review"])
+        actor = d2.text_input("Decision maker", value=owner)
+        notes = st.text_area("What was decided, and why?")
+        if st.form_submit_button(
+            "Add to decision log",
+            disabled=not DEPLOYMENT.writes_enabled,
+            help="Decision logging is available in Private Business mode.",
+        ):
+            require_private_mode(DEPLOYMENT, "Decision logging")
+            event_id = log_decision(
+                customer_id, event_type, actor, notes, database_path=DATABASE_PATH
+            )
+            st.success(f"Decision recorded: {event_id}")
+    decisions = pd.DataFrame(list_decisions(customer_id, DATABASE_PATH))
+    if not decisions.empty:
+        st.subheader(f"Decision timeline · {selected_name}")
+        st.dataframe(decisions, use_container_width=True, hide_index=True)
+
+elif page == "Policy Studio":
+    page_heading(
+        "Decision governance",
+        "Renewal-Risk Policy Studio",
+        "Edit business policy outside the code, preview portfolio consequences, and enforce maker-checker approval before activation.",
+    )
+    active_policy_id, active_parameters = get_active_policy(DATABASE_PATH)
+    versions = list_policy_versions(DATABASE_PATH)
+    active_version = next(
+        (version for version in versions if version["policy_version_id"] == active_policy_id), None
+    )
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Active version", f"v{active_version['version_number']}" if active_version else "Baseline")
+    c2.metric("Governed parameters", len(active_parameters))
+    c3.metric("Drafts awaiting review", sum(version["policy_status"] == "Draft" for version in versions))
+    if active_version:
+        st.info(
+            f"Active policy: **{active_version['policy_name']}** · activated "
+            f"{active_version['activated_at']} · rationale: {active_version['rationale']}"
+        )
+
+    st.subheader("Draft proposed parameters")
+    editor_source = pd.DataFrame(policy_editor_rows(active_parameters))[
+        ["parameter_name", "category", "label", "value", "description"]
+    ]
+    edited = st.data_editor(
+        editor_source,
+        use_container_width=True,
+        hide_index=True,
+        disabled=["parameter_name", "category", "label", "description"],
+        column_config={"value": st.column_config.NumberColumn("Proposed value", format="%.2f")},
+        key="policy_editor",
+    )
+    proposed_parameters = {
+        str(row.parameter_name): float(row.value) for row in edited.itertuples(index=False)
+    }
+    policy_errors = validate_policy(proposed_parameters)
+    if policy_errors:
+        for error in policy_errors:
+            st.error(error)
+    else:
+        impact = preview_policy_impact(proposed_parameters, date.today(), DATABASE_PATH)
+        i1, i2, i3 = st.columns(3)
+        i1.metric("Classifications changed", impact["customers_changed"])
+        i2.metric("ACV reclassified", f"${impact['acv_reclassified']:,.0f}")
+        i3.metric("Average score movement", f"{impact['average_score_delta']:+.1f}")
+        impact_frame = pd.DataFrame(impact["rows"])
+        changed_only = st.checkbox("Show only classification changes", value=False)
+        if changed_only:
+            impact_frame = impact_frame[impact_frame.classification_changed]
+        st.dataframe(impact_frame, use_container_width=True, hide_index=True)
+
+    with st.form("save_policy_draft", clear_on_submit=True):
+        st.subheader("Submit policy for review")
+        s1, s2 = st.columns(2)
+        policy_name = s1.text_input("Policy name", value="Renewal policy proposal")
+        created_by = s2.text_input("Policy author")
+        rationale = st.text_area("Business rationale and expected effect")
+        save_draft = st.form_submit_button(
+            "Save draft policy",
+            type="primary",
+            disabled=not DEPLOYMENT.writes_enabled,
+            help="Policy persistence is available in Private Business mode.",
+        )
+        if save_draft:
+            require_private_mode(DEPLOYMENT, "Policy draft persistence")
+            if policy_errors:
+                st.error("Correct the policy validation errors before saving.")
+            else:
+                try:
+                    draft_id = create_policy_draft(
+                        policy_name, proposed_parameters, created_by, rationale, DATABASE_PATH
+                    )
+                    st.success(f"Draft saved for independent review: {draft_id}")
+                except ValueError as error:
+                    st.error(str(error))
+
+    versions = list_policy_versions(DATABASE_PATH)
+    drafts = [version for version in versions if version["policy_status"] == "Draft"]
+    if drafts:
+        with st.form("review_policy"):
+            st.subheader("Independent maker-checker review")
+            draft_id = st.selectbox(
+                "Draft",
+                [version["policy_version_id"] for version in drafts],
+                format_func=lambda value: next(
+                    f"v{version['version_number']} · {version['policy_name']} · by {version['created_by']}"
+                    for version in drafts
+                    if version["policy_version_id"] == value
+                ),
+            )
+            decision = st.radio("Decision", ["Approved", "Rejected"], horizontal=True)
+            reviewer = st.text_input("Independent reviewer")
+            review_notes = st.text_area("Decision notes")
+            if st.form_submit_button(
+                "Record governance decision",
+                disabled=not DEPLOYMENT.writes_enabled,
+                help="Policy approval is available in Private Business mode.",
+            ):
+                require_private_mode(DEPLOYMENT, "Policy approval")
+                try:
+                    decide_policy(draft_id, decision, reviewer, review_notes, DATABASE_PATH)
+                    st.success(f"Policy {decision.lower()}. The active scoring policy is now updated if approved.")
+                    st.rerun()
+                except ValueError as error:
+                    st.error(str(error))
+    st.subheader("Policy version register")
+    st.dataframe(pd.DataFrame(versions), use_container_width=True, hide_index=True)
+
+else:
+    page_heading(
+        "Governance workspace",
+        "Data Health",
+        "Inspect source lineage, quality gates, checksums, warning approvals, and the audit history behind the active business dataset.",
+    )
+    with connect(DATABASE_PATH) as connection:
+        runs = pd.read_sql_query("SELECT * FROM ingestion_runs ORDER BY started_at DESC", connection)
+        issues = pd.read_sql_query("SELECT * FROM data_quality_issues ORDER BY created_at DESC", connection)
+        manifests = pd.read_sql_query("SELECT * FROM source_file_manifest ORDER BY ingestion_run_id, source_file", connection)
+    c1, c2, c3 = st.columns(3)
+    latest_status = runs.iloc[0].run_status if not runs.empty else "Never run"
+    c1.metric("Latest ingestion", latest_status)
+    c2.metric("Recorded quality issues", len(issues))
+    c3.metric("Manifested source files", len(manifests))
+    run_tab, issue_tab, manifest_tab = st.tabs(["Ingestion runs", "Quality issues", "File lineage"])
+    with run_tab:
+        st.dataframe(runs, use_container_width=True, hide_index=True)
+    with issue_tab:
+        st.dataframe(issues, use_container_width=True, hide_index=True)
+    with manifest_tab:
+        st.dataframe(manifests, use_container_width=True, hide_index=True)
+
+st.divider()
+st.caption(
+    f"{DEPLOYMENT.label} · {business_profile['organization_name']} · {business_profile['data_classification']} · "
+    "Deterministic business rules · Source-linked evidence · Local SQLite system of record"
+)

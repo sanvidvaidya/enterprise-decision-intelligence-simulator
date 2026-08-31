@@ -11,20 +11,22 @@ DEFAULT_DATABASE_PATH = PROJECT_ROOT / "data" / "decision_intelligence.db"
 SCHEMA_PATH = PROJECT_ROOT / "data" / "schema.sql"
 
 
-def connect(database_path: Path = DEFAULT_DATABASE_PATH) -> sqlite3.Connection:
+def connect(database_path: str | Path = DEFAULT_DATABASE_PATH) -> sqlite3.Connection:
     """Open a SQLite connection with relational integrity enabled."""
-    connection = sqlite3.connect(database_path)
+    path_text = str(database_path)
+    connection = sqlite3.connect(path_text, uri=path_text.startswith("file:"))
     connection.row_factory = sqlite3.Row
     connection.execute("PRAGMA foreign_keys = ON")
     return connection
 
 
 def create_database(
-    database_path: Path = DEFAULT_DATABASE_PATH,
+    database_path: str | Path = DEFAULT_DATABASE_PATH,
     schema_path: Path = SCHEMA_PATH,
 ) -> None:
     """Create an empty, normalized SQLite database from the versioned schema."""
-    database_path.parent.mkdir(parents=True, exist_ok=True)
+    if not str(database_path).startswith("file:"):
+        Path(database_path).parent.mkdir(parents=True, exist_ok=True)
     schema_sql = schema_path.read_text(encoding="utf-8")
 
     with connect(database_path) as connection:

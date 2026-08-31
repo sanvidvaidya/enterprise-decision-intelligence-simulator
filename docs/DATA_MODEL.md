@@ -1,9 +1,5 @@
 # Data Model
 
-## Purpose
-
-The decision-support system integrates five normalized entities. Each operational record retains its source-system identity, allowing later risk findings to identify the exact customer, usage event, contract, or ticket that supports them.
-
 ## Entity relationship diagram
 
 ```mermaid
@@ -12,78 +8,56 @@ erDiagram
     CUSTOMERS ||--o{ CONTRACTS : signs
     CUSTOMERS ||--o{ PRODUCT_USAGE_EVENTS : generates
     CUSTOMERS ||--o{ SUPPORT_TICKETS : raises
-
-    ACCOUNT_MANAGERS {
-        text account_manager_id PK
-        text full_name
-        text email UK
-        text region
-        boolean active
-    }
-    CUSTOMERS {
-        text customer_id PK
-        text customer_name UK
-        text account_manager_id FK
-        text segment
-        text customer_status
-    }
-    CONTRACTS {
-        text contract_id PK
-        text customer_id FK
-        date renewal_date
-        decimal annual_contract_value
-        text contract_status
-    }
-    PRODUCT_USAGE_EVENTS {
-        text usage_event_id PK
-        text customer_id FK
-        date event_date
-        integer active_users
-        integer seats_purchased
-        decimal feature_adoption_pct
-    }
-    SUPPORT_TICKETS {
-        text ticket_id PK
-        text customer_id FK
-        text priority
-        text ticket_status
-        datetime opened_at
-        datetime resolved_at
-    }
+    CUSTOMERS ||--o{ RISK_ASSESSMENTS : receives
+    RISK_ASSESSMENTS ||--o{ RISK_FACTOR_RESULTS : explains
+    POLICY_VERSIONS ||--o{ POLICY_PARAMETERS : defines
+    POLICY_VERSIONS ||--o{ POLICY_APPROVALS : governs
+    POLICY_VERSIONS ||--o{ ASSESSMENT_POLICY_VERSIONS : applied_to
+    RISK_ASSESSMENTS ||--o| ASSESSMENT_POLICY_VERSIONS : evaluated_under
+    CUSTOMERS ||--o{ SCENARIO_RUNS : explores
+    CUSTOMERS ||--o{ ACCOUNT_ACTIONS : requires
+    CUSTOMERS ||--o{ DECISION_EVENTS : records
+    ACCOUNT_ACTIONS o|--o{ DECISION_EVENTS : relates_to
+    CAPACITY_PLANS ||--o{ CAPACITY_PLAN_ITEMS : allocates
+    CUSTOMERS ||--o{ CAPACITY_PLAN_ITEMS : prioritizes
+    INGESTION_RUNS ||--o{ DATA_QUALITY_ISSUES : records
+    INGESTION_RUNS ||--o{ SOURCE_FILE_MANIFEST : fingerprints
+    INGESTION_RUNS ||--o| DATA_QUALITY_WARNING_APPROVALS : authorizes
+    INGESTION_RUNS ||--o| BUSINESS_DATA_IMPORTS : activates
 ```
 
-## Tables and business meaning
+## Operational layer
 
-| Table | Grain | Purpose |
+| Table | Grain | Business meaning |
 | --- | --- | --- |
-| `account_managers` | One row per employee account owner | Supports accountability, territory analysis, and recommended-action routing. |
-| `customers` | One row per customer organization | Provides the shared enterprise customer key used to integrate all systems. |
-| `contracts` | One row per customer contract | Stores renewal timing, value, and renewal status. |
-| `product_usage_events` | One row per customer per monthly observation | Supplies the time series needed to assess adoption and engagement trends. |
-| `support_tickets` | One row per support request | Captures unresolved work, severity, and service experience. |
+| `account_managers` | One row per account owner | Organizational accountability and territory. |
+| `customers` | One row per company | Shared enterprise key across systems. |
+| `contracts` | One row per customer contract | Renewal timing, commercial value, and terms. |
+| `product_usage_events` | One monthly customer observation | Adoption, engagement, and usage trend. |
+| `support_tickets` | One support request | Service severity, state, experience, and resolution. |
 
-## Integrity and provenance rules
+## Decision layer
 
-- Text IDs are stable, human-readable business keys (for example, `CUS-001` and `TKT-005-01`).
-- Every contract, usage event, and ticket must reference an existing customer.
-- Every customer must reference an existing account manager.
-- Database `CHECK` constraints reject invalid segments, statuses, negative quantities, invalid percentages, and invalid support priorities.
-- A customer can have only one usage observation per event date.
-- `source_system` fields preserve where operational facts originated: `product_analytics` or `support_desk`.
-
-## Synthetic source extracts
-
-The deterministic generator creates these files in `data/raw/`:
-
-| File | Fictional source system | Rows |
+| Table | Grain | Business meaning |
 | --- | --- | --- |
-| `account_managers.csv` | CRM | 5 |
-| `customers.csv` | CRM | 30 |
-| `contracts.csv` | Contract management | 30 |
-| `product_usage_events.csv` | Product analytics | 180 (six months per customer) |
-| `support_tickets.csv` | Support desk | Variable by customer profile |
+| `risk_assessments` | One customer at one decision time | Immutable score, band, and as-of date. |
+| `risk_factor_results` | One triggered rule in an assessment | Points, explanation, evidence IDs, and action. |
+| `scenario_runs` | One saved set of hypothetical assumptions | Baseline and simulated outcome without source mutation. |
+| `account_actions` | One assigned intervention | Owner, priority, due date, status, and linked evidence. |
+| `decision_events` | One human decision or meeting event | Actor, timestamp, rationale, and optional action link. |
+| `capacity_plans` | One saved portfolio allocation | Resource constraints, utilization, owner, policy, and covered ACV. |
+| `capacity_plan_items` | One selected or deferred candidate | Rank, effort, cost, addressable points, evidence, and deferral reason. |
 
-The generator uses a fixed random seed and reference date. Running it again produces the same dataset, which is essential for reproducible demonstrations and test results.
-## Ingestion audit tables
+## Governance layer
 
-`ingestion_runs` records when each integration attempt started and finished, its outcome, its source directory, and received/loaded/rejected counts. `data_quality_issues` stores factor-independent data-quality evidence for failed validation runs. These tables keep quality governance separate from operational customer facts.
+`ingestion_runs` records every integration attempt. `data_quality_issues` retains row-level errors and warnings. `source_file_manifest` stores file SHA-256 and row counts. `data_quality_warning_approvals` records who authorized a warning-level exception. `business_data_imports` registers the organization, steward, classification, counts, and completed ingestion behind the active local workspace. A partial unique index permits only one active business dataset.
+
+`policy_versions` and `policy_parameters` preserve complete business-rule configurations. `policy_approvals` supplies maker-checker evidence. `assessment_policy_versions` identifies the exact policy used by each historical assessment.
+
+## Integrity and provenance
+
+- Stable human-readable IDs such as `CUS-005`, `USE-005-06`, and `TKT-005-01` enable direct evidence lookup.
+- Foreign keys enforce ownership and prevent orphaned contracts, events, tickets, and workflow records.
+- `CHECK` constraints reject invalid statuses, priorities, segments, percentages, and negative quantities.
+- `evidence_record_ids_json` retains the exact operational keys that justified a factor or action.
+- Source facts, derived assessments, hypothetical scenarios, and human decisions live in distinct tables because they represent different kinds of organizational truth.
