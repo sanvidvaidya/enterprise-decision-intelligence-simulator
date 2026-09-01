@@ -66,21 +66,72 @@ st.markdown(
     .eyebrow {font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:#667085; font-weight:700;}
     .hero {font-size:2.35rem; line-height:1.1; font-weight:760; margin:.3rem 0 .5rem;}
     .subtle {color:#667085; max-width:850px;}
-    .home-hero {background:linear-gradient(135deg,#101828 0%,#1d2939 56%,#1849a9 100%); color:white; border-radius:22px; padding:3.2rem 3.4rem; margin-bottom:1.2rem; box-shadow:0 18px 50px rgba(16,24,40,.16);}
-    .home-kicker {font-size:.75rem; letter-spacing:.16em; text-transform:uppercase; color:#b2ccff; font-weight:750;}
-    .home-title {font-size:3.35rem; line-height:1.02; letter-spacing:-.035em; font-weight:780; max-width:900px; margin:.7rem 0 1rem;}
-    .home-copy {font-size:1.08rem; line-height:1.65; color:#d0d5dd; max-width:800px;}
-    .trust-pill {display:inline-block; margin-top:1.4rem; margin-right:.5rem; padding:.42rem .72rem; border:1px solid rgba(255,255,255,.22); border-radius:999px; color:#e4e7ec; font-size:.78rem;}
-    .section-kicker {font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:#175cd3; font-weight:750; margin-bottom:.2rem;}
-    .journey-card {border:1px solid #e4e7ec; border-radius:16px; padding:1.15rem 1.15rem .8rem; min-height:165px; background:#fff;}
-    .journey-number {color:#175cd3; font-size:.75rem; font-weight:800; letter-spacing:.08em;}
-    .journey-title {font-size:1.05rem; font-weight:750; margin:.45rem 0; color:#101828;}
-    .journey-copy {font-size:.88rem; line-height:1.5; color:#667085;}
-    .brief-card {border:1px solid #d0d5dd; border-radius:16px; padding:1.3rem; background:#f9fafb;}
-    .brief-name {font-size:1.35rem; font-weight:760; color:#101828;}
-    .lifecycle {text-align:center; border-top:3px solid #84adff; background:#f5f8ff; border-radius:10px; padding:1rem .55rem; min-height:112px;}
-    .lifecycle strong {display:block; color:#1849a9; margin-bottom:.35rem;}
-    @media (max-width: 800px) {.home-hero{padding:2rem 1.5rem}.home-title{font-size:2.35rem}}
+    .eds-home {color:#13233a; margin-top:.2rem;}
+    .eds-hero {position:relative; overflow:hidden; background:#071629; color:#f8fafc; border:1px solid #152b45; border-radius:8px; padding:1.15rem 1.35rem 1.4rem; margin-bottom:.9rem; box-shadow:0 24px 65px rgba(8,23,43,.18);}
+    .eds-hero:before {content:""; position:absolute; inset:0; pointer-events:none; opacity:.18; background-image:linear-gradient(rgba(121,164,215,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(121,164,215,.16) 1px,transparent 1px); background-size:48px 48px; mask-image:linear-gradient(90deg,transparent 28%,#000 100%);}
+    .eds-masthead {position:relative; display:flex; align-items:center; justify-content:space-between; gap:1rem; padding-bottom:1rem; border-bottom:1px solid rgba(190,213,240,.2); font-size:.67rem; letter-spacing:.15em; text-transform:uppercase; color:#adc3dd; font-weight:700;}
+    .eds-live {display:inline-flex; align-items:center; gap:.45rem; color:#d7e5f5;}
+    .eds-live:before {content:""; width:7px; height:7px; border-radius:50%; background:#57d9a3; box-shadow:0 0 0 4px rgba(87,217,163,.12);}
+    .eds-hero-grid {position:relative; display:grid; grid-template-columns:minmax(0,1.62fr) minmax(300px,.82fr); gap:2.5rem; padding:3.5rem .6rem 2.35rem; align-items:end;}
+    .eds-kicker {font-size:.72rem; line-height:1.4; letter-spacing:.18em; text-transform:uppercase; color:#8ab4f8; font-weight:750; margin-bottom:1.25rem;}
+    .eds-title {font-family:Georgia,'Times New Roman',serif; font-size:clamp(3rem,5.4vw,5.7rem); line-height:.96; letter-spacing:-.045em; font-weight:400; max-width:960px; margin:0 0 1.45rem; color:#fff;}
+    .eds-title em {font-weight:400; color:#91b9f2;}
+    .eds-copy {font-size:1.03rem; line-height:1.72; color:#bfd0e4; max-width:760px; margin:0;}
+    .eds-proof {display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-top:2rem; max-width:720px; border-top:1px solid rgba(190,213,240,.2);}
+    .eds-proof-item {padding:.9rem 1rem 0 0;}
+    .eds-proof-item + .eds-proof-item {border-left:1px solid rgba(190,213,240,.2); padding-left:1rem;}
+    .eds-proof-value {display:block; font-family:Georgia,'Times New Roman',serif; font-size:1.35rem; color:#fff; margin-bottom:.15rem;}
+    .eds-proof-label {font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; color:#8fa8c3;}
+    .eds-priority {background:#f4efe4; color:#12233a; padding:1.2rem 1.25rem 1.3rem; border-top:4px solid #2d6cdf; box-shadow:12px 12px 0 rgba(73,122,189,.12);}
+    .eds-priority-head {display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #c8c0b3; padding-bottom:.65rem; margin-bottom:1rem; font-size:.65rem; letter-spacing:.14em; text-transform:uppercase; color:#59697c; font-weight:800;}
+    .eds-priority-index {font-family:Georgia,'Times New Roman',serif; font-size:1.7rem; color:#2d6cdf; letter-spacing:0;}
+    .eds-priority-name {font-family:Georgia,'Times New Roman',serif; font-size:1.8rem; line-height:1.08; letter-spacing:-.02em; margin-bottom:.85rem;}
+    .eds-priority-stats {display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid #c8c0b3; border-bottom:1px solid #c8c0b3; margin:.8rem 0;}
+    .eds-priority-stat {padding:.7rem .55rem .7rem 0;}
+    .eds-priority-stat + .eds-priority-stat {border-left:1px solid #c8c0b3; padding-left:.6rem;}
+    .eds-priority-stat strong {display:block; font-size:.98rem; color:#12233a;}
+    .eds-priority-stat span {font-size:.61rem; text-transform:uppercase; letter-spacing:.1em; color:#697789;}
+    .eds-priority-label {font-size:.61rem; letter-spacing:.12em; text-transform:uppercase; color:#697789; font-weight:800; margin-top:.85rem;}
+    .eds-priority-copy {font-size:.79rem; line-height:1.5; margin:.28rem 0 0; color:#31445a;}
+    .eds-ticker {position:relative; display:grid; grid-template-columns:1.1fr repeat(4,1fr); border-top:1px solid rgba(190,213,240,.2); margin-top:.15rem;}
+    .eds-ticker-cell {padding:1rem .85rem .15rem; min-height:58px;}
+    .eds-ticker-cell + .eds-ticker-cell {border-left:1px solid rgba(190,213,240,.2);}
+    .eds-ticker-label {display:block; font-size:.59rem; letter-spacing:.12em; text-transform:uppercase; color:#819ab7; margin-bottom:.25rem;}
+    .eds-ticker-value {font-size:.88rem; color:#f5f8fc; font-weight:650;}
+    .eds-section-head {display:grid; grid-template-columns:180px 1fr; gap:1.5rem; align-items:start; border-top:1px solid #aab4c0; padding-top:1rem; margin:3rem 0 1.4rem;}
+    .eds-section-number {font-size:.66rem; letter-spacing:.15em; text-transform:uppercase; color:#2d6cdf; font-weight:800;}
+    .eds-section-title {font-family:Georgia,'Times New Roman',serif; font-size:2.2rem; line-height:1.08; letter-spacing:-.025em; color:#13233a; margin:0; font-weight:400;}
+    .eds-section-subtitle {font-size:.88rem; color:#657386; line-height:1.55; margin:.45rem 0 0; max-width:720px;}
+    .eds-metric-grid {display:grid; grid-template-columns:repeat(5,1fr); border:1px solid #cdd4dc; background:#fff;}
+    .eds-metric {padding:1.2rem 1rem 1.1rem; min-height:118px;}
+    .eds-metric + .eds-metric {border-left:1px solid #d7dce2;}
+    .eds-metric-label {font-size:.62rem; letter-spacing:.105em; text-transform:uppercase; color:#667589; min-height:32px;}
+    .eds-metric-value {font-family:Georgia,'Times New Roman',serif; font-size:2rem; line-height:1; color:#10243e; margin:.55rem 0 .35rem;}
+    .eds-metric-context {font-size:.7rem; color:#7a8796;}
+    .eds-metric.alert {background:#fff6f3;}
+    .eds-metric.alert .eds-metric-value {color:#b42318;}
+    .eds-brief {border:1px solid #ccd3dc; background:#f7f5ef; padding:1.6rem 1.7rem; min-height:305px;}
+    .eds-brief-top {display:flex; align-items:center; justify-content:space-between; gap:1rem; border-bottom:1px solid #cbd0d5; padding-bottom:.8rem; margin-bottom:1.2rem;}
+    .eds-brief-tag {font-size:.62rem; letter-spacing:.13em; text-transform:uppercase; color:#2d6cdf; font-weight:800;}
+    .eds-brief-risk {font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:#b42318; font-weight:800;}
+    .eds-brief-name {font-family:Georgia,'Times New Roman',serif; font-size:2.25rem; line-height:1.08; color:#10243e; margin-bottom:.65rem;}
+    .eds-brief-thesis {font-size:.96rem; line-height:1.6; color:#364a61; max-width:780px;}
+    .eds-brief-move {border-left:3px solid #2d6cdf; margin-top:1.3rem; padding:.15rem 0 .15rem 1rem; color:#10243e; font-size:.91rem; line-height:1.5;}
+    .eds-readiness {border-top:4px solid #12233a; background:#fff; border-left:1px solid #ccd3dc; border-right:1px solid #ccd3dc; border-bottom:1px solid #ccd3dc; padding:1.25rem 1.35rem; min-height:305px;}
+    .eds-readiness-title {font-family:Georgia,'Times New Roman',serif; font-size:1.35rem; margin-bottom:.9rem; color:#10243e;}
+    .eds-readiness-row {display:flex; justify-content:space-between; gap:1rem; border-top:1px solid #e2e5e9; padding:.62rem 0; font-size:.72rem;}
+    .eds-readiness-row span {color:#6a7788;}
+    .eds-readiness-row strong {color:#1b3049; text-align:right;}
+    .eds-journey {border-top:3px solid #193653; padding:1rem .2rem .35rem 0; min-height:185px;}
+    .eds-journey-number {font-family:Georgia,'Times New Roman',serif; color:#2d6cdf; font-size:1.7rem;}
+    .eds-journey-title {font-size:.96rem; text-transform:uppercase; letter-spacing:.055em; font-weight:800; margin:.7rem 0 .55rem; color:#13233a;}
+    .eds-journey-copy {font-size:.8rem; line-height:1.55; color:#657386;}
+    .eds-lifecycle {border-top:1px solid #9eabb8; padding:.85rem .55rem .5rem 0; min-height:105px;}
+    .eds-lifecycle strong {display:block; color:#173653; font-size:.78rem; margin-bottom:.4rem;}
+    .eds-lifecycle span {font-size:.7rem; line-height:1.45; color:#6b7888;}
+    .eds-trust {background:#eef3fa; border-left:4px solid #2d6cdf; padding:1rem 1.2rem; color:#344a63; font-size:.8rem; line-height:1.55; margin-top:2rem;}
+    @media (max-width: 1050px) {.eds-hero-grid{grid-template-columns:1fr; gap:2rem}.eds-priority{max-width:620px}.eds-metric-grid{grid-template-columns:repeat(2,1fr)}.eds-metric{border-bottom:1px solid #d7dce2}.eds-ticker{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width: 700px) {.eds-hero{padding:1rem}.eds-masthead{align-items:flex-start;flex-direction:column}.eds-hero-grid{padding:2.4rem 0 .9rem}.eds-title{font-size:2.75rem}.eds-proof{grid-template-columns:1fr}.eds-proof-item + .eds-proof-item{border-left:0;padding-left:0}.eds-ticker,.eds-metric-grid{grid-template-columns:1fr}.eds-ticker-cell + .eds-ticker-cell,.eds-metric + .eds-metric{border-left:0;border-top:1px solid rgba(190,213,240,.2)}.eds-section-head{grid-template-columns:1fr;gap:.45rem}.eds-section-title{font-size:1.8rem}}
     </style>""",
     unsafe_allow_html=True,
 )
@@ -137,12 +188,12 @@ st.sidebar.caption(business_profile["organization_name"])
 st.sidebar.caption(f"{DEPLOYMENT.label} mode")
 st.sidebar.caption("Local by design · Rules, not guesses · No LLM")
 
-if DEPLOYMENT.is_public_demo:
+if DEPLOYMENT.is_public_demo and page != "Home":
     st.info(
         "Public Demo mode: this instance uses an isolated synthetic dataset. "
         "Uploads and persistent workflow changes are disabled."
     )
-else:
+elif not DEPLOYMENT.is_public_demo and page != "Home":
     st.success(
         "Private Business mode: governed uploads and persistent workflow changes are enabled "
         "for this local installation."
@@ -219,13 +270,58 @@ if page == "Home":
         snapshot_count = connection.execute("SELECT COUNT(*) FROM risk_assessments").fetchone()[0]
         quality_issue_count = connection.execute("SELECT COUNT(*) FROM data_quality_issues").fetchone()[0]
 
+    top_assessment = assess_customer(top_account.customer_id, today, DATABASE_PATH)
+    factor_names = ", ".join(factor["name"] for factor in top_assessment["factors"])
+    factor_summary = factor_names or "No rule-based risk factors are currently active"
+    home_high_acv = float(home_high.annual_contract_value.sum())
+    home_total_acv = float(home_portfolio.annual_contract_value.sum())
+    home_exposure_pct = (home_high_acv / home_total_acv * 100) if home_total_acv else 0
+    high_account_pct = (len(home_high) / len(home_portfolio) * 100) if len(home_portfolio) else 0
+    latest_run_status = str(latest_run["run_status"]) if latest_run else "Not run"
+    latest_completed_label = "Not available"
+    if latest_run and latest_run["completed_at"]:
+        latest_completed = pd.to_datetime(latest_run["completed_at"])
+        latest_completed_label = latest_completed.strftime("%d %b %Y / %H:%M UTC")
+
     st.markdown(
-        """<div class="home-hero">
-        <div class="home-kicker">Enterprise Decision Simulator</div>
-        <div class="home-title">Turn fragmented customer signals into decisions people can defend.</div>
-        <div class="home-copy">Judge renewal exposure, understand the evidence, negotiate intervention scenarios, allocate scarce capacity, and govern the rules, all inside one local, explainable decision system.</div>
-        <span class="trust-pill">No LLM</span><span class="trust-pill">No paid API</span><span class="trust-pill">Source-linked evidence</span><span class="trust-pill">Local SQLite</span>
-        </div>""",
+        f"""<div class="eds-home"><section class="eds-hero">
+        <div class="eds-masthead">
+          <span>Enterprise Decision Simulator / Executive operating view</span>
+          <span class="eds-live">Live portfolio / {escape(today.strftime('%d %B %Y'))}</span>
+        </div>
+        <div class="eds-hero-grid">
+          <div>
+            <div class="eds-kicker">Renewal intelligence / Decision operations</div>
+            <h1 class="eds-title">Know what is at risk.<br>See exactly <em>why.</em><br>Commit the next move.</h1>
+            <p class="eds-copy">A governed decision system that converts fragmented commercial, product, support, and contract signals into transparent renewal priorities. Every score has evidence. Every recommendation has an owner. Every rule can be challenged.</p>
+            <div class="eds-proof">
+              <div class="eds-proof-item"><span class="eds-proof-value">4</span><span class="eds-proof-label">Source domains integrated</span></div>
+              <div class="eds-proof-item"><span class="eds-proof-value">100%</span><span class="eds-proof-label">Rule traceability</span></div>
+              <div class="eds-proof-item"><span class="eds-proof-value">0</span><span class="eds-proof-label">Black-box models</span></div>
+            </div>
+          </div>
+          <aside class="eds-priority">
+            <div class="eds-priority-head"><span>Today's priority account</span><span class="eds-priority-index">01</span></div>
+            <div class="eds-priority-name">{escape(str(top_account.customer_name))}</div>
+            <div class="eds-priority-stats">
+              <div class="eds-priority-stat"><strong>{escape(str(top_account.risk_level))}</strong><span>Risk</span></div>
+              <div class="eds-priority-stat"><strong>{int(top_account.risk_score)}/100</strong><span>Score</span></div>
+              <div class="eds-priority-stat"><strong>${float(top_account.annual_contract_value):,.0f}</strong><span>ACV</span></div>
+            </div>
+            <div class="eds-priority-label">Management diagnosis</div>
+            <p class="eds-priority-copy">{escape(factor_summary)}</p>
+            <div class="eds-priority-label">Recommended move</div>
+            <p class="eds-priority-copy"><strong>{escape(str(top_account.next_action))}</strong></p>
+          </aside>
+        </div>
+        <div class="eds-ticker">
+          <div class="eds-ticker-cell"><span class="eds-ticker-label">Operating context</span><span class="eds-ticker-value">{escape(str(business_profile['organization_name']))}</span></div>
+          <div class="eds-ticker-cell"><span class="eds-ticker-label">Customers monitored</span><span class="eds-ticker-value">{len(home_portfolio):,}</span></div>
+          <div class="eds-ticker-cell"><span class="eds-ticker-label">High-risk ACV</span><span class="eds-ticker-value">${home_high_acv:,.0f}</span></div>
+          <div class="eds-ticker-cell"><span class="eds-ticker-label">Active policy</span><span class="eds-ticker-value">{escape(active_policy_label)}</span></div>
+          <div class="eds-ticker-cell"><span class="eds-ticker-label">Control boundary</span><span class="eds-ticker-value">{escape(DEPLOYMENT.label)}</span></div>
+        </div>
+        </section></div>""",
         unsafe_allow_html=True,
     )
     hero_left, hero_data, hero_mid, hero_right = st.columns([1.3, 1, 1, 1])
@@ -255,26 +351,38 @@ if page == "Home":
         args=("Capacity Planner",),
     )
 
-    st.markdown('<div class="section-kicker">Live portfolio pulse</div>', unsafe_allow_html=True)
-    st.subheader("What needs attention right now")
-    m1, m2, m3, m4, m5 = st.columns(5)
-    m1.metric("Customers monitored", len(home_portfolio))
-    m2.metric("High-risk accounts", len(home_high))
-    m3.metric("High-risk ACV", f"${home_high.annual_contract_value.sum():,.0f}")
-    m4.metric("Renewals ≤90 days", len(home_due))
-    m5.metric("Overdue actions", home_overdue)
+    st.markdown(
+        """<div class="eds-section-head"><div class="eds-section-number">01 / Portfolio signal</div>
+        <div><h2 class="eds-section-title">The commercial situation, at a glance.</h2>
+        <p class="eds-section-subtitle">A live view of exposure, urgency, and execution debt across the integrated customer portfolio.</p></div></div>""",
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        f"""<div class="eds-metric-grid">
+        <div class="eds-metric"><div class="eds-metric-label">Customers monitored</div><div class="eds-metric-value">{len(home_portfolio):,}</div><div class="eds-metric-context">Integrated book of business</div></div>
+        <div class="eds-metric alert"><div class="eds-metric-label">High-risk accounts</div><div class="eds-metric-value">{len(home_high):,}</div><div class="eds-metric-context">{high_account_pct:.0f}% of monitored accounts</div></div>
+        <div class="eds-metric alert"><div class="eds-metric-label">High-risk ACV</div><div class="eds-metric-value">${home_high_acv:,.0f}</div><div class="eds-metric-context">{home_exposure_pct:.1f}% of portfolio ACV</div></div>
+        <div class="eds-metric"><div class="eds-metric-label">Renewals within 90 days</div><div class="eds-metric-value">{len(home_due):,}</div><div class="eds-metric-context">Near-term contract urgency</div></div>
+        <div class="eds-metric"><div class="eds-metric-label">Overdue actions</div><div class="eds-metric-value">{home_overdue:,}</div><div class="eds-metric-context">Unresolved execution debt</div></div>
+        </div>""",
+        unsafe_allow_html=True,
+    )
 
-    st.markdown('<div class="section-kicker">Executive briefing</div>', unsafe_allow_html=True)
+    st.markdown(
+        """<div class="eds-section-head"><div class="eds-section-number">02 / Executive brief</div>
+        <div><h2 class="eds-section-title">One decision deserves the room first.</h2>
+        <p class="eds-section-subtitle">The highest-priority renewal, the evidence behind it, and the action the operating team should debate today.</p></div></div>""",
+        unsafe_allow_html=True,
+    )
     briefing, readiness = st.columns([1.8, 1])
-    top_assessment = assess_customer(top_account.customer_id, today, DATABASE_PATH)
     with briefing:
-        factor_names = ", ".join(factor["name"] for factor in top_assessment["factors"]) or "No factors triggered"
         st.markdown(
-            f"""<div class="brief-card"><div class="section-kicker">Highest-priority account</div>
-            <div class="brief-name">{escape(str(top_account.customer_name))}</div>
-            <p><strong>{escape(str(top_account.risk_level))} risk · {int(top_account.risk_score)}/100 · ${float(top_account.annual_contract_value):,.0f} ACV</strong></p>
-            <p>{escape(factor_names)}</p>
-            <p><strong>Recommended move:</strong> {escape(str(top_account.next_action))}</p></div>""",
+            f"""<article class="eds-brief">
+            <div class="eds-brief-top"><span class="eds-brief-tag">Management memo / Priority 01</span><span class="eds-brief-risk">{escape(str(top_account.risk_level))} risk / {int(top_account.risk_score)} points</span></div>
+            <div class="eds-brief-name">{escape(str(top_account.customer_name))}</div>
+            <div class="eds-brief-thesis"><strong>Decision thesis.</strong> ${float(top_account.annual_contract_value):,.0f} in annual contract value requires attention. The active scoring policy identifies {escape(factor_summary)}.</div>
+            <div class="eds-brief-move"><strong>Recommended management move</strong><br>{escape(str(top_account.next_action))}</div>
+            </article>""",
             unsafe_allow_html=True,
         )
         b1, b2 = st.columns(2)
@@ -293,31 +401,39 @@ if page == "Home":
             key="home_to_scenario",
         )
     with readiness:
-        st.markdown("#### System readiness")
-        st.write(f"**Active organization:** {business_profile['organization_name']}")
-        st.write(f"**Data classification:** {business_profile['data_classification']}")
-        st.write(f"**Active scoring policy:** {active_policy_label}")
-        st.write(f"**Latest ingestion:** {latest_run['run_status'] if latest_run else 'Not run'}")
-        st.write(f"**Historical assessments:** {snapshot_count:,}")
-        st.write(f"**Recorded quality issues:** {quality_issue_count:,}")
-        st.write("**Source systems integrated:** CRM, contracts, product analytics, support")
-        if latest_run and latest_run["completed_at"]:
-            st.caption("Last ingestion completed " + latest_run["completed_at"])
+        st.markdown(
+            f"""<aside class="eds-readiness">
+            <div class="eds-readiness-title">Control environment</div>
+            <div class="eds-readiness-row"><span>Organization</span><strong>{escape(str(business_profile['organization_name']))}</strong></div>
+            <div class="eds-readiness-row"><span>Data classification</span><strong>{escape(str(business_profile['data_classification']))}</strong></div>
+            <div class="eds-readiness-row"><span>Scoring policy</span><strong>{escape(active_policy_label)}</strong></div>
+            <div class="eds-readiness-row"><span>Latest ingestion</span><strong>{escape(latest_run_status)}</strong></div>
+            <div class="eds-readiness-row"><span>Data freshness</span><strong>{escape(latest_completed_label)}</strong></div>
+            <div class="eds-readiness-row"><span>Assessment history</span><strong>{snapshot_count:,} snapshots</strong></div>
+            <div class="eds-readiness-row"><span>Quality register</span><strong>{quality_issue_count:,} issues</strong></div>
+            <div class="eds-readiness-row"><span>Integrated domains</span><strong>CRM / Contract / Product / Support</strong></div>
+            </aside>""",
+            unsafe_allow_html=True,
+        )
 
-    st.markdown('<div class="section-kicker">Decision journeys</div>', unsafe_allow_html=True)
-    st.subheader("Move from signal to accountable action")
+    st.markdown(
+        """<div class="eds-section-head"><div class="eds-section-number">03 / Decision path</div>
+        <div><h2 class="eds-section-title">From weak signal to accountable action.</h2>
+        <p class="eds-section-subtitle">A practical route through diagnosis, evidence, intervention design, and constrained execution.</p></div></div>""",
+        unsafe_allow_html=True,
+    )
     journey_columns = st.columns(4)
     journeys = [
-        ("01 · JUDGE", "Prioritize exposure", "Rank accounts by evidence-backed risk, renewal urgency, commercial exposure, and accountable next action.", "Command Center", "Open portfolio"),
-        ("02 · UNDERSTAND", "Trace the reason", "Move from score to factor to the exact usage event, ticket, or contract record, and see what changed over time.", "Change Timeline", "Explain change"),
-        ("03 · NEGOTIATE", "Test the intervention", "Change explicit assumptions and compare current versus simulated policy outcomes without touching source data.", "Scenario Lab", "Open Scenario Lab"),
-        ("04 · ALLOCATE", "Commit scarce resources", "Fund the highest-value interventions within hours, budget, escalation, and enablement constraints.", "Capacity Planner", "Build capacity plan"),
+        ("01", "Judge", "Rank accounts by evidence-backed risk, renewal urgency, commercial exposure, and accountable next action.", "Command Center", "Open portfolio"),
+        ("02", "Understand", "Move from score to factor to the exact usage event, support ticket, contract record, and temporal change.", "Change Timeline", "Explain change"),
+        ("03", "Negotiate", "Change explicit assumptions and compare current versus simulated outcomes without altering source data.", "Scenario Lab", "Open Scenario Lab"),
+        ("04", "Allocate", "Fund the highest-value interventions within hours, budget, escalation, and enablement constraints.", "Capacity Planner", "Build capacity plan"),
     ]
     for index, (number, title, copy, destination, button_label) in enumerate(journeys):
         with journey_columns[index]:
             st.markdown(
-                f"""<div class="journey-card"><div class="journey-number">{number}</div>
-                <div class="journey-title">{title}</div><div class="journey-copy">{copy}</div></div>""",
+                f"""<div class="eds-journey"><div class="eds-journey-number">{number}</div>
+                <div class="eds-journey-title">{title}</div><div class="eds-journey-copy">{copy}</div></div>""",
                 unsafe_allow_html=True,
             )
             st.button(
@@ -328,8 +444,12 @@ if page == "Home":
                 key=f"journey_{index}",
             )
 
-    st.markdown('<div class="section-kicker">Operating model</div>', unsafe_allow_html=True)
-    st.subheader("One governed decision lifecycle")
+    st.markdown(
+        """<div class="eds-section-head"><div class="eds-section-number">04 / Operating model</div>
+        <div><h2 class="eds-section-title">A governed decision lifecycle.</h2>
+        <p class="eds-section-subtitle">The application separates evidence, policy, recommendation, and human action so every decision remains reviewable.</p></div></div>""",
+        unsafe_allow_html=True,
+    )
     lifecycle = [
         ("1", "Integrate", "Connect four operational domains"),
         ("2", "Validate", "Block errors and record provenance"),
@@ -340,7 +460,7 @@ if page == "Home":
     ]
     for column, (number, title, copy) in zip(st.columns(6), lifecycle):
         column.markdown(
-            f'<div class="lifecycle"><strong>{number} · {title}</strong><span>{copy}</span></div>',
+            f'<div class="eds-lifecycle"><strong>{number} / {title}</strong><span>{copy}</span></div>',
             unsafe_allow_html=True,
         )
 
@@ -349,9 +469,9 @@ if page == "Home":
         if DEPLOYMENT.is_public_demo
         else "an authorized local dataset, explicit approvals, and human-owned decisions"
     )
-    st.info(
-        f"Trust boundary: {trust_data}, deterministic rules, and source-linked evidence. "
-        "This system supports judgment. It does not pretend to replace it."
+    st.markdown(
+        f"""<div class="eds-trust"><strong>Trust boundary.</strong> {escape(trust_data.capitalize())}, deterministic rules, and source-linked evidence. This system supports judgment. It does not pretend to replace it.</div>""",
+        unsafe_allow_html=True,
     )
 
 elif page == "Data Onboarding":
