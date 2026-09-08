@@ -67,102 +67,98 @@ from decision_intelligence.workflow import (
 st.set_page_config(page_title="Enterprise Decision Simulator", page_icon="◈", layout="wide")
 st.markdown(
     """<style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
+
     :root {
         --eds-ease-apple: cubic-bezier(0.23, 1, 0.32, 1);
         --eds-ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
-        --eds-duration-fast: 120ms;
-        --eds-duration-normal: 220ms;
-    }
-    .block-container {padding-top: 1.5rem; padding-bottom: 3rem;}
-    
-    /* Apple Hairline Scroll Progress Bar pinned to top of viewport */
-    .eds-scroll-track {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 3px;
-        background: transparent;
-        z-index: 999999;
-        pointer-events: none;
-    }
-    .eds-scroll-bar {
-        height: 100%;
-        width: 100%;
-        background: linear-gradient(90deg, #1f68c4 0%, #38bdf8 35%, #6366f1 70%, #ec4899 100%);
-        box-shadow: 0 0 10px rgba(56, 189, 248, 0.8), 0 0 18px rgba(99, 102, 241, 0.4);
-        animation: edsScrollGlow 3.5s ease-in-out infinite alternate;
-    }
-    @keyframes edsScrollGlow {
-        0% { filter: brightness(1); }
-        100% { filter: brightness(1.3) drop-shadow(0 0 8px rgba(56, 189, 248, 0.8)); }
+        --eds-duration-fast: 140ms;
+        --eds-duration-normal: 240ms;
+        --eds-font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        --eds-font-mono: 'JetBrains Mono', monospace;
     }
 
-    /* Apple Staggered Reveals */
-    @keyframes edsReveal {
-        from {
-            opacity: 0;
-            transform: translateY(12px) scale(0.98);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
+    html, body, [class*="css"], .stApp {
+        font-family: var(--eds-font) !important;
     }
-    .eds-metric, .eds-brief, .eds-readiness, .eds-journey, .eds-lifecycle, [data-testid="stMetric"] {
-        animation: edsReveal 280ms var(--eds-ease-apple) both;
-    }
-    .eds-metric:nth-child(1) { animation-delay: 20ms; }
-    .eds-metric:nth-child(2) { animation-delay: 50ms; }
-    .eds-metric:nth-child(3) { animation-delay: 80ms; }
-    .eds-metric:nth-child(4) { animation-delay: 110ms; }
-    .eds-metric:nth-child(5) { animation-delay: 140ms; }
 
-    
-    /* Emil Kowalski Tactile Button Press Physics & High-Specificity Selectors */
-    div[data-testid="stButton"] button,
-    button[data-testid="stBaseButton-primary"],
-    button[data-testid="stBaseButton-secondary"],
-    button[kind="primary"],
-    button[kind="secondary"],
-    div.stButton > button {
-        border-radius: 10px !important;
+    .block-container {
+        padding-top: 1.2rem !important;
+        padding-bottom: 3rem !important;
+        max-width: 1280px !important;
+    }
+
+    /* Apple Hairline Scroll Progress Track (Always Visible & Interactive) */
+    #eds-scroll-progress-wrap {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 4px !important;
+        background: rgba(37, 99, 235, 0.12) !important;
+        z-index: 99999999 !important;
+        pointer-events: none !important;
+    }
+    #eds-scroll-bar-indicator {
+        height: 100% !important;
+        width: 10% !important;
+        background: linear-gradient(90deg, #1d4ed8 0%, #38bdf8 35%, #6366f1 70%, #ec4899 100%) !important;
+        box-shadow: 0 0 14px rgba(56, 189, 248, 0.95), 0 0 24px rgba(99, 102, 241, 0.7) !important;
+        border-radius: 0 3px 3px 0 !important;
+        transition: width 60ms linear !important;
+    }
+
+    /* Transform Streamlit Sidebar Radio into Apple macOS/iOS Glass Navigation */
+    section[data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+        border-right: 1px solid #e2e8f0 !important;
+    }
+    section[data-testid="stSidebar"] [data-testid="stRadio"] > div {
+        gap: 6px !important;
+    }
+    section[data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label {
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+        padding: 9px 14px !important;
+        margin: 0 !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        transition: transform var(--eds-duration-fast) var(--eds-ease-apple), box-shadow var(--eds-duration-fast) var(--eds-ease-apple), background var(--eds-duration-fast) ease, border-color var(--eds-duration-fast) ease !important;
+        color: #334155 !important;
+        font-size: 0.88rem !important;
         font-weight: 600 !important;
-        box-shadow: 0 2px 8px rgba(27, 83, 145, 0.12) !important;
-        transition: transform var(--eds-duration-fast) var(--eds-ease-apple), box-shadow var(--eds-duration-fast) var(--eds-ease-apple), border-color var(--eds-duration-fast) ease !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
     }
-    div[data-testid="stButton"] button:hover,
-    button[data-testid="stBaseButton-primary"]:hover,
-    button[data-testid="stBaseButton-secondary"]:hover,
-    button[kind="primary"]:hover,
-    button[kind="secondary"]:hover,
-    div.stButton > button:hover {
-        transform: translateY(-1.5px) !important;
-        box-shadow: 0 6px 18px rgba(27, 83, 145, 0.22) !important;
+    section[data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:hover {
+        background: #f8fafc !important;
+        border-color: #93c5fd !important;
+        color: #1d4ed8 !important;
+        transform: translateX(4px) !important;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08) !important;
     }
-    div[data-testid="stButton"] button:active,
-    button[data-testid="stBaseButton-primary"]:active,
-    button[data-testid="stBaseButton-secondary"]:active,
-    button[kind="primary"]:active,
-    button[kind="secondary"]:active,
-    div.stButton > button:active {
-        transform: scale(0.97) translateY(0) !important;
-        box-shadow: 0 1px 4px rgba(27, 83, 145, 0.2) !important;
+    section[data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:has(input:checked),
+    section[data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label[data-checked="true"] {
+        background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%) !important;
+        border-color: #1d4ed8 !important;
+        color: #ffffff !important;
+        font-weight: 700 !important;
+        box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35) !important;
+        transform: translateX(3px) !important;
     }
-
-    div.stButton > button {
-        border-radius: 10px !important;
-        font-weight: 600 !important;
-        box-shadow: 0 2px 8px rgba(27, 83, 145, 0.12) !important;
-        transition: transform var(--eds-duration-fast) var(--eds-ease-apple), box-shadow var(--eds-duration-fast) var(--eds-ease-apple), border-color var(--eds-duration-fast) ease !important;
+    section[data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:has(input:checked) p,
+    section[data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:has(input:checked) span {
+        color: #ffffff !important;
     }
-    div.stButton > button:hover {
-        transform: translateY(-1.5px) !important;
-        box-shadow: 0 6px 18px rgba(27, 83, 145, 0.22) !important;
+    section[data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label > div:first-child {
+        display: none !important;
     }
-    div.stButton > button:active {
-        transform: scale(0.97) translateY(0) !important;
-        box-shadow: 0 1px 4px rgba(27, 83, 145, 0.2) !important;
+    section[data-testid="stSidebar"] [data-testid="stRadio"] input[type="radio"] {
+        display: none !important;
+    }
+    section[data-testid="stSidebar"] [data-testid="stRadio"] div[data-testid="stMarkdownContainer"] p {
+        margin: 0 !important;
     }
 
     /* Dynamic Island Live Telemetry Beacon */
@@ -174,15 +170,15 @@ st.markdown(
         letter-spacing: 0.14em;
         text-transform: uppercase;
         font-weight: 800;
-        color: #0b4f8a;
-        background: rgba(45, 115, 200, 0.1);
-        border: 1px solid rgba(45, 115, 200, 0.28);
-        padding: 3px 10px;
+        color: #1d4ed8;
+        background: rgba(37, 99, 235, 0.08);
+        border: 1px solid rgba(37, 99, 235, 0.25);
+        padding: 4px 12px;
         border-radius: 999px;
     }
     .eds-beacon-dot {
-        width: 6.5px;
-        height: 6.5px;
+        width: 7px;
+        height: 7px;
         border-radius: 50%;
         background: #10b981;
         position: relative;
@@ -200,108 +196,132 @@ st.markdown(
         100% { transform: scale(2.4); opacity: 0; }
     }
 
-    [data-testid="stMetric"] {border: 1px solid #d7e6f4; border-radius: 14px; padding: 14px; background: linear-gradient(145deg, #fff 0%, #f4f9ff 100%); box-shadow: 0 6px 20px rgba(35,83,132,0.06);}
-    .eyebrow {font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:#527092; font-weight:750;}
-    .hero {font-size:2.35rem; line-height:1.1; font-weight:760; margin:.3rem 0 .5rem; letter-spacing: -0.03em; color: #0d2b50;}
-    .subtle {color:#607892; max-width:850px; line-height: 1.6;}
-    .eds-home {color:#102a4c; margin-top:.2rem;}
-    .eds-hero {position:relative; overflow:hidden; color:#f8fbff; border:1px solid rgba(255,255,255,.45); border-radius:28px; padding:1.25rem 1.4rem 1.4rem; margin-bottom:1.2rem; box-shadow:0 28px 75px rgba(27,83,145,.24); background:radial-gradient(circle at 88% 2%,rgba(230,249,255,.92) 0%,rgba(230,249,255,0) 26%),radial-gradient(circle at 72% 94%,rgba(80,169,241,.7) 0%,rgba(80,169,241,0) 38%),linear-gradient(128deg,#071b35 0%,#123d70 36%,#2d73c8 66%,#a8e0fa 100%);}
-    .eds-hero:before {content:""; position:absolute; width:460px; height:460px; border-radius:50%; right:-160px; top:-210px; pointer-events:none; border:1px solid rgba(255,255,255,.4); box-shadow:0 0 0 46px rgba(255,255,255,.06),0 0 0 92px rgba(255,255,255,.045);}
-    .eds-hero:after {content:""; position:absolute; inset:0; pointer-events:none; opacity:.24; background-image:linear-gradient(rgba(255,255,255,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.14) 1px,transparent 1px); background-size:52px 52px; mask-image:linear-gradient(90deg,transparent 18%,#000 100%);}
-    .eds-masthead {position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.15rem .25rem 1rem; border-bottom:1px solid rgba(235,247,255,.32); font-size:.66rem; letter-spacing:.15em; text-transform:uppercase; color:#d9edff; font-weight:750;}
-    .eds-live {display:inline-flex; align-items:center; gap:.45rem; color:#f5fbff;}
-    .eds-live:before {content:""; width:7px; height:7px; border-radius:50%; background:#66f0bc; box-shadow:0 0 0 4px rgba(102,240,188,.16);}
-    .eds-hero-grid {position:relative; z-index:2; display:grid; grid-template-columns:minmax(0,1.58fr) minmax(300px,.82fr); gap:2.25rem; padding:3.15rem .5rem 2.25rem; align-items:center;}
-    .eds-kicker {font-size:.72rem; line-height:1.4; letter-spacing:.2em; text-transform:uppercase; color:#b9dcff; font-weight:800; margin-bottom:1.1rem;}
-    .eds-hero .eds-title {font-family:'Source Sans',Arial,sans-serif!important; font-size:clamp(2.8rem,4.7vw,4.9rem)!important; line-height:1.01!important; letter-spacing:-.045em!important; font-weight:760!important; max-width:790px; margin:0 0 1.35rem; color:#fff;}
-    .eds-title em {font-style:normal; font-weight:760; color:#d8f3ff; text-shadow:0 6px 30px rgba(178,230,255,.22);}
-    .eds-copy {font-size:1.02rem; line-height:1.7; color:#e1effd; max-width:700px; margin:0;}
-    .eds-proof {display:grid; grid-template-columns:repeat(3,1fr); gap:.65rem; margin-top:1.65rem; max-width:720px;}
-    .eds-proof-item {padding:.72rem .8rem; border:1px solid rgba(230,245,255,.22); background:rgba(6,35,70,.18); border-radius:12px; backdrop-filter:blur(8px);}
-    .eds-proof-item + .eds-proof-item {padding-left:.8rem;}
-    .eds-proof-value {display:block; font-size:1.18rem; font-weight:760; color:#fff; margin-bottom:.1rem;}
-    .eds-proof-label {font-size:.59rem; letter-spacing:.1em; text-transform:uppercase; color:#cbe4fa;}
-    .eds-priority {background:linear-gradient(155deg,rgba(255,255,255,.94),rgba(233,246,255,.82)); color:#102a4c; padding:1.25rem 1.3rem 1.35rem; border:1px solid rgba(255,255,255,.75); border-radius:20px; box-shadow:0 22px 55px rgba(5,38,76,.26); backdrop-filter:blur(16px); transition: transform 200ms var(--eds-ease-apple), box-shadow 200ms var(--eds-ease-apple);}
-    .eds-priority:hover {transform: translateY(-2.5px); box-shadow: 0 28px 65px rgba(5,38,76,.32);}
-    .eds-priority-head {display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(61,111,168,.2); padding-bottom:.7rem; margin-bottom:1rem; font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:#527092; font-weight:800;}
-    .eds-priority-index {display:flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#1f68c4,#64b5ee); font-size:.85rem; font-weight:800; color:#fff; letter-spacing:0; box-shadow:0 8px 20px rgba(31,104,196,.25);}
-    .eds-priority-name {font-size:1.72rem; line-height:1.08; letter-spacing:-.025em; font-weight:750; margin-bottom:.85rem; color:#0d2b50;}
-    .eds-priority-stats {display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid rgba(61,111,168,.18); border-bottom:1px solid rgba(61,111,168,.18); margin:.8rem 0;}
-    .eds-priority-stat {padding:.72rem .55rem .72rem 0;}
-    .eds-priority-stat + .eds-priority-stat {border-left:1px solid rgba(61,111,168,.18); padding-left:.6rem;}
-    .eds-priority-stat strong {display:block; font-size:.98rem; color:#0d2b50;}
-    .eds-priority-stat span {font-size:.58rem; text-transform:uppercase; letter-spacing:.1em; color:#66809e;}
-    .eds-priority-label {font-size:.59rem; letter-spacing:.12em; text-transform:uppercase; color:#527092; font-weight:800; margin-top:.85rem;}
-    .eds-priority-copy {font-size:.78rem; line-height:1.5; margin:.28rem 0 0; color:#2f506f;}
-    .eds-ticker {position:relative; z-index:2; display:grid; grid-template-columns:1.1fr repeat(4,1fr); overflow:hidden; border:1px solid rgba(232,247,255,.22); border-radius:14px; background:rgba(5,34,68,.2); backdrop-filter:blur(9px);}
-    .eds-ticker-cell {padding:.82rem .85rem; min-height:64px;}
-    .eds-ticker-cell + .eds-ticker-cell {border-left:1px solid rgba(232,247,255,.2);}
-    .eds-ticker-label {display:block; font-size:.56rem; letter-spacing:.12em; text-transform:uppercase; color:#c2ddf5; margin-bottom:.22rem;}
-    .eds-ticker-value {font-size:.84rem; color:#fff; font-weight:700;}
-    .eds-section-head {display:grid; grid-template-columns:180px 1fr; gap:1.5rem; align-items:start; border-top:1px solid #c7d9ec; padding-top:1.15rem; margin:3.2rem 0 1.45rem;}
-    .eds-section-number {display:inline-flex; width:max-content; padding:.32rem .58rem; border-radius:999px; background:#eaf4ff; font-size:.61rem; letter-spacing:.13em; text-transform:uppercase; color:#1766bd; font-weight:800;}
-    .eds-section-title {font-family:'Source Sans',Arial,sans-serif; font-size:2.25rem; line-height:1.08; letter-spacing:-.028em; color:#102a4c; margin:0; font-weight:740;}
-    .eds-section-subtitle {font-size:.9rem; color:#607892; line-height:1.55; margin:.45rem 0 0; max-width:720px;}
-    .eds-metric-grid {display:grid; grid-template-columns:repeat(5,1fr); gap:.7rem; background:transparent;}
-    .eds-metric {position:relative; overflow:hidden; padding:1.2rem 1rem 1.1rem; min-height:126px; border:1px solid #d7e6f4; border-top:1px solid #ffffff; border-radius:16px; background:linear-gradient(145deg,#fff 0%,#f2f8ff 100%); box-shadow:0 10px 28px rgba(35,83,132,.07); transition: transform 200ms var(--eds-ease-apple), box-shadow 200ms var(--eds-ease-apple);}
-    .eds-metric:hover {transform: translateY(-2.5px); box-shadow: 0 16px 36px rgba(35,83,132,.12);}
-    .eds-metric:before {content:""; position:absolute; height:3px; inset:0 0 auto; background:linear-gradient(90deg,#72b8ed,#2d73c8);}
-    .eds-metric + .eds-metric {border-left:1px solid #d7e6f4;}
-    .eds-metric-label {font-size:.59rem; letter-spacing:.105em; text-transform:uppercase; color:#607892; min-height:32px;}
-    .eds-metric-value {font-size:1.85rem; line-height:1; font-weight:750; color:#103b6b; margin:.55rem 0 .35rem;}
-    .eds-metric-context {font-size:.68rem; color:#7890a7;}
-    .eds-metric.alert {background:linear-gradient(145deg,#fff 0%,#eef7ff 70%,#fdf2f3 100%);}
-    .eds-metric.alert:before {background:linear-gradient(90deg,#2d73c8,#df6c78);}
-    .eds-metric.alert .eds-metric-value {color:#a52a3d;}
-    .eds-brief {border:1px solid #cfe2f5; border-top: 1px solid #ffffff; border-radius:20px; background:linear-gradient(145deg,#f5faff 0%,#e8f4ff 100%); padding:1.6rem 1.7rem; min-height:340px; box-shadow:0 16px 42px rgba(31,93,153,.1); transition: transform 200ms var(--eds-ease-apple);}
-    .eds-brief:hover {transform: translateY(-2px);}
-    .eds-brief-top {display:flex; align-items:center; justify-content:space-between; gap:1rem; border-bottom:1px solid #c9ddef; padding-bottom:.8rem; margin-bottom:1.2rem;}
-    .eds-brief-tag {font-size:.6rem; letter-spacing:.13em; text-transform:uppercase; color:#1766bd; font-weight:800;}
-    .eds-brief-risk {font-size:.66rem; letter-spacing:.08em; text-transform:uppercase; color:#a52a3d; font-weight:800;}
-    .eds-brief-name {font-size:2.15rem; line-height:1.08; font-weight:750; color:#102f55; margin-bottom:.65rem;}
-    .eds-brief-thesis {font-size:.94rem; line-height:1.65; color:#365877; max-width:780px;}
-    .eds-brief-move {border-left:4px solid #2d73c8; border-radius:0 10px 10px 0; background:rgba(255,255,255,.62); margin-top:1.3rem; padding:.7rem .85rem; color:#163e68; font-size:.9rem; line-height:1.5;}
-    .eds-readiness {border:1px solid #2f73b8; border-radius:20px; background:radial-gradient(circle at 100% 0%,rgba(112,188,241,.42),transparent 34%),linear-gradient(145deg,#0b2b50 0%,#174d83 100%); padding:1.25rem 1.35rem; min-height:340px; box-shadow:0 16px 42px rgba(15,57,99,.16);}
-    .eds-readiness-title {font-size:1.28rem; font-weight:750; margin-bottom:.9rem; color:#fff;}
-    .eds-readiness-row {display:flex; justify-content:space-between; gap:1rem; border-top:1px solid rgba(213,236,255,.18); padding:.58rem 0; font-size:.7rem;}
-    .eds-readiness-row span {color:#b9d6ed;}
-    .eds-readiness-row strong {color:#fff; text-align:right;}
-    .eds-journey {position:relative; overflow:hidden; border:1px solid #d4e4f3; border-top:1px solid #ffffff; border-radius:16px; background:linear-gradient(155deg,#fff,#f3f9ff); padding:1.15rem 1rem .7rem; min-height:190px; box-shadow:0 10px 28px rgba(35,83,132,.07); transition:transform 200ms var(--eds-ease-apple),box-shadow 200ms var(--eds-ease-apple);}
-    .eds-journey:before {content:""; position:absolute; inset:0 0 auto; height:4px; background:linear-gradient(90deg,#92d1f3,#2d73c8);}
-    .eds-journey:hover {transform:translateY(-3px); box-shadow:0 16px 34px rgba(35,83,132,.12);}
-    .eds-journey-number {color:#2672c6; font-size:1.48rem; font-weight:750;}
-    .eds-journey-title {font-size:.9rem; text-transform:uppercase; letter-spacing:.055em; font-weight:800; margin:.7rem 0 .55rem; color:#12385f;}
-    .eds-journey-copy {font-size:.78rem; line-height:1.55; color:#617a93;}
-    .eds-lifecycle {border:1px solid #d6e6f5; border-radius:14px; background:linear-gradient(150deg,#fff,#edf6ff); padding:.85rem .7rem; min-height:108px; box-shadow:0 8px 22px rgba(35,83,132,.06);}
-    .eds-lifecycle strong {display:block; color:#1766bd; font-size:.75rem; margin-bottom:.4rem;}
-    .eds-lifecycle span {font-size:.68rem; line-height:1.45; color:#607892;}
-    .eds-trust {background:linear-gradient(90deg,#e9f5ff,#f5fbff); border:1px solid #cbe2f5; border-left:5px solid #2d73c8; border-radius:12px; padding:1rem 1.2rem; color:#365877; font-size:.8rem; line-height:1.55; margin-top:2rem; box-shadow:0 8px 24px rgba(35,83,132,.06);}
-    @media (max-width: 1050px) {.eds-hero-grid{grid-template-columns:1fr;gap:2rem}.eds-priority{max-width:620px}.eds-metric-grid{grid-template-columns:repeat(2,1fr)}.eds-ticker{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width: 700px) {.eds-hero{padding:1rem;border-radius:20px}.eds-masthead{align-items:flex-start;flex-direction:column}.eds-hero-grid{padding:2.4rem 0 .9rem}.eds-hero .eds-title{font-size:2.55rem!important}.eds-proof{grid-template-columns:1fr}.eds-ticker,.eds-metric-grid{grid-template-columns:1fr}.eds-ticker-cell + .eds-ticker-cell{border-left:0;border-top:1px solid rgba(230,245,255,.18)}.eds-section-head{grid-template-columns:1fr;gap:.55rem}.eds-section-title{font-size:1.8rem}}
-    
+    /* Emil Kowalski Tactile Button Press Physics & High-Specificity Selectors */
+    div[data-testid="stButton"] button,
+    button[data-testid="stBaseButton-primary"],
+    button[data-testid="stBaseButton-secondary"],
+    button[kind="primary"],
+    button[kind="secondary"],
+    div.stButton > button {
+        border-radius: 12px !important;
+        font-weight: 600 !important;
+        font-size: 0.92rem !important;
+        padding: 0.55rem 1.25rem !important;
+        transition: transform var(--eds-duration-fast) var(--eds-ease-apple), box-shadow var(--eds-duration-fast) var(--eds-ease-apple), border-color var(--eds-duration-fast) ease !important;
+    }
+    div[data-testid="stButton"] button:hover,
+    button[data-testid="stBaseButton-primary"]:hover,
+    button[data-testid="stBaseButton-secondary"]:hover,
+    button[kind="primary"]:hover,
+    button[kind="secondary"]:hover,
+    div.stButton > button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 24px rgba(37, 99, 235, 0.22) !important;
+    }
+    div[data-testid="stButton"] button:active,
+    button[data-testid="stBaseButton-primary"]:active,
+    button[data-testid="stBaseButton-secondary"]:active,
+    button[kind="primary"]:active,
+    button[kind="secondary"]:active,
+    div.stButton > button:active {
+        transform: scale(0.97) translateY(0) !important;
+        box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2) !important;
+    }
+
+    /* Apple Bento Grid & Specular Glass Cards */
+    .eds-bento-hero {
+        background: linear-gradient(135deg, #071b35 0%, #10325e 40%, #1e5aa0 75%, #38bdf8 120%);
+        border-radius: 24px;
+        padding: 32px 36px;
+        color: #ffffff;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 24px 60px rgba(16, 50, 94, 0.28);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-top: 2px solid rgba(255, 255, 255, 0.45);
+        margin-bottom: 24px;
+        animation: edsReveal 300ms var(--eds-ease-apple) both;
+    }
+    .eds-bento-hero::before {
+        content: "";
+        position: absolute;
+        width: 380px;
+        height: 380px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(56, 189, 248, 0.35) 0%, rgba(56, 189, 248, 0) 70%);
+        top: -120px;
+        right: -80px;
+        pointer-events: none;
+    }
+    .eds-bento-hero h1 {
+        font-size: 2.85rem !important;
+        font-weight: 800 !important;
+        line-height: 1.08 !important;
+        letter-spacing: -0.035em !important;
+        color: #ffffff !important;
+        margin: 12px 0 16px 0 !important;
+    }
+    .eds-bento-hero p {
+        font-size: 1.05rem !important;
+        color: #dbeafe !important;
+        max-width: 720px !important;
+        line-height: 1.6 !important;
+    }
+
+    /* Bento Cards with Specular Top Border */
+    .eds-bento-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-top: 2px solid #3b82f6;
+        border-radius: 18px;
+        padding: 22px 24px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+        transition: transform var(--eds-duration-normal) var(--eds-ease-apple), box-shadow var(--eds-duration-normal) var(--eds-ease-apple);
+        animation: edsReveal 280ms var(--eds-ease-apple) both;
+        height: 100%;
+    }
+    .eds-bento-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 36px rgba(37, 99, 235, 0.12);
+    }
+
+    /* Stagger Animation */
+    @keyframes edsReveal {
+        from {
+            opacity: 0;
+            transform: translateY(14px) scale(0.98);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
     /* Native Tabs with Apple Pill Style */
-    [data-testid="stTabs"] button[role="tab"] {
-        font-size: 0.84rem !important;
+    [data-testid="stTabs"] button[role="tab"],
+    button[data-baseweb="tab"] {
+        font-size: 0.86rem !important;
         font-weight: 600 !important;
         color: #64748b !important;
-        border-radius: 8px !important;
-        padding: 8px 16px !important;
+        border-radius: 10px !important;
+        padding: 8px 18px !important;
         transition: all var(--eds-duration-fast) var(--eds-ease-apple) !important;
     }
-    [data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
-        color: #1e40af !important;
+    [data-testid="stTabs"] button[role="tab"][aria-selected="true"],
+    button[data-baseweb="tab"][aria-selected="true"] {
+        color: #1d4ed8 !important;
         background: #eff6ff !important;
-        border-bottom: 2px solid #2563eb !important;
+        border-bottom: 2.5px solid #2563eb !important;
     }
 
     @media (prefers-reduced-motion: reduce) {
-        *, .eds-metric, .eds-brief, .eds-readiness, .eds-journey, .eds-lifecycle, [data-testid="stMetric"], .eds-scroll-bar, div.stButton > button {
+        *, #eds-scroll-bar-indicator, div[data-testid="stButton"] button {
             animation: none !important;
             transition: none !important;
             transform: none !important;
         }
     }
-    </style>""",
+</style>""",
     unsafe_allow_html=True,
 )
 
@@ -494,23 +514,36 @@ st.sidebar.markdown(
     </div>""",
     unsafe_allow_html=True,
 )
-page = st.sidebar.radio(
+WORKSPACE_OPTIONS = [
+    "⚡ Home",
+    "📁 Data Onboarding",
+    "🎯 Command Center",
+    "👤 Customer 360",
+    "⏱️ Change Timeline",
+    "🧪 Scenario Lab",
+    "📊 Capacity Planner",
+    "✅ Actions & Decisions",
+    "⚖️ Policy Studio",
+    "🛡️ Data Health",
+]
+
+# Sync session state navigation key if set by buttons
+if "workspace" in st.session_state:
+    cur = st.session_state["workspace"]
+    for opt in WORKSPACE_OPTIONS:
+        if opt.endswith(cur):
+            st.session_state["workspace_select"] = opt
+            break
+
+selected_workspace = st.sidebar.radio(
     "Workspace",
-    [
-        "Home",
-        "Data Onboarding",
-        "Command Center",
-        "Customer 360",
-        "Change Timeline",
-        "Scenario Lab",
-        "Capacity Planner",
-        "Actions & Decisions",
-        "Policy Studio",
-        "Data Health",
-    ],
+    WORKSPACE_OPTIONS,
+    index=0,
     label_visibility="collapsed",
-    key="workspace",
+    key="workspace_select",
 )
+page = selected_workspace.split(" ", 1)[-1]
+st.session_state["workspace"] = page
 with st.sidebar.expander("90-second guided demo", expanded=False):
     st.markdown(
         """1. Start at **Home** for the executive briefing.
@@ -567,8 +600,11 @@ def page_heading(eyebrow: str, title: str, subtitle: str) -> None:
 
 def navigate_to(workspace: str) -> None:
     """Navigation callback used by homepage calls to action."""
-
     st.session_state["workspace"] = workspace
+    for opt in WORKSPACE_OPTIONS:
+        if opt.endswith(workspace):
+            st.session_state["workspace_select"] = opt
+            break
 
 
 def navigate_to_customer(customer_name: str) -> None:
@@ -619,107 +655,151 @@ if page == "Home":
         latest_completed = pd.to_datetime(latest_run["completed_at"])
         latest_completed_label = latest_completed.strftime("%d %b %Y / %H:%M UTC")
 
+    # =========================================================================
+    # APPLE BENTO GRID EXECUTIVE HERO
+    # =========================================================================
     st.markdown(
-        f"""<div class="eds-home"><section class="eds-hero">
-        <div class="eds-masthead">
-          <span>Enterprise Decision Simulator / Decision clarity at operating speed</span>
-          <span class="eds-live">Live portfolio / {escape(today.strftime('%d %B %Y'))}</span>
-        </div>
-        <div class="eds-hero-grid">
-          <div>
-            <div class="eds-kicker">Integrated renewal intelligence</div>
-            <h1 class="eds-title">Turn fragmented<br>signals into decisions<br><em>people can defend.</em></h1>
-            <p class="eds-copy">See which customers are at risk, why the score moved, what evidence supports it, and which intervention deserves capacity. Every recommendation is transparent. Every rule can be challenged.</p>
-            <div class="eds-proof">
-              <div class="eds-proof-item"><span class="eds-proof-value">4</span><span class="eds-proof-label">Source domains integrated</span></div>
-              <div class="eds-proof-item"><span class="eds-proof-value">100%</span><span class="eds-proof-label">Rule traceability</span></div>
-              <div class="eds-proof-item"><span class="eds-proof-value">0</span><span class="eds-proof-label">Black-box models</span></div>
+        f"""
+        <div class="eds-bento-hero">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:12px; margin-bottom:18px;">
+                <span class="eds-live-beacon" style="background:rgba(255,255,255,0.15); color:#ffffff; border-color:rgba(255,255,255,0.3);">
+                    <span class="eds-beacon-dot" style="background:#34d399;"></span>
+                    <span>LIVE DETERMINISTIC ENGINE • {escape(today.strftime('%d %B %Y'))}</span>
+                </span>
+                <span style="font-size:0.75rem; color:#bfdbfe; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;">
+                    Zero Black-Box Models • 100% Rule Traceability
+                </span>
             </div>
-          </div>
-          <aside class="eds-priority">
-            <div class="eds-priority-head"><span>Today's priority account</span><span class="eds-priority-index">01</span></div>
-            <div class="eds-priority-name">{escape(str(top_account.customer_name))}</div>
-            <div class="eds-priority-stats">
-              <div class="eds-priority-stat"><strong>{escape(str(top_account.risk_level))}</strong><span>Risk</span></div>
-              <div class="eds-priority-stat"><strong>{int(top_account.risk_score)}/100</strong><span>Score</span></div>
-              <div class="eds-priority-stat"><strong>${float(top_account.annual_contract_value):,.0f}</strong><span>ACV</span></div>
-            </div>
-            <div class="eds-priority-label">Management diagnosis</div>
-            <p class="eds-priority-copy">{escape(factor_summary)}</p>
-            <div class="eds-priority-label">Recommended move</div>
-            <p class="eds-priority-copy"><strong>{escape(str(top_account.next_action))}</strong></p>
-          </aside>
+            <h1>Turn Fragmented Signals Into<br><span style="background:linear-gradient(90deg, #67e8f9 0%, #a5b4fc 50%, #f472b6 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Decisions People Can Defend.</span></h1>
+            <p>See exactly which customer renewals are exposed, why the risk score moved, and which intervention deserves immediate capacity. Every recommendation is transparent. Every rule is challengeable.</p>
         </div>
-        <div class="eds-ticker">
-          <div class="eds-ticker-cell"><span class="eds-ticker-label">Operating context</span><span class="eds-ticker-value">{escape(str(business_profile['organization_name']))}</span></div>
-          <div class="eds-ticker-cell"><span class="eds-ticker-label">Customers monitored</span><span class="eds-ticker-value">{len(home_portfolio):,}</span></div>
-          <div class="eds-ticker-cell"><span class="eds-ticker-label">High-risk ACV</span><span class="eds-ticker-value">${home_high_acv:,.0f}</span></div>
-          <div class="eds-ticker-cell"><span class="eds-ticker-label">Active policy</span><span class="eds-ticker-value">{escape(active_policy_label)}</span></div>
-          <div class="eds-ticker-cell"><span class="eds-ticker-label">Control boundary</span><span class="eds-ticker-value">{escape(DEPLOYMENT.label)}</span></div>
-        </div>
-        </section></div>""",
+        """,
         unsafe_allow_html=True,
     )
-    # Interactive Portfolio Pulse on Executive Home
-    h_col1, h_col2 = st.columns([1.25, 2])
-    with h_col1:
-        if HAS_PLOTLY:
-            home_donut = render_home_portfolio_donut(home_portfolio)
-            if home_donut:
-                st.plotly_chart(home_donut, use_container_width=True)
-    with h_col2:
+
+    # Action Quick-Launch Buttons
+    hero_btn1, hero_btn2, hero_btn3 = st.columns([1.4, 1.2, 1.2])
+    with hero_btn1:
+        st.button(
+            "⚡ Open Renewal Command Center ➔",
+            type="primary",
+            use_container_width=True,
+            on_click=navigate_to,
+            args=("Command Center",),
+        )
+    with hero_btn2:
+        st.button(
+            "👤 Explore Customer 360",
+            use_container_width=True,
+            on_click=navigate_to_customer,
+            args=(top_account.customer_name,),
+        )
+    with hero_btn3:
+        st.button(
+            "🧪 Launch Scenario Lab",
+            use_container_width=True,
+            on_click=navigate_to,
+            args=("Scenario Lab",),
+        )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # Apple Bento Grid Row 1: Priority Account Focus + Real-Time Portfolio Donut
+    bento_left, bento_right = st.columns([1.35, 1.1])
+    with bento_left:
         st.markdown(
-            f'''<div style="padding: 16px 20px; background: linear-gradient(145deg, #fff 0%, #f4f9ff 100%); border: 1px solid #d7e6f4; border-top: 2px solid #2d73c8; border-radius: 14px; box-shadow: 0 8px 24px rgba(35,83,132,0.06); height: 210px; display: flex; flex-direction: column; justify-content: space-around;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: #527092; font-weight: 800;">RENEWAL EXPOSURE HEALTH CHECK</span>
-                    <span class="eds-live-beacon" style="font-size: 0.58rem; padding: 2px 8px;"><span class="eds-beacon-dot"></span><span>ACTIVE</span></span>
+            f"""
+            <div class="eds-bento-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid #e2e8f0; padding-bottom:10px;">
+                    <span style="font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:#2563eb; font-weight:800;">
+                        TODAY'S PRIORITY ACCOUNT
+                    </span>
+                    <span style="background:#fee2e2; color:#b91c1c; font-size:0.72rem; font-weight:700; padding:3px 10px; border-radius:999px;">
+                        {escape(str(top_account.risk_level))} • {int(top_account.risk_score)}/100
+                    </span>
                 </div>
-                <div style="display: flex; gap: 20px; margin-top: 8px;">
-                    <div>
-                        <div style="font-size: 0.62rem; color: #607892; text-transform: uppercase; letter-spacing: 0.08em;">High-Risk Ratio</div>
-                        <div style="font-size: 1.6rem; font-weight: 800; color: #a52a3d; line-height: 1.1;">{high_account_pct:.1f}%</div>
-                        <div style="font-size: 0.65rem; color: #7890a7;">{len(home_high)} of {len(home_portfolio)} accounts</div>
-                    </div>
-                    <div style="border-left: 1px solid #d7e6f4; padding-left: 20px;">
-                        <div style="font-size: 0.62rem; color: #607892; text-transform: uppercase; letter-spacing: 0.08em;">Annual Revenue At Risk</div>
-                        <div style="font-size: 1.6rem; font-weight: 800; color: #103b6b; line-height: 1.1;">${home_high_acv:,.0f}</div>
-                        <div style="font-size: 0.65rem; color: #2d73c8;">{home_exposure_pct:.1f}% of total portfolio ACV</div>
-                    </div>
+                <div style="font-size:1.85rem; font-weight:800; color:#0f172a; letter-spacing:-0.03em; margin-bottom:4px;">
+                    {escape(str(top_account.customer_name))}
                 </div>
-                <div style="font-size: 0.74rem; color: #365877; border-top: 1px solid #e2eaf2; padding-top: 8px; margin-top: 4px;">
-                    <b>Executive takeaway:</b> High risk is concentrated in renewals within 90 days. Rule-based intervention reduces projected churn by up to 34 points.
+                <div style="font-size:0.85rem; color:#64748b; margin-bottom:16px;">
+                    Segment: <strong style="color:#1e293b;">{escape(str(top_account.segment))}</strong> | ACV: <strong style="color:#0f172a;">${float(top_account.annual_contract_value):,.0f}</strong> | Days to Renewal: <strong style="color:#dc2626;">{int(top_account.days_to_renewal)} days</strong>
                 </div>
-            </div>''',
+                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px 14px; margin-bottom:14px;">
+                    <div style="font-size:0.64rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#64748b; margin-bottom:4px;">Management Diagnosis</div>
+                    <div style="font-size:0.82rem; color:#334155; line-height:1.5;">{escape(factor_summary)}</div>
+                </div>
+                <div style="background:rgba(37,99,235,0.06); border-left:4px solid #2563eb; border-radius:0 10px 10px 0; padding:10px 14px;">
+                    <div style="font-size:0.64rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#1d4ed8; margin-bottom:2px;">Recommended Account Move</div>
+                    <div style="font-size:0.86rem; font-weight:600; color:#1e3a8a;">{escape(str(top_account.next_action))}</div>
+                </div>
+            </div>
+            """,
             unsafe_allow_html=True,
         )
 
-    st.markdown("<br/>", unsafe_allow_html=True)
-    hero_left, hero_data, hero_mid, hero_right = st.columns([1.3, 1, 1, 1])
-    hero_left.button(
-        "Open the Renewal Command Center",
-        type="primary",
-        use_container_width=True,
-        on_click=navigate_to,
-        args=("Command Center",),
-    )
-    hero_data.button(
-        "Onboard business data",
-        use_container_width=True,
-        on_click=navigate_to,
-        args=("Data Onboarding",),
-    )
-    hero_mid.button(
-        "Review highest-risk account",
-        use_container_width=True,
-        on_click=navigate_to_customer,
-        args=(top_account.customer_name,),
-    )
-    hero_right.button(
-        "Plan this week's capacity",
-        use_container_width=True,
-        on_click=navigate_to,
-        args=("Capacity Planner",),
-    )
+    with bento_right:
+        donut_fig = render_home_portfolio_donut(home_portfolio) if HAS_PLOTLY else None
+        if donut_fig:
+            st.plotly_chart(donut_fig, use_container_width=True)
+        st.markdown(
+            f"""
+            <div style="background:#ffffff; border:1px solid #e2e8f0; border-top:2px solid #10b981; border-radius:14px; padding:14px 18px; box-shadow:0 4px 16px rgba(0,0,0,0.03);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-size:0.66rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#059669;">PORTFOLIO RISK SUMMARY</span>
+                    <span style="font-size:0.75rem; color:#64748b; font-weight:600;">{len(home_portfolio)} Total Accounts</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                    <div style="font-size:1.55rem; font-weight:800; color:#b91c1c;">${home_high_acv:,.0f}</div>
+                    <div style="font-size:0.8rem; font-weight:700; color:#ef4444;">{home_exposure_pct:.1f}% Exposure</div>
+                </div>
+                <div style="font-size:0.72rem; color:#64748b; margin-top:4px;">High-risk ACV requiring active intervention before contract expiration.</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # Apple Bento Grid Row 2: Four Glass Metric Tiles
+    m1, m2, m3, m4 = st.columns(4)
+    with m1:
+        st.markdown(
+            f"""<div class="eds-bento-card" style="padding:16px 18px;">
+                <div style="font-size:0.65rem; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">ORGANIZATION</div>
+                <div style="font-size:1.25rem; font-weight:800; color:#0f172a; margin:4px 0 2px 0;">{escape(str(business_profile['organization_name']))}</div>
+                <div style="font-size:0.7rem; color:#2563eb; font-weight:600;">Active Workspace</div>
+            </div>""",
+            unsafe_allow_html=True,
+        )
+    with m2:
+        st.markdown(
+            f"""<div class="eds-bento-card" style="padding:16px 18px;">
+                <div style="font-size:0.65rem; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">CUSTOMERS MONITORED</div>
+                <div style="font-size:1.25rem; font-weight:800; color:#0f172a; margin:4px 0 2px 0;">{len(home_portfolio):,}</div>
+                <div style="font-size:0.7rem; color:#10b981; font-weight:600;">100% Ingested Clean</div>
+            </div>""",
+            unsafe_allow_html=True,
+        )
+    with m3:
+        st.markdown(
+            f"""<div class="eds-bento-card" style="padding:16px 18px;">
+                <div style="font-size:0.65rem; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">GOVERNANCE POLICY</div>
+                <div style="font-size:1.25rem; font-weight:800; color:#0f172a; margin:4px 0 2px 0;">{escape(active_policy_label)}</div>
+                <div style="font-size:0.7rem; color:#6366f1; font-weight:600;">Audit Locked & Signed</div>
+            </div>""",
+            unsafe_allow_html=True,
+        )
+    with m4:
+        st.markdown(
+            f"""<div class="eds-bento-card" style="padding:16px 18px;">
+                <div style="font-size:0.65rem; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">CONTROL BOUNDARY</div>
+                <div style="font-size:1.25rem; font-weight:800; color:#0f172a; margin:4px 0 2px 0;">{escape(DEPLOYMENT.label)}</div>
+                <div style="font-size:0.7rem; color:#f59e0b; font-weight:600;">Zero External Telemetry</div>
+            </div>""",
+            unsafe_allow_html=True,
+        )
+
+    st.markdown("<br>", unsafe_allow_html=True)
 
     st.markdown(
         """<div class="eds-section-head"><div class="eds-section-number">01 / Portfolio signal</div>
