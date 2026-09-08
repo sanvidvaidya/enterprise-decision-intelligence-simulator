@@ -10,8 +10,12 @@ from html import escape
 from pathlib import Path
 
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
+try:
+    import plotly.express as px
+    import plotly.graph_objects as go
+    HAS_PLOTLY = True
+except ImportError:
+    HAS_PLOTLY = False
 import streamlit as st
 
 from decision_intelligence.database import DEFAULT_DATABASE_PATH, connect, create_database
@@ -114,7 +118,38 @@ st.markdown(
     .eds-metric:nth-child(4) { animation-delay: 110ms; }
     .eds-metric:nth-child(5) { animation-delay: 140ms; }
 
-    /* Emil Kowalski Tactile Button Press Physics */
+    
+    /* Emil Kowalski Tactile Button Press Physics & High-Specificity Selectors */
+    div[data-testid="stButton"] button,
+    button[data-testid="stBaseButton-primary"],
+    button[data-testid="stBaseButton-secondary"],
+    button[kind="primary"],
+    button[kind="secondary"],
+    div.stButton > button {
+        border-radius: 10px !important;
+        font-weight: 600 !important;
+        box-shadow: 0 2px 8px rgba(27, 83, 145, 0.12) !important;
+        transition: transform var(--eds-duration-fast) var(--eds-ease-apple), box-shadow var(--eds-duration-fast) var(--eds-ease-apple), border-color var(--eds-duration-fast) ease !important;
+    }
+    div[data-testid="stButton"] button:hover,
+    button[data-testid="stBaseButton-primary"]:hover,
+    button[data-testid="stBaseButton-secondary"]:hover,
+    button[kind="primary"]:hover,
+    button[kind="secondary"]:hover,
+    div.stButton > button:hover {
+        transform: translateY(-1.5px) !important;
+        box-shadow: 0 6px 18px rgba(27, 83, 145, 0.22) !important;
+    }
+    div[data-testid="stButton"] button:active,
+    button[data-testid="stBaseButton-primary"]:active,
+    button[data-testid="stBaseButton-secondary"]:active,
+    button[kind="primary"]:active,
+    button[kind="secondary"]:active,
+    div.stButton > button:active {
+        transform: scale(0.97) translateY(0) !important;
+        box-shadow: 0 1px 4px rgba(27, 83, 145, 0.2) !important;
+    }
+
     div.stButton > button {
         border-radius: 10px !important;
         font-weight: 600 !important;
@@ -272,7 +307,37 @@ st.markdown(
 
 DEPLOYMENT = deployment_mode()
 
+
+def render_home_portfolio_donut(portfolio: pd.DataFrame) -> go.Figure | None:
+    if not HAS_PLOTLY:
+        return None
+    counts = portfolio["risk_level"].value_counts().reindex(["High", "Medium", "Low"], fill_value=0)
+    color_map = {"High": "#ef4444", "Medium": "#f59e0b", "Low": "#10b981"}
+    colors = [color_map.get(k, "#64748b") for k in counts.index]
+    
+    fig = go.Figure(data=[go.Pie(
+        labels=counts.index,
+        values=counts.values,
+        hole=0.68,
+        marker=dict(colors=colors, line=dict(color="#ffffff", width=2)),
+        textinfo="label+value",
+        textfont=dict(size=12, family="Plus Jakarta Sans, sans-serif"),
+        hoverinfo="label+value+percent",
+    )])
+    fig.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        margin=dict(l=10, r=10, t=25, b=15),
+        showlegend=False,
+        height=210,
+        annotations=[dict(text="Portfolio<br>Risk Split", x=0.5, y=0.5, font_size=13, font_color="#102a4c", font_family="Plus Jakarta Sans, sans-serif", showarrow=False)]
+    )
+    return fig
+
+
 def render_customer_score_waterfall(assessment: dict) -> go.Figure | None:
+    if not HAS_PLOTLY:
+        return None
     factors = assessment.get("factors", [])
     if not factors:
         return None
@@ -305,7 +370,9 @@ def render_customer_score_waterfall(assessment: dict) -> go.Figure | None:
     return fig
 
 
-def render_command_center_bubble(portfolio: pd.DataFrame) -> go.Figure:
+def render_command_center_bubble(portfolio: pd.DataFrame) -> go.Figure | None:
+    if not HAS_PLOTLY:
+        return None
     color_map = {"High": "#ef4444", "Medium": "#f59e0b", "Low": "#10b981"}
     fig = px.scatter(
         portfolio,
@@ -341,7 +408,9 @@ def render_command_center_bubble(portfolio: pd.DataFrame) -> go.Figure:
     return fig
 
 
-def render_segment_exposure_bar(high_portfolio: pd.DataFrame) -> go.Figure:
+def render_segment_exposure_bar(high_portfolio: pd.DataFrame) -> go.Figure | None:
+    if not HAS_PLOTLY:
+        return None
     segment_risk = high_portfolio.groupby("segment", as_index=False).annual_contract_value.sum()
     fig = px.bar(
         segment_risk,
@@ -364,7 +433,9 @@ def render_segment_exposure_bar(high_portfolio: pd.DataFrame) -> go.Figure:
     return fig
 
 
-def render_scenario_gauge(baseline_score: int, simulated_score: int) -> go.Figure:
+def render_scenario_gauge(baseline_score: int, simulated_score: int) -> go.Figure | None:
+    if not HAS_PLOTLY:
+        return None
     fig = go.Figure(go.Indicator(
         mode="gauge+number+delta",
         value=simulated_score,
@@ -589,6 +660,40 @@ if page == "Home":
         </section></div>""",
         unsafe_allow_html=True,
     )
+    # Interactive Portfolio Pulse on Executive Home
+    h_col1, h_col2 = st.columns([1.25, 2])
+    with h_col1:
+        if HAS_PLOTLY:
+            home_donut = render_home_portfolio_donut(home_portfolio)
+            if home_donut:
+                st.plotly_chart(home_donut, use_container_width=True)
+    with h_col2:
+        st.markdown(
+            f'''<div style="padding: 16px 20px; background: linear-gradient(145deg, #fff 0%, #f4f9ff 100%); border: 1px solid #d7e6f4; border-top: 2px solid #2d73c8; border-radius: 14px; box-shadow: 0 8px 24px rgba(35,83,132,0.06); height: 210px; display: flex; flex-direction: column; justify-content: space-around;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: #527092; font-weight: 800;">RENEWAL EXPOSURE HEALTH CHECK</span>
+                    <span class="eds-live-beacon" style="font-size: 0.58rem; padding: 2px 8px;"><span class="eds-beacon-dot"></span><span>ACTIVE</span></span>
+                </div>
+                <div style="display: flex; gap: 20px; margin-top: 8px;">
+                    <div>
+                        <div style="font-size: 0.62rem; color: #607892; text-transform: uppercase; letter-spacing: 0.08em;">High-Risk Ratio</div>
+                        <div style="font-size: 1.6rem; font-weight: 800; color: #a52a3d; line-height: 1.1;">{high_account_pct:.1f}%</div>
+                        <div style="font-size: 0.65rem; color: #7890a7;">{len(home_high)} of {len(home_portfolio)} accounts</div>
+                    </div>
+                    <div style="border-left: 1px solid #d7e6f4; padding-left: 20px;">
+                        <div style="font-size: 0.62rem; color: #607892; text-transform: uppercase; letter-spacing: 0.08em;">Annual Revenue At Risk</div>
+                        <div style="font-size: 1.6rem; font-weight: 800; color: #103b6b; line-height: 1.1;">${home_high_acv:,.0f}</div>
+                        <div style="font-size: 0.65rem; color: #2d73c8;">{home_exposure_pct:.1f}% of total portfolio ACV</div>
+                    </div>
+                </div>
+                <div style="font-size: 0.74rem; color: #365877; border-top: 1px solid #e2eaf2; padding-top: 8px; margin-top: 4px;">
+                    <b>Executive takeaway:</b> High risk is concentrated in renewals within 90 days. Rule-based intervention reduces projected churn by up to 34 points.
+                </div>
+            </div>''',
+            unsafe_allow_html=True,
+        )
+
+    st.markdown("<br/>", unsafe_allow_html=True)
     hero_left, hero_data, hero_mid, hero_right = st.columns([1.3, 1, 1, 1])
     hero_left.button(
         "Open the Renewal Command Center",
