@@ -139,17 +139,61 @@ The suite verifies validation, relational integrity, risk boundaries, source evi
 
 ## Screenshots
 
-Add nine screenshots after launching locally:
+These frames were captured from the public demo using synthetic data only.
 
-1. Executive Home with the hero, live portfolio pulse, and guided journeys.
-2. Data Onboarding with the file profile and validation result.
-3. Command Center with portfolio KPIs and priority queue.
-4. Customer 360 with score waterfall and an expanded source-record evidence block.
-5. Scenario Lab showing current versus simulated score.
-6. Actions & Decisions with an assigned intervention and decision timeline.
-7. Policy Studio with a portfolio impact preview and version register.
-8. Change Timeline with a factor-level score explanation.
-9. Capacity Planner with funded and deferred interventions.
+### Executive Home
+
+![Executive Home](docs/screenshots/01-home.png)
+
+_Live portfolio pulse, today's priority account, and the governed decision path._
+
+### Data Onboarding
+
+![Data Onboarding](docs/screenshots/02-data-onboarding.png)
+
+_Public-boundary preview of the five-file onboarding kit and validation contract._
+
+### Command Center
+
+![Renewal Command Center](docs/screenshots/03-command-center.png)
+
+_Portfolio KPIs and the evidence-backed renewal priority queue._
+
+### Customer 360
+
+![Customer 360](docs/screenshots/04-customer-360.png)
+
+_Score contribution waterfall paired with expanded, source-linked usage evidence._
+
+### Scenario Lab
+
+![Intervention Scenario Lab](docs/screenshots/06-scenario-lab.png)
+
+_Current versus simulated score after explicit adoption, support, and renewal assumptions._
+
+### Actions & Decisions
+
+![Actions and Decisions](docs/screenshots/08-actions-decisions.png)
+
+_Assigned intervention context and the human decision timeline for Juniper Labs._
+
+### Policy Studio
+
+![Renewal-Risk Policy Studio](docs/screenshots/09-policy-studio.png)
+
+_Portfolio impact preview alongside the maker-checker policy version register._
+
+### Change Timeline
+
+![Risk Change Timeline](docs/screenshots/05-change-timeline.png)
+
+_Factor-level score movement with the exact contract, usage, and support evidence involved._
+
+### Capacity Planner
+
+![Capacity-Aware Intervention Planner](docs/screenshots/07-capacity-planner.png)
+
+_Funded intervention portfolio under explicit hours, budget, escalation, and enablement limits._
 
 ## Future AI integration without weakening governance
 

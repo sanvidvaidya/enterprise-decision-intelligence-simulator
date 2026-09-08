@@ -10,6 +10,8 @@ from html import escape
 from pathlib import Path
 
 import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
 
 from decision_intelligence.database import DEFAULT_DATABASE_PATH, connect, create_database
@@ -61,13 +63,114 @@ from decision_intelligence.workflow import (
 st.set_page_config(page_title="Enterprise Decision Simulator", page_icon="◈", layout="wide")
 st.markdown(
     """<style>
-    .block-container {padding-top: 1.8rem; padding-bottom: 3rem;}
-    [data-testid="stMetric"] {border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px;}
-    .eyebrow {font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:#667085; font-weight:700;}
-    .hero {font-size:2.35rem; line-height:1.1; font-weight:760; margin:.3rem 0 .5rem;}
-    .subtle {color:#667085; max-width:850px;}
+    :root {
+        --eds-ease-apple: cubic-bezier(0.23, 1, 0.32, 1);
+        --eds-ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+        --eds-duration-fast: 120ms;
+        --eds-duration-normal: 220ms;
+    }
+    .block-container {padding-top: 1.5rem; padding-bottom: 3rem;}
+    
+    /* Apple Hairline Scroll Progress Bar pinned to top of viewport */
+    .eds-scroll-track {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 3px;
+        background: transparent;
+        z-index: 999999;
+        pointer-events: none;
+    }
+    .eds-scroll-bar {
+        height: 100%;
+        width: 100%;
+        background: linear-gradient(90deg, #1f68c4 0%, #38bdf8 35%, #6366f1 70%, #ec4899 100%);
+        box-shadow: 0 0 10px rgba(56, 189, 248, 0.8), 0 0 18px rgba(99, 102, 241, 0.4);
+        animation: edsScrollGlow 3.5s ease-in-out infinite alternate;
+    }
+    @keyframes edsScrollGlow {
+        0% { filter: brightness(1); }
+        100% { filter: brightness(1.3) drop-shadow(0 0 8px rgba(56, 189, 248, 0.8)); }
+    }
+
+    /* Apple Staggered Reveals */
+    @keyframes edsReveal {
+        from {
+            opacity: 0;
+            transform: translateY(12px) scale(0.98);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+    .eds-metric, .eds-brief, .eds-readiness, .eds-journey, .eds-lifecycle, [data-testid="stMetric"] {
+        animation: edsReveal 280ms var(--eds-ease-apple) both;
+    }
+    .eds-metric:nth-child(1) { animation-delay: 20ms; }
+    .eds-metric:nth-child(2) { animation-delay: 50ms; }
+    .eds-metric:nth-child(3) { animation-delay: 80ms; }
+    .eds-metric:nth-child(4) { animation-delay: 110ms; }
+    .eds-metric:nth-child(5) { animation-delay: 140ms; }
+
+    /* Emil Kowalski Tactile Button Press Physics */
+    div.stButton > button {
+        border-radius: 10px !important;
+        font-weight: 600 !important;
+        box-shadow: 0 2px 8px rgba(27, 83, 145, 0.12) !important;
+        transition: transform var(--eds-duration-fast) var(--eds-ease-apple), box-shadow var(--eds-duration-fast) var(--eds-ease-apple), border-color var(--eds-duration-fast) ease !important;
+    }
+    div.stButton > button:hover {
+        transform: translateY(-1.5px) !important;
+        box-shadow: 0 6px 18px rgba(27, 83, 145, 0.22) !important;
+    }
+    div.stButton > button:active {
+        transform: scale(0.97) translateY(0) !important;
+        box-shadow: 0 1px 4px rgba(27, 83, 145, 0.2) !important;
+    }
+
+    /* Dynamic Island Live Telemetry Beacon */
+    .eds-live-beacon {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 0.65rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        font-weight: 800;
+        color: #0b4f8a;
+        background: rgba(45, 115, 200, 0.1);
+        border: 1px solid rgba(45, 115, 200, 0.28);
+        padding: 3px 10px;
+        border-radius: 999px;
+    }
+    .eds-beacon-dot {
+        width: 6.5px;
+        height: 6.5px;
+        border-radius: 50%;
+        background: #10b981;
+        position: relative;
+    }
+    .eds-beacon-dot::after {
+        content: "";
+        position: absolute;
+        inset: -3px;
+        border-radius: 50%;
+        border: 1.5px solid #10b981;
+        animation: edsRadar 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+    @keyframes edsRadar {
+        0% { transform: scale(0.8); opacity: 0.9; }
+        100% { transform: scale(2.4); opacity: 0; }
+    }
+
+    [data-testid="stMetric"] {border: 1px solid #d7e6f4; border-radius: 14px; padding: 14px; background: linear-gradient(145deg, #fff 0%, #f4f9ff 100%); box-shadow: 0 6px 20px rgba(35,83,132,0.06);}
+    .eyebrow {font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:#527092; font-weight:750;}
+    .hero {font-size:2.35rem; line-height:1.1; font-weight:760; margin:.3rem 0 .5rem; letter-spacing: -0.03em; color: #0d2b50;}
+    .subtle {color:#607892; max-width:850px; line-height: 1.6;}
     .eds-home {color:#102a4c; margin-top:.2rem;}
-    .eds-hero {position:relative; overflow:hidden; color:#f8fbff; border:1px solid rgba(255,255,255,.4); border-radius:28px; padding:1.2rem 1.35rem 1.35rem; margin-bottom:1rem; box-shadow:0 28px 75px rgba(27,83,145,.24); background:radial-gradient(circle at 88% 2%,rgba(230,249,255,.92) 0%,rgba(230,249,255,0) 26%),radial-gradient(circle at 72% 94%,rgba(80,169,241,.7) 0%,rgba(80,169,241,0) 38%),linear-gradient(128deg,#071b35 0%,#123d70 36%,#2d73c8 66%,#a8e0fa 100%);}
+    .eds-hero {position:relative; overflow:hidden; color:#f8fbff; border:1px solid rgba(255,255,255,.45); border-radius:28px; padding:1.25rem 1.4rem 1.4rem; margin-bottom:1.2rem; box-shadow:0 28px 75px rgba(27,83,145,.24); background:radial-gradient(circle at 88% 2%,rgba(230,249,255,.92) 0%,rgba(230,249,255,0) 26%),radial-gradient(circle at 72% 94%,rgba(80,169,241,.7) 0%,rgba(80,169,241,0) 38%),linear-gradient(128deg,#071b35 0%,#123d70 36%,#2d73c8 66%,#a8e0fa 100%);}
     .eds-hero:before {content:""; position:absolute; width:460px; height:460px; border-radius:50%; right:-160px; top:-210px; pointer-events:none; border:1px solid rgba(255,255,255,.4); box-shadow:0 0 0 46px rgba(255,255,255,.06),0 0 0 92px rgba(255,255,255,.045);}
     .eds-hero:after {content:""; position:absolute; inset:0; pointer-events:none; opacity:.24; background-image:linear-gradient(rgba(255,255,255,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.14) 1px,transparent 1px); background-size:52px 52px; mask-image:linear-gradient(90deg,transparent 18%,#000 100%);}
     .eds-masthead {position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.15rem .25rem 1rem; border-bottom:1px solid rgba(235,247,255,.32); font-size:.66rem; letter-spacing:.15em; text-transform:uppercase; color:#d9edff; font-weight:750;}
@@ -83,7 +186,8 @@ st.markdown(
     .eds-proof-item + .eds-proof-item {padding-left:.8rem;}
     .eds-proof-value {display:block; font-size:1.18rem; font-weight:760; color:#fff; margin-bottom:.1rem;}
     .eds-proof-label {font-size:.59rem; letter-spacing:.1em; text-transform:uppercase; color:#cbe4fa;}
-    .eds-priority {background:linear-gradient(155deg,rgba(255,255,255,.94),rgba(233,246,255,.82)); color:#102a4c; padding:1.25rem 1.3rem 1.35rem; border:1px solid rgba(255,255,255,.72); border-radius:20px; box-shadow:0 22px 55px rgba(5,38,76,.26); backdrop-filter:blur(16px);}
+    .eds-priority {background:linear-gradient(155deg,rgba(255,255,255,.94),rgba(233,246,255,.82)); color:#102a4c; padding:1.25rem 1.3rem 1.35rem; border:1px solid rgba(255,255,255,.75); border-radius:20px; box-shadow:0 22px 55px rgba(5,38,76,.26); backdrop-filter:blur(16px); transition: transform 200ms var(--eds-ease-apple), box-shadow 200ms var(--eds-ease-apple);}
+    .eds-priority:hover {transform: translateY(-2.5px); box-shadow: 0 28px 65px rgba(5,38,76,.32);}
     .eds-priority-head {display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(61,111,168,.2); padding-bottom:.7rem; margin-bottom:1rem; font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:#527092; font-weight:800;}
     .eds-priority-index {display:flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#1f68c4,#64b5ee); font-size:.85rem; font-weight:800; color:#fff; letter-spacing:0; box-shadow:0 8px 20px rgba(31,104,196,.25);}
     .eds-priority-name {font-size:1.72rem; line-height:1.08; letter-spacing:-.025em; font-weight:750; margin-bottom:.85rem; color:#0d2b50;}
@@ -104,7 +208,8 @@ st.markdown(
     .eds-section-title {font-family:'Source Sans',Arial,sans-serif; font-size:2.25rem; line-height:1.08; letter-spacing:-.028em; color:#102a4c; margin:0; font-weight:740;}
     .eds-section-subtitle {font-size:.9rem; color:#607892; line-height:1.55; margin:.45rem 0 0; max-width:720px;}
     .eds-metric-grid {display:grid; grid-template-columns:repeat(5,1fr); gap:.7rem; background:transparent;}
-    .eds-metric {position:relative; overflow:hidden; padding:1.2rem 1rem 1.1rem; min-height:126px; border:1px solid #d7e6f4; border-radius:16px; background:linear-gradient(145deg,#fff 0%,#f2f8ff 100%); box-shadow:0 10px 28px rgba(35,83,132,.07);}
+    .eds-metric {position:relative; overflow:hidden; padding:1.2rem 1rem 1.1rem; min-height:126px; border:1px solid #d7e6f4; border-top:1px solid #ffffff; border-radius:16px; background:linear-gradient(145deg,#fff 0%,#f2f8ff 100%); box-shadow:0 10px 28px rgba(35,83,132,.07); transition: transform 200ms var(--eds-ease-apple), box-shadow 200ms var(--eds-ease-apple);}
+    .eds-metric:hover {transform: translateY(-2.5px); box-shadow: 0 16px 36px rgba(35,83,132,.12);}
     .eds-metric:before {content:""; position:absolute; height:3px; inset:0 0 auto; background:linear-gradient(90deg,#72b8ed,#2d73c8);}
     .eds-metric + .eds-metric {border-left:1px solid #d7e6f4;}
     .eds-metric-label {font-size:.59rem; letter-spacing:.105em; text-transform:uppercase; color:#607892; min-height:32px;}
@@ -113,7 +218,8 @@ st.markdown(
     .eds-metric.alert {background:linear-gradient(145deg,#fff 0%,#eef7ff 70%,#fdf2f3 100%);}
     .eds-metric.alert:before {background:linear-gradient(90deg,#2d73c8,#df6c78);}
     .eds-metric.alert .eds-metric-value {color:#a52a3d;}
-    .eds-brief {border:1px solid #cfe2f5; border-radius:20px; background:linear-gradient(145deg,#f5faff 0%,#e8f4ff 100%); padding:1.6rem 1.7rem; min-height:340px; box-shadow:0 16px 42px rgba(31,93,153,.1);}
+    .eds-brief {border:1px solid #cfe2f5; border-top: 1px solid #ffffff; border-radius:20px; background:linear-gradient(145deg,#f5faff 0%,#e8f4ff 100%); padding:1.6rem 1.7rem; min-height:340px; box-shadow:0 16px 42px rgba(31,93,153,.1); transition: transform 200ms var(--eds-ease-apple);}
+    .eds-brief:hover {transform: translateY(-2px);}
     .eds-brief-top {display:flex; align-items:center; justify-content:space-between; gap:1rem; border-bottom:1px solid #c9ddef; padding-bottom:.8rem; margin-bottom:1.2rem;}
     .eds-brief-tag {font-size:.6rem; letter-spacing:.13em; text-transform:uppercase; color:#1766bd; font-weight:800;}
     .eds-brief-risk {font-size:.66rem; letter-spacing:.08em; text-transform:uppercase; color:#a52a3d; font-weight:800;}
@@ -125,7 +231,7 @@ st.markdown(
     .eds-readiness-row {display:flex; justify-content:space-between; gap:1rem; border-top:1px solid rgba(213,236,255,.18); padding:.58rem 0; font-size:.7rem;}
     .eds-readiness-row span {color:#b9d6ed;}
     .eds-readiness-row strong {color:#fff; text-align:right;}
-    .eds-journey {position:relative; overflow:hidden; border:1px solid #d4e4f3; border-radius:16px; background:linear-gradient(155deg,#fff,#f3f9ff); padding:1.15rem 1rem .7rem; min-height:190px; box-shadow:0 10px 28px rgba(35,83,132,.07); transition:transform .2s ease,box-shadow .2s ease;}
+    .eds-journey {position:relative; overflow:hidden; border:1px solid #d4e4f3; border-top:1px solid #ffffff; border-radius:16px; background:linear-gradient(155deg,#fff,#f3f9ff); padding:1.15rem 1rem .7rem; min-height:190px; box-shadow:0 10px 28px rgba(35,83,132,.07); transition:transform 200ms var(--eds-ease-apple),box-shadow 200ms var(--eds-ease-apple);}
     .eds-journey:before {content:""; position:absolute; inset:0 0 auto; height:4px; background:linear-gradient(90deg,#92d1f3,#2d73c8);}
     .eds-journey:hover {transform:translateY(-3px); box-shadow:0 16px 34px rgba(35,83,132,.12);}
     .eds-journey-number {color:#2672c6; font-size:1.48rem; font-weight:750;}
@@ -137,11 +243,159 @@ st.markdown(
     .eds-trust {background:linear-gradient(90deg,#e9f5ff,#f5fbff); border:1px solid #cbe2f5; border-left:5px solid #2d73c8; border-radius:12px; padding:1rem 1.2rem; color:#365877; font-size:.8rem; line-height:1.55; margin-top:2rem; box-shadow:0 8px 24px rgba(35,83,132,.06);}
     @media (max-width: 1050px) {.eds-hero-grid{grid-template-columns:1fr;gap:2rem}.eds-priority{max-width:620px}.eds-metric-grid{grid-template-columns:repeat(2,1fr)}.eds-ticker{grid-template-columns:repeat(2,1fr)}}
     @media (max-width: 700px) {.eds-hero{padding:1rem;border-radius:20px}.eds-masthead{align-items:flex-start;flex-direction:column}.eds-hero-grid{padding:2.4rem 0 .9rem}.eds-hero .eds-title{font-size:2.55rem!important}.eds-proof{grid-template-columns:1fr}.eds-ticker,.eds-metric-grid{grid-template-columns:1fr}.eds-ticker-cell + .eds-ticker-cell{border-left:0;border-top:1px solid rgba(230,245,255,.18)}.eds-section-head{grid-template-columns:1fr;gap:.55rem}.eds-section-title{font-size:1.8rem}}
+    
+    /* Native Tabs with Apple Pill Style */
+    [data-testid="stTabs"] button[role="tab"] {
+        font-size: 0.84rem !important;
+        font-weight: 600 !important;
+        color: #64748b !important;
+        border-radius: 8px !important;
+        padding: 8px 16px !important;
+        transition: all var(--eds-duration-fast) var(--eds-ease-apple) !important;
+    }
+    [data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
+        color: #1e40af !important;
+        background: #eff6ff !important;
+        border-bottom: 2px solid #2563eb !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, .eds-metric, .eds-brief, .eds-readiness, .eds-journey, .eds-lifecycle, [data-testid="stMetric"], .eds-scroll-bar, div.stButton > button {
+            animation: none !important;
+            transition: none !important;
+            transform: none !important;
+        }
+    }
     </style>""",
     unsafe_allow_html=True,
 )
 
 DEPLOYMENT = deployment_mode()
+
+def render_customer_score_waterfall(assessment: dict) -> go.Figure | None:
+    factors = assessment.get("factors", [])
+    if not factors:
+        return None
+    names = [f["name"] for f in factors]
+    points = [f["points"] for f in factors]
+    total_score = assessment["risk_score"]
+    
+    fig = go.Figure(go.Waterfall(
+        name="Risk Points",
+        orientation="v",
+        measure=["relative"] * len(factors) + ["total"],
+        x=names + ["Calculated Risk Score"],
+        textposition="outside",
+        text=[f"+{p} pts" for p in points] + [f"{total_score} / 100"],
+        y=points + [total_score],
+        connector={"line": {"color": "rgba(31, 104, 196, 0.4)", "width": 1.5, "dash": "dot"}},
+        decreasing={"marker": {"color": "#10b981"}},
+        increasing={"marker": {"color": "#ef4444"}},
+        totals={"marker": {"color": "#1e40af"}},
+    ))
+    fig.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        margin=dict(l=10, r=10, t=30, b=10),
+        xaxis=dict(tickangle=-15, tickfont=dict(size=11, color="#334155")),
+        yaxis=dict(title="Score Contribution (Points)", range=[0, 110], gridcolor="rgba(0,0,0,0.06)", tickfont=dict(size=10, color="#64748b")),
+        height=320,
+        showlegend=False,
+    )
+    return fig
+
+
+def render_command_center_bubble(portfolio: pd.DataFrame) -> go.Figure:
+    color_map = {"High": "#ef4444", "Medium": "#f59e0b", "Low": "#10b981"}
+    fig = px.scatter(
+        portfolio,
+        x="days_to_renewal",
+        y="risk_score",
+        size="annual_contract_value",
+        color="risk_level",
+        color_discrete_map=color_map,
+        hover_name="customer_name",
+        hover_data={
+            "days_to_renewal": True,
+            "risk_score": True,
+            "annual_contract_value": ":$,.0f",
+            "account_manager": True,
+            "risk_level": False,
+        },
+        labels={
+            "days_to_renewal": "Days to Renewal (Contract Urgency)",
+            "risk_score": "Risk Score (0-100)",
+            "annual_contract_value": "Contract ACV",
+        },
+        size_max=28,
+    )
+    fig.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        margin=dict(l=10, r=10, t=15, b=10),
+        xaxis=dict(gridcolor="rgba(0,0,0,0.06)", zeroline=False, tickfont=dict(size=10, color="#64748b")),
+        yaxis=dict(gridcolor="rgba(0,0,0,0.06)", zeroline=False, range=[0, 105], tickfont=dict(size=10, color="#64748b")),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        height=300,
+    )
+    return fig
+
+
+def render_segment_exposure_bar(high_portfolio: pd.DataFrame) -> go.Figure:
+    segment_risk = high_portfolio.groupby("segment", as_index=False).annual_contract_value.sum()
+    fig = px.bar(
+        segment_risk,
+        x="annual_contract_value",
+        y="segment",
+        orientation="h",
+        color="annual_contract_value",
+        color_continuous_scale=["#93c5fd", "#1d4ed8"],
+        labels={"annual_contract_value": "High-Risk ACV ($)", "segment": "Segment"},
+    )
+    fig.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        margin=dict(l=10, r=15, t=15, b=10),
+        coloraxis_showscale=False,
+        xaxis=dict(gridcolor="rgba(0,0,0,0.06)", tickprefix="$", tickfont=dict(size=10, color="#64748b")),
+        yaxis=dict(tickfont=dict(size=11, color="#334155")),
+        height=300,
+    )
+    return fig
+
+
+def render_scenario_gauge(baseline_score: int, simulated_score: int) -> go.Figure:
+    fig = go.Figure(go.Indicator(
+        mode="gauge+number+delta",
+        value=simulated_score,
+        title={'text': "Simulated Risk Score (After Intervention)", 'font': {'size': 13, 'color': '#0f172a'}},
+        delta={'reference': baseline_score, 'decreasing': {'color': "#10b981"}, 'increasing': {'color': "#ef4444"}},
+        gauge={
+            'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': "#64748b"},
+            'bar': {'color': "#2563eb"},
+            'bgcolor': "white",
+            'borderwidth': 1,
+            'bordercolor': "#cbd5e1",
+            'steps': [
+                {'range': [0, 40], 'color': 'rgba(16, 185, 129, 0.2)'},
+                {'range': [40, 70], 'color': 'rgba(245, 158, 11, 0.2)'},
+                {'range': [70, 100], 'color': 'rgba(239, 68, 68, 0.2)'}
+            ],
+            'threshold': {
+                'line': {'color': "#ef4444", 'width': 3},
+                'thickness': 0.8,
+                'value': baseline_score
+            }
+        }
+    ))
+    fig.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        margin=dict(l=20, r=20, t=30, b=10),
+        height=230,
+    )
+    return fig
+
 
 
 @st.cache_resource(show_spinner="Preparing isolated synthetic demonstration data...")
@@ -162,7 +416,13 @@ with connect(DATABASE_PATH) as connection:
         connection,
     )
 
-st.sidebar.markdown("### ◈ Enterprise Decision Simulator")
+st.sidebar.markdown(
+    """<div style="margin-bottom:12px;">
+        <span class="eds-live-beacon"><span class="eds-beacon-dot"></span><span>LIVE PORTFOLIO ACTIVE</span></span>
+        <div style="font-size:1.35rem; font-weight:800; color:#0d2b50; letter-spacing:-0.02em; margin-top:8px;">◈ Decision Simulator</div>
+    </div>""",
+    unsafe_allow_html=True,
+)
 page = st.sidebar.radio(
     "Workspace",
     [
@@ -725,15 +985,13 @@ elif page == "Command Center":
         column_config={"ACV": st.column_config.NumberColumn(format="$%.0f"), "Score": st.column_config.ProgressColumn(min_value=0, max_value=100)},
     )
 
-    left, right = st.columns([1, 2])
+    left, right = st.columns([1.25, 1])
     with left:
-        st.subheader("Risk distribution")
-        distribution = portfolio.risk_level.value_counts().reindex(["High", "Medium", "Low"], fill_value=0)
-        st.bar_chart(distribution)
+        st.subheader("Portfolio Risk vs. ACV Bubble Map")
+        st.plotly_chart(render_command_center_bubble(portfolio), use_container_width=True)
     with right:
-        st.subheader("Revenue exposure by segment")
-        segment_risk = high.groupby("segment", as_index=True).annual_contract_value.sum()
-        st.bar_chart(segment_risk)
+        st.subheader("Revenue Exposure by Segment")
+        st.plotly_chart(render_segment_exposure_bar(high), use_container_width=True)
 
     d1, d2, d3 = st.columns([1, 1, 1])
     if d1.button(
@@ -784,9 +1042,13 @@ elif page == "Customer 360":
             f"Account manager: **{customer['account_manager_name']}** ({customer['account_manager_email']})"
         )
         if assessment["factors"]:
-            waterfall = pd.DataFrame(assessment["factors"])[["name", "points"]].set_index("name")
-            st.subheader("Score contribution")
-            st.bar_chart(waterfall)
+            st.subheader("Score contribution waterfall")
+            wf_fig = render_customer_score_waterfall(assessment)
+            if wf_fig:
+                st.plotly_chart(wf_fig, use_container_width=True)
+            else:
+                waterfall = pd.DataFrame(assessment["factors"])[["name", "points"]].set_index("name")
+                st.bar_chart(waterfall)
         else:
             st.success("No configured renewal-risk factors are currently triggered.")
         st.subheader("Why this score exists")
@@ -903,6 +1165,7 @@ elif page == "Scenario Lab":
         database_path=DATABASE_PATH,
     )
     baseline, simulated = scenario["baseline"], scenario["simulated"]
+    st.plotly_chart(render_scenario_gauge(baseline["risk_score"], simulated["risk_score"]), use_container_width=True)
     col1, col2, col3 = st.columns(3)
     col1.metric("Current score", baseline["risk_score"], baseline["risk_level"])
     col2.metric("Scenario score", simulated["risk_score"], simulated["risk_level"])
