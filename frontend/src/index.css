@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    background-color: #eee7d7;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(217, 119, 6, 0.14) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(245, 158, 11, 0.12) 0px, transparent 50%),
+      radial-gradient(at 50% 50%, rgba(238, 229, 212, 0.95) 0px, transparent 65%),
+      radial-gradient(at 100% 100%, rgba(22, 101, 52, 0.09) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, rgba(180, 83, 9, 0.10) 0px, transparent 50%);
+    background-attachment: fixed;
+    color: #241e19;
+    font-family: var(--font-sans);
+    letter-spacing: -0.015em;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.03em;
+    color: #1f1a16;
+  }
+
+  code, pre, .font-mono {
+    font-family: var(--font-mono);
+  }
+
+  /* Sleek warm ochre scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgba(230, 220, 202, 0.8);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(217, 119, 6, 0.5), rgba(180, 83, 9, 0.5));
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, rgba(217, 119, 6, 0.8), rgba(180, 83, 9, 0.8));
+  }
+}
+
+/* Tactile French Parchment / Butter Cream Card */
+.apple-cockpit-card {
+  background: rgba(245, 239, 226, 0.95);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-radius: 24px;
+  border: 1px solid rgba(214, 201, 178, 0.88);
+  box-shadow: 
+    0 1px 3px 0 rgba(36, 30, 25, 0.03),
+    0 20px 45px -15px rgba(120, 53, 15, 0.08),
+    inset 0 1px 0 0 rgba(254, 250, 242, 0.9);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.apple-cockpit-card:hover {
+  border-color: rgba(217, 119, 6, 0.5);
+  box-shadow: 
+    0 25px 55px -12px rgba(180, 83, 9, 0.14),
+    inset 0 1px 0 0 rgba(254, 250, 242, 0.95);
+  transform: translateY(-3px);
+}
+
+/* Dynamic Island in Darker Cream Linen */
+.apple-dynamic-island {
+  background: rgba(242, 235, 220, 0.97);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(210, 196, 171, 0.95);
+  box-shadow: 
+    0 12px 30px -5px rgba(36, 30, 25, 0.08),
+    inset 0 1px 0 0 rgba(254, 250, 242, 0.95),
+    0 0 20px rgba(217, 119, 6, 0.08);
+}
+
+/* Yellow Ochre, Sienna & Warm Walnut Gradients */
+.apple-title-gradient {
+  background: linear-gradient(135deg, #1f1a16 0%, #78350f 45%, #b45309 75%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.ochre-gradient-text {
+  background: linear-gradient(135deg, #9a3412 0%, #b45309 45%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.terracotta-gradient-text {
+  background: linear-gradient(135deg, #9a3412 0%, #c2410c 50%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.jade-gradient-text {
+  background: linear-gradient(135deg, #14532d 0%, #15803d 50%, #16a34a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Button spring physics */
+.apple-spring-press {
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s ease;
+}
+.apple-spring-press:active {
+  transform: scale(0.96);
+}
+
+.mono-num {
+  font-feature-settings: "tnum" 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Animated Circular Donut / Pie Chart SVG */
+.pie-segment {
+  transition: stroke-dasharray 0.8s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.3s ease;
+}

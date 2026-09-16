@@ -1,0 +1,4659 @@
+{
+  "default_policy": {
+    "medium_risk_threshold": 30,
+    "high_risk_threshold": 55,
+    "usage_decline_moderate_threshold": 0.15,
+    "usage_decline_moderate_points": 18,
+    "usage_decline_high_threshold": 0.3,
+    "usage_decline_high_points": 30,
+    "seat_engagement_low_threshold": 0.4,
+    "seat_engagement_low_points": 15,
+    "seat_engagement_medium_threshold": 0.6,
+    "seat_engagement_medium_points": 8,
+    "critical_support_points": 30,
+    "renewal_near_days": 30,
+    "renewal_near_points": 20,
+    "renewal_mid_days": 60,
+    "renewal_mid_points": 12,
+    "renewal_far_days": 90,
+    "renewal_far_points": 6,
+    "high_acv_threshold": 100000,
+    "high_acv_points": 10,
+    "medium_acv_threshold": 50000,
+    "medium_acv_points": 5
+  },
+  "customers": [
+    {
+      "customer_id": "CUS-001",
+      "customer_name": "Acme Systems",
+      "industry": "Technology",
+      "segment": "Mid-Market",
+      "employee_count": 1312,
+      "region": "North America",
+      "account_manager_id": "AM-001",
+      "customer_status": "Active",
+      "created_at": "2022-12-28"
+    },
+    {
+      "customer_id": "CUS-002",
+      "customer_name": "Bluebird Health",
+      "industry": "Healthcare",
+      "segment": "SMB",
+      "employee_count": 804,
+      "region": "Europe",
+      "account_manager_id": "AM-002",
+      "customer_status": "Active",
+      "created_at": "2024-03-16"
+    },
+    {
+      "customer_id": "CUS-003",
+      "customer_name": "Cedar Finance",
+      "industry": "Financial Services",
+      "segment": "Enterprise",
+      "employee_count": 2625,
+      "region": "Asia Pacific",
+      "account_manager_id": "AM-003",
+      "customer_status": "Active",
+      "created_at": "2024-08-23"
+    },
+    {
+      "customer_id": "CUS-004",
+      "customer_name": "Delta Logistics",
+      "industry": "Logistics",
+      "segment": "Mid-Market",
+      "employee_count": 1440,
+      "region": "Latin America",
+      "account_manager_id": "AM-004",
+      "customer_status": "Active",
+      "created_at": "2023-03-28"
+    },
+    {
+      "customer_id": "CUS-005",
+      "customer_name": "Evergreen Retail",
+      "industry": "Retail",
+      "segment": "SMB",
+      "employee_count": 215,
+      "region": "North America",
+      "account_manager_id": "AM-005",
+      "customer_status": "At Risk",
+      "created_at": "2024-01-20"
+    },
+    {
+      "customer_id": "CUS-006",
+      "customer_name": "Fjord Manufacturing",
+      "industry": "Manufacturing",
+      "segment": "Enterprise",
+      "employee_count": 9702,
+      "region": "Europe",
+      "account_manager_id": "AM-001",
+      "customer_status": "Active",
+      "created_at": "2023-01-02"
+    },
+    {
+      "customer_id": "CUS-007",
+      "customer_name": "Granite Energy",
+      "industry": "Technology",
+      "segment": "Mid-Market",
+      "employee_count": 2688,
+      "region": "Asia Pacific",
+      "account_manager_id": "AM-002",
+      "customer_status": "Active",
+      "created_at": "2025-05-23"
+    },
+    {
+      "customer_id": "CUS-008",
+      "customer_name": "Harbor Education",
+      "industry": "Healthcare",
+      "segment": "SMB",
+      "employee_count": 806,
+      "region": "Latin America",
+      "account_manager_id": "AM-003",
+      "customer_status": "Active",
+      "created_at": "2025-01-17"
+    },
+    {
+      "customer_id": "CUS-009",
+      "customer_name": "Indigo Media",
+      "industry": "Financial Services",
+      "segment": "Enterprise",
+      "employee_count": 5863,
+      "region": "North America",
+      "account_manager_id": "AM-004",
+      "customer_status": "Active",
+      "created_at": "2023-07-25"
+    },
+    {
+      "customer_id": "CUS-010",
+      "customer_name": "Juniper Labs",
+      "industry": "Logistics",
+      "segment": "Mid-Market",
+      "employee_count": 1365,
+      "region": "Europe",
+      "account_manager_id": "AM-005",
+      "customer_status": "At Risk",
+      "created_at": "2022-11-23"
+    },
+    {
+      "customer_id": "CUS-011",
+      "customer_name": "Keystone Analytics",
+      "industry": "Retail",
+      "segment": "SMB",
+      "employee_count": 612,
+      "region": "Asia Pacific",
+      "account_manager_id": "AM-001",
+      "customer_status": "Active",
+      "created_at": "2024-10-16"
+    },
+    {
+      "customer_id": "CUS-012",
+      "customer_name": "Lighthouse Foods",
+      "industry": "Manufacturing",
+      "segment": "Enterprise",
+      "employee_count": 4404,
+      "region": "Latin America",
+      "account_manager_id": "AM-002",
+      "customer_status": "Active",
+      "created_at": "2022-12-06"
+    },
+    {
+      "customer_id": "CUS-013",
+      "customer_name": "Meridian Travel",
+      "industry": "Technology",
+      "segment": "Mid-Market",
+      "employee_count": 1800,
+      "region": "North America",
+      "account_manager_id": "AM-003",
+      "customer_status": "Active",
+      "created_at": "2022-11-30"
+    },
+    {
+      "customer_id": "CUS-014",
+      "customer_name": "Northwind Security",
+      "industry": "Healthcare",
+      "segment": "SMB",
+      "employee_count": 250,
+      "region": "Europe",
+      "account_manager_id": "AM-004",
+      "customer_status": "Active",
+      "created_at": "2024-07-02"
+    },
+    {
+      "customer_id": "CUS-015",
+      "customer_name": "Orchid Bio",
+      "industry": "Financial Services",
+      "segment": "Enterprise",
+      "employee_count": 10556,
+      "region": "Asia Pacific",
+      "account_manager_id": "AM-005",
+      "customer_status": "At Risk",
+      "created_at": "2023-01-02"
+    },
+    {
+      "customer_id": "CUS-016",
+      "customer_name": "Pioneer Legal",
+      "industry": "Logistics",
+      "segment": "Mid-Market",
+      "employee_count": 3910,
+      "region": "Latin America",
+      "account_manager_id": "AM-001",
+      "customer_status": "Active",
+      "created_at": "2024-04-30"
+    },
+    {
+      "customer_id": "CUS-017",
+      "customer_name": "Quartz Mobility",
+      "industry": "Retail",
+      "segment": "SMB",
+      "employee_count": 312,
+      "region": "North America",
+      "account_manager_id": "AM-002",
+      "customer_status": "Active",
+      "created_at": "2023-11-13"
+    },
+    {
+      "customer_id": "CUS-018",
+      "customer_name": "Redwood Telecom",
+      "industry": "Manufacturing",
+      "segment": "Enterprise",
+      "employee_count": 3003,
+      "region": "Europe",
+      "account_manager_id": "AM-003",
+      "customer_status": "Active",
+      "created_at": "2023-11-23"
+    },
+    {
+      "customer_id": "CUS-019",
+      "customer_name": "Summit Hospitality",
+      "industry": "Technology",
+      "segment": "Mid-Market",
+      "employee_count": 1905,
+      "region": "Asia Pacific",
+      "account_manager_id": "AM-004",
+      "customer_status": "Active",
+      "created_at": "2025-03-14"
+    },
+    {
+      "customer_id": "CUS-020",
+      "customer_name": "Tidal Commerce",
+      "industry": "Healthcare",
+      "segment": "SMB",
+      "employee_count": 432,
+      "region": "Latin America",
+      "account_manager_id": "AM-005",
+      "customer_status": "At Risk",
+      "created_at": "2023-01-21"
+    },
+    {
+      "customer_id": "CUS-021",
+      "customer_name": "Umber Construction",
+      "industry": "Financial Services",
+      "segment": "Enterprise",
+      "employee_count": 13124,
+      "region": "North America",
+      "account_manager_id": "AM-001",
+      "customer_status": "Active",
+      "created_at": "2024-10-27"
+    },
+    {
+      "customer_id": "CUS-022",
+      "customer_name": "Vertex Insurance",
+      "industry": "Logistics",
+      "segment": "Mid-Market",
+      "employee_count": 1044,
+      "region": "Europe",
+      "account_manager_id": "AM-002",
+      "customer_status": "Active",
+      "created_at": "2024-08-11"
+    },
+    {
+      "customer_id": "CUS-023",
+      "customer_name": "Willow Software",
+      "industry": "Retail",
+      "segment": "SMB",
+      "employee_count": 354,
+      "region": "Asia Pacific",
+      "account_manager_id": "AM-003",
+      "customer_status": "Active",
+      "created_at": "2024-03-25"
+    },
+    {
+      "customer_id": "CUS-024",
+      "customer_name": "Xenon Aerospace",
+      "industry": "Manufacturing",
+      "segment": "Enterprise",
+      "employee_count": 8256,
+      "region": "Latin America",
+      "account_manager_id": "AM-004",
+      "customer_status": "Active",
+      "created_at": "2023-05-18"
+    },
+    {
+      "customer_id": "CUS-025",
+      "customer_name": "Yellowtail Foods",
+      "industry": "Technology",
+      "segment": "Mid-Market",
+      "employee_count": 2640,
+      "region": "North America",
+      "account_manager_id": "AM-005",
+      "customer_status": "At Risk",
+      "created_at": "2022-12-24"
+    },
+    {
+      "customer_id": "CUS-026",
+      "customer_name": "Zenith Consulting",
+      "industry": "Healthcare",
+      "segment": "SMB",
+      "employee_count": 336,
+      "region": "Europe",
+      "account_manager_id": "AM-001",
+      "customer_status": "Active",
+      "created_at": "2023-03-19"
+    },
+    {
+      "customer_id": "CUS-027",
+      "customer_name": "Atlas Public Sector",
+      "industry": "Financial Services",
+      "segment": "Enterprise",
+      "employee_count": 5139,
+      "region": "Asia Pacific",
+      "account_manager_id": "AM-002",
+      "customer_status": "Active",
+      "created_at": "2024-05-11"
+    },
+    {
+      "customer_id": "CUS-028",
+      "customer_name": "Beacon Properties",
+      "industry": "Logistics",
+      "segment": "Mid-Market",
+      "employee_count": 376,
+      "region": "Latin America",
+      "account_manager_id": "AM-003",
+      "customer_status": "Active",
+      "created_at": "2022-08-21"
+    },
+    {
+      "customer_id": "CUS-029",
+      "customer_name": "Cascade Robotics",
+      "industry": "Retail",
+      "segment": "SMB",
+      "employee_count": 276,
+      "region": "North America",
+      "account_manager_id": "AM-004",
+      "customer_status": "Active",
+      "created_at": "2023-07-24"
+    },
+    {
+      "customer_id": "CUS-030",
+      "customer_name": "Driftwood Apparel",
+      "industry": "Manufacturing",
+      "segment": "Enterprise",
+      "employee_count": 2600,
+      "region": "Europe",
+      "account_manager_id": "AM-005",
+      "customer_status": "At Risk",
+      "created_at": "2022-09-28"
+    }
+  ],
+  "contracts": [
+    {
+      "contract_id": "CON-001",
+      "customer_id": "CUS-001",
+      "contract_start_date": "2026-02-08",
+      "contract_end_date": "2027-02-08",
+      "renewal_date": "2027-02-08",
+      "annual_contract_value": 27880.0,
+      "currency": "USD",
+      "contract_status": "Active",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-002",
+      "customer_id": "CUS-002",
+      "contract_start_date": "2026-01-22",
+      "contract_end_date": "2027-01-22",
+      "renewal_date": "2027-01-22",
+      "annual_contract_value": 9112.0,
+      "currency": "USD",
+      "contract_status": "Active",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-003",
+      "customer_id": "CUS-003",
+      "contract_start_date": "2025-10-23",
+      "contract_end_date": "2026-10-23",
+      "renewal_date": "2026-10-23",
+      "annual_contract_value": 72750.0,
+      "currency": "USD",
+      "contract_status": "Pending Renewal",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-004",
+      "customer_id": "CUS-004",
+      "contract_start_date": "2026-02-13",
+      "contract_end_date": "2027-02-13",
+      "renewal_date": "2027-02-13",
+      "annual_contract_value": 18048.0,
+      "currency": "USD",
+      "contract_status": "Active",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-005",
+      "customer_id": "CUS-005",
+      "contract_start_date": "2025-09-17",
+      "contract_end_date": "2026-09-17",
+      "renewal_date": "2026-09-17",
+      "annual_contract_value": 7955.0,
+      "currency": "USD",
+      "contract_status": "Pending Renewal",
+      "auto_renew": 0
+    },
+    {
+      "contract_id": "CON-006",
+      "customer_id": "CUS-006",
+      "contract_start_date": "2025-10-03",
+      "contract_end_date": "2026-10-03",
+      "renewal_date": "2026-10-03",
+      "annual_contract_value": 130977.0,
+      "currency": "USD",
+      "contract_status": "Pending Renewal",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-007",
+      "customer_id": "CUS-007",
+      "contract_start_date": "2026-03-26",
+      "contract_end_date": "2027-03-26",
+      "renewal_date": "2027-03-26",
+      "annual_contract_value": 36096.0,
+      "currency": "USD",
+      "contract_status": "Active",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-008",
+      "customer_id": "CUS-008",
+      "contract_start_date": "2026-03-05",
+      "contract_end_date": "2027-03-05",
+      "renewal_date": "2027-03-05",
+      "annual_contract_value": 6262.0,
+      "currency": "USD",
+      "contract_status": "Active",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-009",
+      "customer_id": "CUS-009",
+      "contract_start_date": "2025-10-06",
+      "contract_end_date": "2026-10-06",
+      "renewal_date": "2026-10-06",
+      "annual_contract_value": 71955.0,
+      "currency": "USD",
+      "contract_status": "Pending Renewal",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-010",
+      "customer_id": "CUS-010",
+      "contract_start_date": "2025-09-27",
+      "contract_end_date": "2026-09-27",
+      "renewal_date": "2026-09-27",
+      "annual_contract_value": 15106.0,
+      "currency": "USD",
+      "contract_status": "Pending Renewal",
+      "auto_renew": 0
+    },
+    {
+      "contract_id": "CON-011",
+      "customer_id": "CUS-011",
+      "contract_start_date": "2026-03-07",
+      "contract_end_date": "2027-03-07",
+      "renewal_date": "2027-03-07",
+      "annual_contract_value": 6069.0,
+      "currency": "USD",
+      "contract_status": "Active",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-012",
+      "customer_id": "CUS-012",
+      "contract_start_date": "2025-10-30",
+      "contract_end_date": "2026-10-30",
+      "renewal_date": "2026-10-30",
+      "annual_contract_value": 132120.0,
+      "currency": "USD",
+      "contract_status": "Pending Renewal",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-013",
+      "customer_id": "CUS-013",
+      "contract_start_date": "2026-01-05",
+      "contract_end_date": "2027-01-05",
+      "renewal_date": "2027-01-05",
+      "annual_contract_value": 26100.0,
+      "currency": "USD",
+      "contract_status": "Active",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-014",
+      "customer_id": "CUS-014",
+      "contract_start_date": "2026-03-19",
+      "contract_end_date": "2027-03-19",
+      "renewal_date": "2027-03-19",
+      "annual_contract_value": 9950.0,
+      "currency": "USD",
+      "contract_status": "Active",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-015",
+      "customer_id": "CUS-015",
+      "contract_start_date": "2025-09-25",
+      "contract_end_date": "2026-09-25",
+      "renewal_date": "2026-09-25",
+      "annual_contract_value": 76908.0,
+      "currency": "USD",
+      "contract_status": "Pending Renewal",
+      "auto_renew": 0
+    },
+    {
+      "contract_id": "CON-016",
+      "customer_id": "CUS-016",
+      "contract_start_date": "2025-12-02",
+      "contract_end_date": "2026-12-02",
+      "renewal_date": "2026-12-02",
+      "annual_contract_value": 38180.0,
+      "currency": "USD",
+      "contract_status": "Active",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-017",
+      "customer_id": "CUS-017",
+      "contract_start_date": "2026-03-12",
+      "contract_end_date": "2027-03-12",
+      "renewal_date": "2027-03-12",
+      "annual_contract_value": 4344.0,
+      "currency": "USD",
+      "contract_status": "Active",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-018",
+      "customer_id": "CUS-018",
+      "contract_start_date": "2025-11-19",
+      "contract_end_date": "2026-11-19",
+      "renewal_date": "2026-11-19",
+      "annual_contract_value": 71643.0,
+      "currency": "USD",
+      "contract_status": "Pending Renewal",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-019",
+      "customer_id": "CUS-019",
+      "contract_start_date": "2026-02-28",
+      "contract_end_date": "2027-02-28",
+      "renewal_date": "2027-02-28",
+      "annual_contract_value": 14605.0,
+      "currency": "USD",
+      "contract_status": "Active",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-020",
+      "customer_id": "CUS-020",
+      "contract_start_date": "2025-09-14",
+      "contract_end_date": "2026-09-14",
+      "renewal_date": "2026-09-14",
+      "annual_contract_value": 4806.0,
+      "currency": "USD",
+      "contract_status": "Pending Renewal",
+      "auto_renew": 0
+    },
+    {
+      "contract_id": "CON-021",
+      "customer_id": "CUS-021",
+      "contract_start_date": "2025-11-05",
+      "contract_end_date": "2026-11-05",
+      "renewal_date": "2026-11-05",
+      "annual_contract_value": 110396.0,
+      "currency": "USD",
+      "contract_status": "Pending Renewal",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-022",
+      "customer_id": "CUS-022",
+      "contract_start_date": "2026-02-12",
+      "contract_end_date": "2027-02-12",
+      "renewal_date": "2027-02-12",
+      "annual_contract_value": 17400.0,
+      "currency": "USD",
+      "contract_status": "Active",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-023",
+      "customer_id": "CUS-023",
+      "contract_start_date": "2026-01-21",
+      "contract_end_date": "2027-01-21",
+      "renewal_date": "2027-01-21",
+      "annual_contract_value": 9617.0,
+      "currency": "USD",
+      "contract_status": "Active",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-024",
+      "customer_id": "CUS-024",
+      "contract_start_date": "2025-10-07",
+      "contract_end_date": "2026-10-07",
+      "renewal_date": "2026-10-07",
+      "annual_contract_value": 85140.0,
+      "currency": "USD",
+      "contract_status": "Pending Renewal",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-025",
+      "customer_id": "CUS-025",
+      "contract_start_date": "2025-09-25",
+      "contract_end_date": "2026-09-25",
+      "renewal_date": "2026-09-25",
+      "annual_contract_value": 42460.0,
+      "currency": "USD",
+      "contract_status": "Pending Renewal",
+      "auto_renew": 0
+    },
+    {
+      "contract_id": "CON-026",
+      "customer_id": "CUS-026",
+      "contract_start_date": "2025-12-26",
+      "contract_end_date": "2026-12-26",
+      "renewal_date": "2026-12-26",
+      "annual_contract_value": 2688.0,
+      "currency": "USD",
+      "contract_status": "Active",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-027",
+      "customer_id": "CUS-027",
+      "contract_start_date": "2025-11-13",
+      "contract_end_date": "2026-11-13",
+      "renewal_date": "2026-11-13",
+      "annual_contract_value": 72517.0,
+      "currency": "USD",
+      "contract_status": "Pending Renewal",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-028",
+      "customer_id": "CUS-028",
+      "contract_start_date": "2025-12-12",
+      "contract_end_date": "2026-12-12",
+      "renewal_date": "2026-12-12",
+      "annual_contract_value": 16826.0,
+      "currency": "USD",
+      "contract_status": "Active",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-029",
+      "customer_id": "CUS-029",
+      "contract_start_date": "2026-01-14",
+      "contract_end_date": "2027-01-14",
+      "renewal_date": "2027-01-14",
+      "annual_contract_value": 13317.0,
+      "currency": "USD",
+      "contract_status": "Active",
+      "auto_renew": 1
+    },
+    {
+      "contract_id": "CON-030",
+      "customer_id": "CUS-030",
+      "contract_start_date": "2025-09-29",
+      "contract_end_date": "2026-09-29",
+      "renewal_date": "2026-09-29",
+      "annual_contract_value": 49400.0,
+      "currency": "USD",
+      "contract_status": "Pending Renewal",
+      "auto_renew": 0
+    }
+  ],
+  "account_managers": [
+    {
+      "account_manager_id": "AM-001",
+      "full_name": "Maya Chen",
+      "email": "maya.chen@northstar.example",
+      "region": "North America",
+      "active": 1
+    },
+    {
+      "account_manager_id": "AM-002",
+      "full_name": "Daniel Okafor",
+      "email": "daniel.okafor@northstar.example",
+      "region": "Europe",
+      "active": 1
+    },
+    {
+      "account_manager_id": "AM-003",
+      "full_name": "Priya Nair",
+      "email": "priya.nair@northstar.example",
+      "region": "Asia Pacific",
+      "active": 1
+    },
+    {
+      "account_manager_id": "AM-004",
+      "full_name": "Elena Garcia",
+      "email": "elena.garcia@northstar.example",
+      "region": "Latin America",
+      "active": 1
+    },
+    {
+      "account_manager_id": "AM-005",
+      "full_name": "Noah Williams",
+      "email": "noah.williams@northstar.example",
+      "region": "North America",
+      "active": 1
+    }
+  ],
+  "tickets": [
+    {
+      "ticket_id": "TKT-001-01",
+      "customer_id": "CUS-001",
+      "opened_at": "2026-08-24T09:00:00",
+      "resolved_at": "2026-09-01T16:00:00",
+      "priority": "Low",
+      "ticket_status": "Resolved",
+      "ticket_category": "Performance",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic low reporting request for Acme Systems.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-001-02",
+      "customer_id": "CUS-001",
+      "opened_at": "2026-08-15T09:00:00",
+      "resolved_at": "2026-08-18T16:00:00",
+      "priority": "High",
+      "ticket_status": "Resolved",
+      "ticket_category": "Billing",
+      "csat_score": 3,
+      "ticket_summary": "Synthetic high billing request for Acme Systems.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-002-01",
+      "customer_id": "CUS-002",
+      "opened_at": "2026-07-29T09:00:00",
+      "resolved_at": "2026-08-06T16:00:00",
+      "priority": "High",
+      "ticket_status": "Closed",
+      "ticket_category": "Reporting",
+      "csat_score": 5,
+      "ticket_summary": "Synthetic high integration request for Bluebird Health.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-003-01",
+      "customer_id": "CUS-003",
+      "opened_at": "2026-06-28T09:00:00",
+      "resolved_at": "2026-06-30T16:00:00",
+      "priority": "Low",
+      "ticket_status": "Resolved",
+      "ticket_category": "Billing",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic low reporting request for Cedar Finance.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-003-02",
+      "customer_id": "CUS-003",
+      "opened_at": "2026-06-20T09:00:00",
+      "resolved_at": "2026-06-25T16:00:00",
+      "priority": "Normal",
+      "ticket_status": "Resolved",
+      "ticket_category": "Performance",
+      "csat_score": 3,
+      "ticket_summary": "Synthetic normal reporting request for Cedar Finance.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-003-03",
+      "customer_id": "CUS-003",
+      "opened_at": "2026-07-21T09:00:00",
+      "resolved_at": "2026-07-23T16:00:00",
+      "priority": "Low",
+      "ticket_status": "Resolved",
+      "ticket_category": "Reporting",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic low integration request for Cedar Finance.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-005-01",
+      "customer_id": "CUS-005",
+      "opened_at": "2026-06-21T09:00:00",
+      "resolved_at": null,
+      "priority": "Critical",
+      "ticket_status": "Open",
+      "ticket_category": "Billing",
+      "csat_score": null,
+      "ticket_summary": "Synthetic critical billing request for Evergreen Retail.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-005-02",
+      "customer_id": "CUS-005",
+      "opened_at": "2026-07-14T09:00:00",
+      "resolved_at": "2026-07-19T16:00:00",
+      "priority": "High",
+      "ticket_status": "Closed",
+      "ticket_category": "Performance",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic high performance request for Evergreen Retail.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-005-03",
+      "customer_id": "CUS-005",
+      "opened_at": "2026-06-12T09:00:00",
+      "resolved_at": "2026-06-15T16:00:00",
+      "priority": "Normal",
+      "ticket_status": "Resolved",
+      "ticket_category": "User access",
+      "csat_score": 3,
+      "ticket_summary": "Synthetic normal reporting request for Evergreen Retail.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-005-04",
+      "customer_id": "CUS-005",
+      "opened_at": "2026-08-26T09:00:00",
+      "resolved_at": "2026-08-27T16:00:00",
+      "priority": "High",
+      "ticket_status": "Resolved",
+      "ticket_category": "Reporting",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic high user access request for Evergreen Retail.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-006-01",
+      "customer_id": "CUS-006",
+      "opened_at": "2026-08-22T09:00:00",
+      "resolved_at": "2026-08-24T16:00:00",
+      "priority": "Low",
+      "ticket_status": "Closed",
+      "ticket_category": "Billing",
+      "csat_score": 3,
+      "ticket_summary": "Synthetic low performance request for Fjord Manufacturing.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-006-02",
+      "customer_id": "CUS-006",
+      "opened_at": "2026-06-15T09:00:00",
+      "resolved_at": "2026-06-20T16:00:00",
+      "priority": "Low",
+      "ticket_status": "Resolved",
+      "ticket_category": "Reporting",
+      "csat_score": 5,
+      "ticket_summary": "Synthetic low billing request for Fjord Manufacturing.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-006-03",
+      "customer_id": "CUS-006",
+      "opened_at": "2026-04-30T09:00:00",
+      "resolved_at": "2026-05-07T16:00:00",
+      "priority": "Low",
+      "ticket_status": "Resolved",
+      "ticket_category": "Integration",
+      "csat_score": 3,
+      "ticket_summary": "Synthetic low billing request for Fjord Manufacturing.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-007-01",
+      "customer_id": "CUS-007",
+      "opened_at": "2026-06-26T09:00:00",
+      "resolved_at": "2026-07-01T16:00:00",
+      "priority": "High",
+      "ticket_status": "Closed",
+      "ticket_category": "User access",
+      "csat_score": 5,
+      "ticket_summary": "Synthetic high integration request for Granite Energy.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-007-02",
+      "customer_id": "CUS-007",
+      "opened_at": "2026-08-08T09:00:00",
+      "resolved_at": "2026-08-11T16:00:00",
+      "priority": "Normal",
+      "ticket_status": "Resolved",
+      "ticket_category": "Billing",
+      "csat_score": 5,
+      "ticket_summary": "Synthetic normal reporting request for Granite Energy.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-008-01",
+      "customer_id": "CUS-008",
+      "opened_at": "2026-06-07T09:00:00",
+      "resolved_at": "2026-06-10T16:00:00",
+      "priority": "High",
+      "ticket_status": "Resolved",
+      "ticket_category": "Reporting",
+      "csat_score": 5,
+      "ticket_summary": "Synthetic high integration request for Harbor Education.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-008-02",
+      "customer_id": "CUS-008",
+      "opened_at": "2026-05-27T09:00:00",
+      "resolved_at": "2026-06-03T16:00:00",
+      "priority": "High",
+      "ticket_status": "Resolved",
+      "ticket_category": "Integration",
+      "csat_score": 5,
+      "ticket_summary": "Synthetic high user access request for Harbor Education.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-009-01",
+      "customer_id": "CUS-009",
+      "opened_at": "2026-08-09T09:00:00",
+      "resolved_at": "2026-08-11T16:00:00",
+      "priority": "Low",
+      "ticket_status": "Closed",
+      "ticket_category": "Billing",
+      "csat_score": 3,
+      "ticket_summary": "Synthetic low performance request for Indigo Media.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-009-02",
+      "customer_id": "CUS-009",
+      "opened_at": "2026-07-25T09:00:00",
+      "resolved_at": "2026-07-31T16:00:00",
+      "priority": "Low",
+      "ticket_status": "Closed",
+      "ticket_category": "Billing",
+      "csat_score": 5,
+      "ticket_summary": "Synthetic low integration request for Indigo Media.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-010-01",
+      "customer_id": "CUS-010",
+      "opened_at": "2026-05-20T09:00:00",
+      "resolved_at": null,
+      "priority": "Critical",
+      "ticket_status": "Open",
+      "ticket_category": "Integration",
+      "csat_score": null,
+      "ticket_summary": "Synthetic critical integration request for Juniper Labs.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-010-02",
+      "customer_id": "CUS-010",
+      "opened_at": "2026-07-31T09:00:00",
+      "resolved_at": "2026-08-01T16:00:00",
+      "priority": "Normal",
+      "ticket_status": "Closed",
+      "ticket_category": "Performance",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic normal reporting request for Juniper Labs.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-010-03",
+      "customer_id": "CUS-010",
+      "opened_at": "2026-07-31T09:00:00",
+      "resolved_at": "2026-08-05T16:00:00",
+      "priority": "High",
+      "ticket_status": "Closed",
+      "ticket_category": "User access",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic high billing request for Juniper Labs.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-010-04",
+      "customer_id": "CUS-010",
+      "opened_at": "2026-05-25T09:00:00",
+      "resolved_at": "2026-05-26T16:00:00",
+      "priority": "High",
+      "ticket_status": "Closed",
+      "ticket_category": "Reporting",
+      "csat_score": 5,
+      "ticket_summary": "Synthetic high performance request for Juniper Labs.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-010-05",
+      "customer_id": "CUS-010",
+      "opened_at": "2026-04-30T09:00:00",
+      "resolved_at": "2026-05-07T16:00:00",
+      "priority": "High",
+      "ticket_status": "Resolved",
+      "ticket_category": "User access",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic high integration request for Juniper Labs.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-011-01",
+      "customer_id": "CUS-011",
+      "opened_at": "2026-08-22T09:00:00",
+      "resolved_at": "2026-08-27T16:00:00",
+      "priority": "High",
+      "ticket_status": "Closed",
+      "ticket_category": "User access",
+      "csat_score": 5,
+      "ticket_summary": "Synthetic high performance request for Keystone Analytics.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-011-02",
+      "customer_id": "CUS-011",
+      "opened_at": "2026-08-19T09:00:00",
+      "resolved_at": "2026-08-23T16:00:00",
+      "priority": "Normal",
+      "ticket_status": "Closed",
+      "ticket_category": "Performance",
+      "csat_score": 5,
+      "ticket_summary": "Synthetic normal integration request for Keystone Analytics.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-012-01",
+      "customer_id": "CUS-012",
+      "opened_at": "2026-07-03T09:00:00",
+      "resolved_at": "2026-07-04T16:00:00",
+      "priority": "High",
+      "ticket_status": "Resolved",
+      "ticket_category": "Integration",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic high integration request for Lighthouse Foods.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-012-02",
+      "customer_id": "CUS-012",
+      "opened_at": "2026-05-02T09:00:00",
+      "resolved_at": "2026-05-04T16:00:00",
+      "priority": "Low",
+      "ticket_status": "Closed",
+      "ticket_category": "Performance",
+      "csat_score": 2,
+      "ticket_summary": "Synthetic low integration request for Lighthouse Foods.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-014-01",
+      "customer_id": "CUS-014",
+      "opened_at": "2026-08-25T09:00:00",
+      "resolved_at": "2026-08-28T16:00:00",
+      "priority": "Normal",
+      "ticket_status": "Closed",
+      "ticket_category": "Performance",
+      "csat_score": 3,
+      "ticket_summary": "Synthetic normal reporting request for Northwind Security.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-015-01",
+      "customer_id": "CUS-015",
+      "opened_at": "2026-06-17T09:00:00",
+      "resolved_at": null,
+      "priority": "Critical",
+      "ticket_status": "Open",
+      "ticket_category": "Billing",
+      "csat_score": null,
+      "ticket_summary": "Synthetic critical user access request for Orchid Bio.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-015-02",
+      "customer_id": "CUS-015",
+      "opened_at": "2026-08-22T09:00:00",
+      "resolved_at": "2026-08-30T16:00:00",
+      "priority": "High",
+      "ticket_status": "Closed",
+      "ticket_category": "Reporting",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic high performance request for Orchid Bio.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-015-03",
+      "customer_id": "CUS-015",
+      "opened_at": "2026-08-25T09:00:00",
+      "resolved_at": "2026-08-26T16:00:00",
+      "priority": "Low",
+      "ticket_status": "Closed",
+      "ticket_category": "Reporting",
+      "csat_score": 3,
+      "ticket_summary": "Synthetic low billing request for Orchid Bio.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-015-04",
+      "customer_id": "CUS-015",
+      "opened_at": "2026-05-16T09:00:00",
+      "resolved_at": "2026-05-17T16:00:00",
+      "priority": "High",
+      "ticket_status": "Resolved",
+      "ticket_category": "Billing",
+      "csat_score": 3,
+      "ticket_summary": "Synthetic high performance request for Orchid Bio.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-015-05",
+      "customer_id": "CUS-015",
+      "opened_at": "2026-08-19T09:00:00",
+      "resolved_at": "2026-08-23T16:00:00",
+      "priority": "High",
+      "ticket_status": "Closed",
+      "ticket_category": "Billing",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic high performance request for Orchid Bio.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-017-01",
+      "customer_id": "CUS-017",
+      "opened_at": "2026-06-18T09:00:00",
+      "resolved_at": "2026-06-25T16:00:00",
+      "priority": "Normal",
+      "ticket_status": "Closed",
+      "ticket_category": "Reporting",
+      "csat_score": 3,
+      "ticket_summary": "Synthetic normal integration request for Quartz Mobility.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-018-01",
+      "customer_id": "CUS-018",
+      "opened_at": "2026-07-09T09:00:00",
+      "resolved_at": "2026-07-13T16:00:00",
+      "priority": "Normal",
+      "ticket_status": "Closed",
+      "ticket_category": "Performance",
+      "csat_score": 5,
+      "ticket_summary": "Synthetic normal integration request for Redwood Telecom.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-018-02",
+      "customer_id": "CUS-018",
+      "opened_at": "2026-05-18T09:00:00",
+      "resolved_at": "2026-05-22T16:00:00",
+      "priority": "High",
+      "ticket_status": "Closed",
+      "ticket_category": "Performance",
+      "csat_score": 5,
+      "ticket_summary": "Synthetic high billing request for Redwood Telecom.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-018-03",
+      "customer_id": "CUS-018",
+      "opened_at": "2026-05-26T09:00:00",
+      "resolved_at": "2026-05-27T16:00:00",
+      "priority": "Low",
+      "ticket_status": "Resolved",
+      "ticket_category": "User access",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic low user access request for Redwood Telecom.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-019-01",
+      "customer_id": "CUS-019",
+      "opened_at": "2026-05-29T09:00:00",
+      "resolved_at": "2026-06-01T16:00:00",
+      "priority": "High",
+      "ticket_status": "Closed",
+      "ticket_category": "Billing",
+      "csat_score": 5,
+      "ticket_summary": "Synthetic high billing request for Summit Hospitality.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-019-02",
+      "customer_id": "CUS-019",
+      "opened_at": "2026-07-17T09:00:00",
+      "resolved_at": "2026-07-20T16:00:00",
+      "priority": "Normal",
+      "ticket_status": "Resolved",
+      "ticket_category": "User access",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic normal user access request for Summit Hospitality.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-020-01",
+      "customer_id": "CUS-020",
+      "opened_at": "2026-07-16T09:00:00",
+      "resolved_at": null,
+      "priority": "Critical",
+      "ticket_status": "Open",
+      "ticket_category": "User access",
+      "csat_score": null,
+      "ticket_summary": "Synthetic critical user access request for Tidal Commerce.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-020-02",
+      "customer_id": "CUS-020",
+      "opened_at": "2026-05-11T09:00:00",
+      "resolved_at": "2026-05-19T16:00:00",
+      "priority": "Low",
+      "ticket_status": "Closed",
+      "ticket_category": "Billing",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic low reporting request for Tidal Commerce.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-020-03",
+      "customer_id": "CUS-020",
+      "opened_at": "2026-05-06T09:00:00",
+      "resolved_at": "2026-05-13T16:00:00",
+      "priority": "Low",
+      "ticket_status": "Resolved",
+      "ticket_category": "Billing",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic low performance request for Tidal Commerce.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-020-04",
+      "customer_id": "CUS-020",
+      "opened_at": "2026-08-21T09:00:00",
+      "resolved_at": "2026-08-26T16:00:00",
+      "priority": "High",
+      "ticket_status": "Closed",
+      "ticket_category": "Reporting",
+      "csat_score": 5,
+      "ticket_summary": "Synthetic high user access request for Tidal Commerce.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-021-01",
+      "customer_id": "CUS-021",
+      "opened_at": "2026-08-15T09:00:00",
+      "resolved_at": "2026-08-21T16:00:00",
+      "priority": "High",
+      "ticket_status": "Resolved",
+      "ticket_category": "Billing",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic high user access request for Umber Construction.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-021-02",
+      "customer_id": "CUS-021",
+      "opened_at": "2026-05-10T09:00:00",
+      "resolved_at": "2026-05-11T16:00:00",
+      "priority": "Normal",
+      "ticket_status": "Closed",
+      "ticket_category": "Billing",
+      "csat_score": 2,
+      "ticket_summary": "Synthetic normal performance request for Umber Construction.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-021-03",
+      "customer_id": "CUS-021",
+      "opened_at": "2026-06-30T09:00:00",
+      "resolved_at": "2026-07-04T16:00:00",
+      "priority": "Normal",
+      "ticket_status": "Closed",
+      "ticket_category": "Reporting",
+      "csat_score": 2,
+      "ticket_summary": "Synthetic normal reporting request for Umber Construction.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-023-01",
+      "customer_id": "CUS-023",
+      "opened_at": "2026-07-02T09:00:00",
+      "resolved_at": "2026-07-10T16:00:00",
+      "priority": "Normal",
+      "ticket_status": "Resolved",
+      "ticket_category": "Reporting",
+      "csat_score": 5,
+      "ticket_summary": "Synthetic normal reporting request for Willow Software.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-023-02",
+      "customer_id": "CUS-023",
+      "opened_at": "2026-06-25T09:00:00",
+      "resolved_at": "2026-06-30T16:00:00",
+      "priority": "High",
+      "ticket_status": "Resolved",
+      "ticket_category": "Performance",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic high billing request for Willow Software.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-024-01",
+      "customer_id": "CUS-024",
+      "opened_at": "2026-07-06T09:00:00",
+      "resolved_at": "2026-07-07T16:00:00",
+      "priority": "High",
+      "ticket_status": "Resolved",
+      "ticket_category": "Reporting",
+      "csat_score": 2,
+      "ticket_summary": "Synthetic high integration request for Xenon Aerospace.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-025-01",
+      "customer_id": "CUS-025",
+      "opened_at": "2026-06-16T09:00:00",
+      "resolved_at": null,
+      "priority": "Critical",
+      "ticket_status": "Open",
+      "ticket_category": "User access",
+      "csat_score": null,
+      "ticket_summary": "Synthetic critical performance request for Yellowtail Foods.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-025-02",
+      "customer_id": "CUS-025",
+      "opened_at": "2026-06-02T09:00:00",
+      "resolved_at": "2026-06-07T16:00:00",
+      "priority": "Normal",
+      "ticket_status": "Resolved",
+      "ticket_category": "User access",
+      "csat_score": 5,
+      "ticket_summary": "Synthetic normal billing request for Yellowtail Foods.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-025-03",
+      "customer_id": "CUS-025",
+      "opened_at": "2026-05-26T09:00:00",
+      "resolved_at": "2026-05-31T16:00:00",
+      "priority": "Low",
+      "ticket_status": "Closed",
+      "ticket_category": "User access",
+      "csat_score": 3,
+      "ticket_summary": "Synthetic low performance request for Yellowtail Foods.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-025-04",
+      "customer_id": "CUS-025",
+      "opened_at": "2026-05-22T09:00:00",
+      "resolved_at": "2026-05-27T16:00:00",
+      "priority": "Normal",
+      "ticket_status": "Resolved",
+      "ticket_category": "Reporting",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic normal integration request for Yellowtail Foods.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-025-05",
+      "customer_id": "CUS-025",
+      "opened_at": "2026-08-20T09:00:00",
+      "resolved_at": "2026-08-28T16:00:00",
+      "priority": "High",
+      "ticket_status": "Closed",
+      "ticket_category": "Reporting",
+      "csat_score": 5,
+      "ticket_summary": "Synthetic high user access request for Yellowtail Foods.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-026-01",
+      "customer_id": "CUS-026",
+      "opened_at": "2026-05-09T09:00:00",
+      "resolved_at": "2026-05-14T16:00:00",
+      "priority": "Normal",
+      "ticket_status": "Resolved",
+      "ticket_category": "Integration",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic normal performance request for Zenith Consulting.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-027-01",
+      "customer_id": "CUS-027",
+      "opened_at": "2026-07-04T09:00:00",
+      "resolved_at": "2026-07-05T16:00:00",
+      "priority": "Normal",
+      "ticket_status": "Closed",
+      "ticket_category": "Billing",
+      "csat_score": 3,
+      "ticket_summary": "Synthetic normal performance request for Atlas Public Sector.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-030-01",
+      "customer_id": "CUS-030",
+      "opened_at": "2026-05-24T09:00:00",
+      "resolved_at": null,
+      "priority": "Critical",
+      "ticket_status": "Open",
+      "ticket_category": "Integration",
+      "csat_score": null,
+      "ticket_summary": "Synthetic critical user access request for Driftwood Apparel.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-030-02",
+      "customer_id": "CUS-030",
+      "opened_at": "2026-05-25T09:00:00",
+      "resolved_at": "2026-05-28T16:00:00",
+      "priority": "Normal",
+      "ticket_status": "Closed",
+      "ticket_category": "Integration",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic normal integration request for Driftwood Apparel.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-030-03",
+      "customer_id": "CUS-030",
+      "opened_at": "2026-07-08T09:00:00",
+      "resolved_at": "2026-07-16T16:00:00",
+      "priority": "Normal",
+      "ticket_status": "Resolved",
+      "ticket_category": "User access",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic normal billing request for Driftwood Apparel.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-030-04",
+      "customer_id": "CUS-030",
+      "opened_at": "2026-08-13T09:00:00",
+      "resolved_at": "2026-08-14T16:00:00",
+      "priority": "Low",
+      "ticket_status": "Resolved",
+      "ticket_category": "User access",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic low reporting request for Driftwood Apparel.",
+      "source_system": "support_desk"
+    },
+    {
+      "ticket_id": "TKT-030-05",
+      "customer_id": "CUS-030",
+      "opened_at": "2026-07-15T09:00:00",
+      "resolved_at": "2026-07-17T16:00:00",
+      "priority": "Normal",
+      "ticket_status": "Closed",
+      "ticket_category": "Reporting",
+      "csat_score": 4,
+      "ticket_summary": "Synthetic normal reporting request for Driftwood Apparel.",
+      "source_system": "support_desk"
+    }
+  ],
+  "usage": [
+    {
+      "usage_event_id": "USE-001-01",
+      "customer_id": "CUS-001",
+      "event_date": "2026-03-01",
+      "active_users": 118,
+      "seats_purchased": 164,
+      "sessions": 1180,
+      "feature_adoption_pct": 72.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-001-02",
+      "customer_id": "CUS-001",
+      "event_date": "2026-04-01",
+      "active_users": 120,
+      "seats_purchased": 164,
+      "sessions": 1680,
+      "feature_adoption_pct": 71.3,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-001-03",
+      "customer_id": "CUS-001",
+      "event_date": "2026-05-01",
+      "active_users": 119,
+      "seats_purchased": 164,
+      "sessions": 1666,
+      "feature_adoption_pct": 70.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-001-04",
+      "customer_id": "CUS-001",
+      "event_date": "2026-06-01",
+      "active_users": 114,
+      "seats_purchased": 164,
+      "sessions": 1710,
+      "feature_adoption_pct": 75.9,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-001-05",
+      "customer_id": "CUS-001",
+      "event_date": "2026-07-01",
+      "active_users": 112,
+      "seats_purchased": 164,
+      "sessions": 1120,
+      "feature_adoption_pct": 74.9,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-001-06",
+      "customer_id": "CUS-001",
+      "event_date": "2026-08-01",
+      "active_users": 114,
+      "seats_purchased": 164,
+      "sessions": 1026,
+      "feature_adoption_pct": 76.6,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-002-01",
+      "customer_id": "CUS-002",
+      "event_date": "2026-03-01",
+      "active_users": 54,
+      "seats_purchased": 67,
+      "sessions": 270,
+      "feature_adoption_pct": 72.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-002-02",
+      "customer_id": "CUS-002",
+      "event_date": "2026-04-01",
+      "active_users": 55,
+      "seats_purchased": 67,
+      "sessions": 660,
+      "feature_adoption_pct": 72.8,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-002-03",
+      "customer_id": "CUS-002",
+      "event_date": "2026-05-01",
+      "active_users": 50,
+      "seats_purchased": 67,
+      "sessions": 450,
+      "feature_adoption_pct": 73.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-002-04",
+      "customer_id": "CUS-002",
+      "event_date": "2026-06-01",
+      "active_users": 47,
+      "seats_purchased": 67,
+      "sessions": 329,
+      "feature_adoption_pct": 74.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-002-05",
+      "customer_id": "CUS-002",
+      "event_date": "2026-07-01",
+      "active_users": 51,
+      "seats_purchased": 67,
+      "sessions": 255,
+      "feature_adoption_pct": 77.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-002-06",
+      "customer_id": "CUS-002",
+      "event_date": "2026-08-01",
+      "active_users": 51,
+      "seats_purchased": 67,
+      "sessions": 561,
+      "feature_adoption_pct": 67.4,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-003-01",
+      "customer_id": "CUS-003",
+      "event_date": "2026-03-01",
+      "active_users": 256,
+      "seats_purchased": 375,
+      "sessions": 2304,
+      "feature_adoption_pct": 61.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-003-02",
+      "customer_id": "CUS-003",
+      "event_date": "2026-04-01",
+      "active_users": 239,
+      "seats_purchased": 375,
+      "sessions": 2868,
+      "feature_adoption_pct": 58.9,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-003-03",
+      "customer_id": "CUS-003",
+      "event_date": "2026-05-01",
+      "active_users": 243,
+      "seats_purchased": 375,
+      "sessions": 1215,
+      "feature_adoption_pct": 58.4,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-003-04",
+      "customer_id": "CUS-003",
+      "event_date": "2026-06-01",
+      "active_users": 237,
+      "seats_purchased": 375,
+      "sessions": 3555,
+      "feature_adoption_pct": 54.7,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-003-05",
+      "customer_id": "CUS-003",
+      "event_date": "2026-07-01",
+      "active_users": 235,
+      "seats_purchased": 375,
+      "sessions": 3525,
+      "feature_adoption_pct": 51.2,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-003-06",
+      "customer_id": "CUS-003",
+      "event_date": "2026-08-01",
+      "active_users": 231,
+      "seats_purchased": 375,
+      "sessions": 2772,
+      "feature_adoption_pct": 51.9,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-004-01",
+      "customer_id": "CUS-004",
+      "event_date": "2026-03-01",
+      "active_users": 77,
+      "seats_purchased": 96,
+      "sessions": 385,
+      "feature_adoption_pct": 72.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-004-02",
+      "customer_id": "CUS-004",
+      "event_date": "2026-04-01",
+      "active_users": 77,
+      "seats_purchased": 96,
+      "sessions": 1155,
+      "feature_adoption_pct": 72.6,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-004-03",
+      "customer_id": "CUS-004",
+      "event_date": "2026-05-01",
+      "active_users": 85,
+      "seats_purchased": 96,
+      "sessions": 765,
+      "feature_adoption_pct": 74.7,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-004-04",
+      "customer_id": "CUS-004",
+      "event_date": "2026-06-01",
+      "active_users": 79,
+      "seats_purchased": 96,
+      "sessions": 948,
+      "feature_adoption_pct": 76.8,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-004-05",
+      "customer_id": "CUS-004",
+      "event_date": "2026-07-01",
+      "active_users": 84,
+      "seats_purchased": 96,
+      "sessions": 756,
+      "feature_adoption_pct": 76.6,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-004-06",
+      "customer_id": "CUS-004",
+      "event_date": "2026-08-01",
+      "active_users": 83,
+      "seats_purchased": 96,
+      "sessions": 747,
+      "feature_adoption_pct": 69.7,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-005-01",
+      "customer_id": "CUS-005",
+      "event_date": "2026-03-01",
+      "active_users": 42,
+      "seats_purchased": 43,
+      "sessions": 420,
+      "feature_adoption_pct": 45.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-005-02",
+      "customer_id": "CUS-005",
+      "event_date": "2026-04-01",
+      "active_users": 43,
+      "seats_purchased": 43,
+      "sessions": 688,
+      "feature_adoption_pct": 40.3,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-005-03",
+      "customer_id": "CUS-005",
+      "event_date": "2026-05-01",
+      "active_users": 43,
+      "seats_purchased": 43,
+      "sessions": 516,
+      "feature_adoption_pct": 36.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-005-04",
+      "customer_id": "CUS-005",
+      "event_date": "2026-06-01",
+      "active_users": 33,
+      "seats_purchased": 43,
+      "sessions": 462,
+      "feature_adoption_pct": 33.4,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-005-05",
+      "customer_id": "CUS-005",
+      "event_date": "2026-07-01",
+      "active_users": 27,
+      "seats_purchased": 43,
+      "sessions": 270,
+      "feature_adoption_pct": 27.8,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-005-06",
+      "customer_id": "CUS-005",
+      "event_date": "2026-08-01",
+      "active_users": 17,
+      "seats_purchased": 43,
+      "sessions": 221,
+      "feature_adoption_pct": 27.4,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-006-01",
+      "customer_id": "CUS-006",
+      "event_date": "2026-03-01",
+      "active_users": 401,
+      "seats_purchased": 693,
+      "sessions": 5213,
+      "feature_adoption_pct": 61.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-006-02",
+      "customer_id": "CUS-006",
+      "event_date": "2026-04-01",
+      "active_users": 399,
+      "seats_purchased": 693,
+      "sessions": 2793,
+      "feature_adoption_pct": 58.8,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-006-03",
+      "customer_id": "CUS-006",
+      "event_date": "2026-05-01",
+      "active_users": 397,
+      "seats_purchased": 693,
+      "sessions": 2779,
+      "feature_adoption_pct": 56.9,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-006-04",
+      "customer_id": "CUS-006",
+      "event_date": "2026-06-01",
+      "active_users": 399,
+      "seats_purchased": 693,
+      "sessions": 2793,
+      "feature_adoption_pct": 55.8,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-006-05",
+      "customer_id": "CUS-006",
+      "event_date": "2026-07-01",
+      "active_users": 394,
+      "seats_purchased": 693,
+      "sessions": 2364,
+      "feature_adoption_pct": 55.4,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-006-06",
+      "customer_id": "CUS-006",
+      "event_date": "2026-08-01",
+      "active_users": 391,
+      "seats_purchased": 693,
+      "sessions": 5865,
+      "feature_adoption_pct": 51.8,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-007-01",
+      "customer_id": "CUS-007",
+      "event_date": "2026-03-01",
+      "active_users": 146,
+      "seats_purchased": 192,
+      "sessions": 1898,
+      "feature_adoption_pct": 72.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-007-02",
+      "customer_id": "CUS-007",
+      "event_date": "2026-04-01",
+      "active_users": 152,
+      "seats_purchased": 192,
+      "sessions": 760,
+      "feature_adoption_pct": 72.7,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-007-03",
+      "customer_id": "CUS-007",
+      "event_date": "2026-05-01",
+      "active_users": 147,
+      "seats_purchased": 192,
+      "sessions": 1764,
+      "feature_adoption_pct": 72.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-007-04",
+      "customer_id": "CUS-007",
+      "event_date": "2026-06-01",
+      "active_users": 148,
+      "seats_purchased": 192,
+      "sessions": 888,
+      "feature_adoption_pct": 75.1,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-007-05",
+      "customer_id": "CUS-007",
+      "event_date": "2026-07-01",
+      "active_users": 150,
+      "seats_purchased": 192,
+      "sessions": 750,
+      "feature_adoption_pct": 73.7,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-007-06",
+      "customer_id": "CUS-007",
+      "event_date": "2026-08-01",
+      "active_users": 148,
+      "seats_purchased": 192,
+      "sessions": 1628,
+      "feature_adoption_pct": 75.3,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-008-01",
+      "customer_id": "CUS-008",
+      "event_date": "2026-03-01",
+      "active_users": 50,
+      "seats_purchased": 62,
+      "sessions": 350,
+      "feature_adoption_pct": 72.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-008-02",
+      "customer_id": "CUS-008",
+      "event_date": "2026-04-01",
+      "active_users": 52,
+      "seats_purchased": 62,
+      "sessions": 416,
+      "feature_adoption_pct": 73.2,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-008-03",
+      "customer_id": "CUS-008",
+      "event_date": "2026-05-01",
+      "active_users": 45,
+      "seats_purchased": 62,
+      "sessions": 450,
+      "feature_adoption_pct": 74.9,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-008-04",
+      "customer_id": "CUS-008",
+      "event_date": "2026-06-01",
+      "active_users": 47,
+      "seats_purchased": 62,
+      "sessions": 705,
+      "feature_adoption_pct": 72.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-008-05",
+      "customer_id": "CUS-008",
+      "event_date": "2026-07-01",
+      "active_users": 43,
+      "seats_purchased": 62,
+      "sessions": 473,
+      "feature_adoption_pct": 72.4,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-008-06",
+      "customer_id": "CUS-008",
+      "event_date": "2026-08-01",
+      "active_users": 46,
+      "seats_purchased": 62,
+      "sessions": 598,
+      "feature_adoption_pct": 77.2,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-009-01",
+      "customer_id": "CUS-009",
+      "event_date": "2026-03-01",
+      "active_users": 265,
+      "seats_purchased": 533,
+      "sessions": 2385,
+      "feature_adoption_pct": 61.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-009-02",
+      "customer_id": "CUS-009",
+      "event_date": "2026-04-01",
+      "active_users": 268,
+      "seats_purchased": 533,
+      "sessions": 3216,
+      "feature_adoption_pct": 59.6,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-009-03",
+      "customer_id": "CUS-009",
+      "event_date": "2026-05-01",
+      "active_users": 275,
+      "seats_purchased": 533,
+      "sessions": 1375,
+      "feature_adoption_pct": 58.9,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-009-04",
+      "customer_id": "CUS-009",
+      "event_date": "2026-06-01",
+      "active_users": 266,
+      "seats_purchased": 533,
+      "sessions": 3990,
+      "feature_adoption_pct": 54.2,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-009-05",
+      "customer_id": "CUS-009",
+      "event_date": "2026-07-01",
+      "active_users": 261,
+      "seats_purchased": 533,
+      "sessions": 4176,
+      "feature_adoption_pct": 51.2,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-009-06",
+      "customer_id": "CUS-009",
+      "event_date": "2026-08-01",
+      "active_users": 260,
+      "seats_purchased": 533,
+      "sessions": 3640,
+      "feature_adoption_pct": 50.2,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-010-01",
+      "customer_id": "CUS-010",
+      "event_date": "2026-03-01",
+      "active_users": 68,
+      "seats_purchased": 91,
+      "sessions": 408,
+      "feature_adoption_pct": 45.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-010-02",
+      "customer_id": "CUS-010",
+      "event_date": "2026-04-01",
+      "active_users": 70,
+      "seats_purchased": 91,
+      "sessions": 910,
+      "feature_adoption_pct": 39.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-010-03",
+      "customer_id": "CUS-010",
+      "event_date": "2026-05-01",
+      "active_users": 33,
+      "seats_purchased": 91,
+      "sessions": 264,
+      "feature_adoption_pct": 38.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-010-04",
+      "customer_id": "CUS-010",
+      "event_date": "2026-06-01",
+      "active_users": 38,
+      "seats_purchased": 91,
+      "sessions": 190,
+      "feature_adoption_pct": 28.6,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-010-05",
+      "customer_id": "CUS-010",
+      "event_date": "2026-07-01",
+      "active_users": 27,
+      "seats_purchased": 91,
+      "sessions": 189,
+      "feature_adoption_pct": 30.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-010-06",
+      "customer_id": "CUS-010",
+      "event_date": "2026-08-01",
+      "active_users": 18,
+      "seats_purchased": 91,
+      "sessions": 270,
+      "feature_adoption_pct": 28.2,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-011-01",
+      "customer_id": "CUS-011",
+      "event_date": "2026-03-01",
+      "active_users": 31,
+      "seats_purchased": 51,
+      "sessions": 310,
+      "feature_adoption_pct": 72.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-011-02",
+      "customer_id": "CUS-011",
+      "event_date": "2026-04-01",
+      "active_users": 33,
+      "seats_purchased": 51,
+      "sessions": 198,
+      "feature_adoption_pct": 71.9,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-011-03",
+      "customer_id": "CUS-011",
+      "event_date": "2026-05-01",
+      "active_users": 33,
+      "seats_purchased": 51,
+      "sessions": 495,
+      "feature_adoption_pct": 71.4,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-011-04",
+      "customer_id": "CUS-011",
+      "event_date": "2026-06-01",
+      "active_users": 39,
+      "seats_purchased": 51,
+      "sessions": 312,
+      "feature_adoption_pct": 73.9,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-011-05",
+      "customer_id": "CUS-011",
+      "event_date": "2026-07-01",
+      "active_users": 32,
+      "seats_purchased": 51,
+      "sessions": 480,
+      "feature_adoption_pct": 70.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-011-06",
+      "customer_id": "CUS-011",
+      "event_date": "2026-08-01",
+      "active_users": 31,
+      "seats_purchased": 51,
+      "sessions": 434,
+      "feature_adoption_pct": 71.9,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-012-01",
+      "customer_id": "CUS-012",
+      "event_date": "2026-03-01",
+      "active_users": 396,
+      "seats_purchased": 734,
+      "sessions": 5544,
+      "feature_adoption_pct": 61.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-012-02",
+      "customer_id": "CUS-012",
+      "event_date": "2026-04-01",
+      "active_users": 384,
+      "seats_purchased": 734,
+      "sessions": 3840,
+      "feature_adoption_pct": 59.9,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-012-03",
+      "customer_id": "CUS-012",
+      "event_date": "2026-05-01",
+      "active_users": 391,
+      "seats_purchased": 734,
+      "sessions": 5474,
+      "feature_adoption_pct": 57.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-012-04",
+      "customer_id": "CUS-012",
+      "event_date": "2026-06-01",
+      "active_users": 382,
+      "seats_purchased": 734,
+      "sessions": 5348,
+      "feature_adoption_pct": 54.6,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-012-05",
+      "customer_id": "CUS-012",
+      "event_date": "2026-07-01",
+      "active_users": 380,
+      "seats_purchased": 734,
+      "sessions": 4560,
+      "feature_adoption_pct": 55.8,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-012-06",
+      "customer_id": "CUS-012",
+      "event_date": "2026-08-01",
+      "active_users": 376,
+      "seats_purchased": 734,
+      "sessions": 4136,
+      "feature_adoption_pct": 55.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-013-01",
+      "customer_id": "CUS-013",
+      "event_date": "2026-03-01",
+      "active_users": 165,
+      "seats_purchased": 225,
+      "sessions": 1485,
+      "feature_adoption_pct": 72.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-013-02",
+      "customer_id": "CUS-013",
+      "event_date": "2026-04-01",
+      "active_users": 158,
+      "seats_purchased": 225,
+      "sessions": 1106,
+      "feature_adoption_pct": 71.8,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-013-03",
+      "customer_id": "CUS-013",
+      "event_date": "2026-05-01",
+      "active_users": 162,
+      "seats_purchased": 225,
+      "sessions": 1620,
+      "feature_adoption_pct": 72.2,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-013-04",
+      "customer_id": "CUS-013",
+      "event_date": "2026-06-01",
+      "active_users": 156,
+      "seats_purchased": 225,
+      "sessions": 2496,
+      "feature_adoption_pct": 73.8,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-013-05",
+      "customer_id": "CUS-013",
+      "event_date": "2026-07-01",
+      "active_users": 156,
+      "seats_purchased": 225,
+      "sessions": 1560,
+      "feature_adoption_pct": 69.2,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-013-06",
+      "customer_id": "CUS-013",
+      "event_date": "2026-08-01",
+      "active_users": 160,
+      "seats_purchased": 225,
+      "sessions": 1280,
+      "feature_adoption_pct": 72.8,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-014-01",
+      "customer_id": "CUS-014",
+      "event_date": "2026-03-01",
+      "active_users": 35,
+      "seats_purchased": 50,
+      "sessions": 385,
+      "feature_adoption_pct": 72.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-014-02",
+      "customer_id": "CUS-014",
+      "event_date": "2026-04-01",
+      "active_users": 37,
+      "seats_purchased": 50,
+      "sessions": 518,
+      "feature_adoption_pct": 72.2,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-014-03",
+      "customer_id": "CUS-014",
+      "event_date": "2026-05-01",
+      "active_users": 34,
+      "seats_purchased": 50,
+      "sessions": 238,
+      "feature_adoption_pct": 75.2,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-014-04",
+      "customer_id": "CUS-014",
+      "event_date": "2026-06-01",
+      "active_users": 35,
+      "seats_purchased": 50,
+      "sessions": 560,
+      "feature_adoption_pct": 74.3,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-014-05",
+      "customer_id": "CUS-014",
+      "event_date": "2026-07-01",
+      "active_users": 32,
+      "seats_purchased": 50,
+      "sessions": 512,
+      "feature_adoption_pct": 73.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-014-06",
+      "customer_id": "CUS-014",
+      "event_date": "2026-08-01",
+      "active_users": 41,
+      "seats_purchased": 50,
+      "sessions": 451,
+      "feature_adoption_pct": 79.8,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-015-01",
+      "customer_id": "CUS-015",
+      "event_date": "2026-03-01",
+      "active_users": 278,
+      "seats_purchased": 754,
+      "sessions": 4448,
+      "feature_adoption_pct": 45.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-015-02",
+      "customer_id": "CUS-015",
+      "event_date": "2026-04-01",
+      "active_users": 261,
+      "seats_purchased": 754,
+      "sessions": 2610,
+      "feature_adoption_pct": 40.7,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-015-03",
+      "customer_id": "CUS-015",
+      "event_date": "2026-05-01",
+      "active_users": 248,
+      "seats_purchased": 754,
+      "sessions": 1488,
+      "feature_adoption_pct": 34.9,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-015-04",
+      "customer_id": "CUS-015",
+      "event_date": "2026-06-01",
+      "active_users": 243,
+      "seats_purchased": 754,
+      "sessions": 1215,
+      "feature_adoption_pct": 30.3,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-015-05",
+      "customer_id": "CUS-015",
+      "event_date": "2026-07-01",
+      "active_users": 240,
+      "seats_purchased": 754,
+      "sessions": 2400,
+      "feature_adoption_pct": 24.6,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-015-06",
+      "customer_id": "CUS-015",
+      "event_date": "2026-08-01",
+      "active_users": 233,
+      "seats_purchased": 754,
+      "sessions": 2796,
+      "feature_adoption_pct": 21.1,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-016-01",
+      "customer_id": "CUS-016",
+      "event_date": "2026-03-01",
+      "active_users": 163,
+      "seats_purchased": 230,
+      "sessions": 815,
+      "feature_adoption_pct": 72.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-016-02",
+      "customer_id": "CUS-016",
+      "event_date": "2026-04-01",
+      "active_users": 169,
+      "seats_purchased": 230,
+      "sessions": 1014,
+      "feature_adoption_pct": 73.6,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-016-03",
+      "customer_id": "CUS-016",
+      "event_date": "2026-05-01",
+      "active_users": 165,
+      "seats_purchased": 230,
+      "sessions": 2145,
+      "feature_adoption_pct": 72.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-016-04",
+      "customer_id": "CUS-016",
+      "event_date": "2026-06-01",
+      "active_users": 165,
+      "seats_purchased": 230,
+      "sessions": 1980,
+      "feature_adoption_pct": 77.2,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-016-05",
+      "customer_id": "CUS-016",
+      "event_date": "2026-07-01",
+      "active_users": 163,
+      "seats_purchased": 230,
+      "sessions": 2608,
+      "feature_adoption_pct": 77.6,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-016-06",
+      "customer_id": "CUS-016",
+      "event_date": "2026-08-01",
+      "active_users": 170,
+      "seats_purchased": 230,
+      "sessions": 2380,
+      "feature_adoption_pct": 67.2,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-017-01",
+      "customer_id": "CUS-017",
+      "event_date": "2026-03-01",
+      "active_users": 18,
+      "seats_purchased": 24,
+      "sessions": 108,
+      "feature_adoption_pct": 72.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-017-02",
+      "customer_id": "CUS-017",
+      "event_date": "2026-04-01",
+      "active_users": 17,
+      "seats_purchased": 24,
+      "sessions": 272,
+      "feature_adoption_pct": 73.4,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-017-03",
+      "customer_id": "CUS-017",
+      "event_date": "2026-05-01",
+      "active_users": 23,
+      "seats_purchased": 24,
+      "sessions": 184,
+      "feature_adoption_pct": 71.8,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-017-04",
+      "customer_id": "CUS-017",
+      "event_date": "2026-06-01",
+      "active_users": 17,
+      "seats_purchased": 24,
+      "sessions": 153,
+      "feature_adoption_pct": 74.7,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-017-05",
+      "customer_id": "CUS-017",
+      "event_date": "2026-07-01",
+      "active_users": 22,
+      "seats_purchased": 24,
+      "sessions": 176,
+      "feature_adoption_pct": 75.9,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-017-06",
+      "customer_id": "CUS-017",
+      "event_date": "2026-08-01",
+      "active_users": 19,
+      "seats_purchased": 24,
+      "sessions": 247,
+      "feature_adoption_pct": 75.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-018-01",
+      "customer_id": "CUS-018",
+      "event_date": "2026-03-01",
+      "active_users": 221,
+      "seats_purchased": 429,
+      "sessions": 1989,
+      "feature_adoption_pct": 61.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-018-02",
+      "customer_id": "CUS-018",
+      "event_date": "2026-04-01",
+      "active_users": 214,
+      "seats_purchased": 429,
+      "sessions": 2354,
+      "feature_adoption_pct": 59.6,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-018-03",
+      "customer_id": "CUS-018",
+      "event_date": "2026-05-01",
+      "active_users": 212,
+      "seats_purchased": 429,
+      "sessions": 1696,
+      "feature_adoption_pct": 56.2,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-018-04",
+      "customer_id": "CUS-018",
+      "event_date": "2026-06-01",
+      "active_users": 212,
+      "seats_purchased": 429,
+      "sessions": 2120,
+      "feature_adoption_pct": 54.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-018-05",
+      "customer_id": "CUS-018",
+      "event_date": "2026-07-01",
+      "active_users": 211,
+      "seats_purchased": 429,
+      "sessions": 3376,
+      "feature_adoption_pct": 53.3,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-018-06",
+      "customer_id": "CUS-018",
+      "event_date": "2026-08-01",
+      "active_users": 206,
+      "seats_purchased": 429,
+      "sessions": 1030,
+      "feature_adoption_pct": 53.7,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-019-01",
+      "customer_id": "CUS-019",
+      "event_date": "2026-03-01",
+      "active_users": 110,
+      "seats_purchased": 127,
+      "sessions": 1540,
+      "feature_adoption_pct": 72.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-019-02",
+      "customer_id": "CUS-019",
+      "event_date": "2026-04-01",
+      "active_users": 111,
+      "seats_purchased": 127,
+      "sessions": 1776,
+      "feature_adoption_pct": 71.2,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-019-03",
+      "customer_id": "CUS-019",
+      "event_date": "2026-05-01",
+      "active_users": 107,
+      "seats_purchased": 127,
+      "sessions": 1177,
+      "feature_adoption_pct": 73.8,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-019-04",
+      "customer_id": "CUS-019",
+      "event_date": "2026-06-01",
+      "active_users": 109,
+      "seats_purchased": 127,
+      "sessions": 1526,
+      "feature_adoption_pct": 69.7,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-019-05",
+      "customer_id": "CUS-019",
+      "event_date": "2026-07-01",
+      "active_users": 114,
+      "seats_purchased": 127,
+      "sessions": 1824,
+      "feature_adoption_pct": 68.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-019-06",
+      "customer_id": "CUS-019",
+      "event_date": "2026-08-01",
+      "active_users": 115,
+      "seats_purchased": 127,
+      "sessions": 1840,
+      "feature_adoption_pct": 73.7,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-020-01",
+      "customer_id": "CUS-020",
+      "event_date": "2026-03-01",
+      "active_users": 27,
+      "seats_purchased": 27,
+      "sessions": 135,
+      "feature_adoption_pct": 45.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-020-02",
+      "customer_id": "CUS-020",
+      "event_date": "2026-04-01",
+      "active_users": 27,
+      "seats_purchased": 27,
+      "sessions": 270,
+      "feature_adoption_pct": 41.7,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-020-03",
+      "customer_id": "CUS-020",
+      "event_date": "2026-05-01",
+      "active_users": 25,
+      "seats_purchased": 27,
+      "sessions": 375,
+      "feature_adoption_pct": 34.7,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-020-04",
+      "customer_id": "CUS-020",
+      "event_date": "2026-06-01",
+      "active_users": 27,
+      "seats_purchased": 27,
+      "sessions": 324,
+      "feature_adoption_pct": 30.8,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-020-05",
+      "customer_id": "CUS-020",
+      "event_date": "2026-07-01",
+      "active_users": 17,
+      "seats_purchased": 27,
+      "sessions": 85,
+      "feature_adoption_pct": 25.3,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-020-06",
+      "customer_id": "CUS-020",
+      "event_date": "2026-08-01",
+      "active_users": 7,
+      "seats_purchased": 27,
+      "sessions": 70,
+      "feature_adoption_pct": 27.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-021-01",
+      "customer_id": "CUS-021",
+      "event_date": "2026-03-01",
+      "active_users": 411,
+      "seats_purchased": 772,
+      "sessions": 4521,
+      "feature_adoption_pct": 61.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-021-02",
+      "customer_id": "CUS-021",
+      "event_date": "2026-04-01",
+      "active_users": 403,
+      "seats_purchased": 772,
+      "sessions": 2015,
+      "feature_adoption_pct": 59.4,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-021-03",
+      "customer_id": "CUS-021",
+      "event_date": "2026-05-01",
+      "active_users": 403,
+      "seats_purchased": 772,
+      "sessions": 4030,
+      "feature_adoption_pct": 56.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-021-04",
+      "customer_id": "CUS-021",
+      "event_date": "2026-06-01",
+      "active_users": 395,
+      "seats_purchased": 772,
+      "sessions": 6320,
+      "feature_adoption_pct": 56.6,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-021-05",
+      "customer_id": "CUS-021",
+      "event_date": "2026-07-01",
+      "active_users": 396,
+      "seats_purchased": 772,
+      "sessions": 3564,
+      "feature_adoption_pct": 54.1,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-021-06",
+      "customer_id": "CUS-021",
+      "event_date": "2026-08-01",
+      "active_users": 391,
+      "seats_purchased": 772,
+      "sessions": 4301,
+      "feature_adoption_pct": 49.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-022-01",
+      "customer_id": "CUS-022",
+      "event_date": "2026-03-01",
+      "active_users": 145,
+      "seats_purchased": 174,
+      "sessions": 2320,
+      "feature_adoption_pct": 72.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-022-02",
+      "customer_id": "CUS-022",
+      "event_date": "2026-04-01",
+      "active_users": 140,
+      "seats_purchased": 174,
+      "sessions": 1400,
+      "feature_adoption_pct": 73.6,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-022-03",
+      "customer_id": "CUS-022",
+      "event_date": "2026-05-01",
+      "active_users": 145,
+      "seats_purchased": 174,
+      "sessions": 1595,
+      "feature_adoption_pct": 74.8,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-022-04",
+      "customer_id": "CUS-022",
+      "event_date": "2026-06-01",
+      "active_users": 143,
+      "seats_purchased": 174,
+      "sessions": 2002,
+      "feature_adoption_pct": 74.1,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-022-05",
+      "customer_id": "CUS-022",
+      "event_date": "2026-07-01",
+      "active_users": 141,
+      "seats_purchased": 174,
+      "sessions": 1692,
+      "feature_adoption_pct": 71.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-022-06",
+      "customer_id": "CUS-022",
+      "event_date": "2026-08-01",
+      "active_users": 143,
+      "seats_purchased": 174,
+      "sessions": 1430,
+      "feature_adoption_pct": 70.6,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-023-01",
+      "customer_id": "CUS-023",
+      "event_date": "2026-03-01",
+      "active_users": 47,
+      "seats_purchased": 59,
+      "sessions": 752,
+      "feature_adoption_pct": 72.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-023-02",
+      "customer_id": "CUS-023",
+      "event_date": "2026-04-01",
+      "active_users": 41,
+      "seats_purchased": 59,
+      "sessions": 369,
+      "feature_adoption_pct": 72.1,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-023-03",
+      "customer_id": "CUS-023",
+      "event_date": "2026-05-01",
+      "active_users": 47,
+      "seats_purchased": 59,
+      "sessions": 517,
+      "feature_adoption_pct": 75.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-023-04",
+      "customer_id": "CUS-023",
+      "event_date": "2026-06-01",
+      "active_users": 43,
+      "seats_purchased": 59,
+      "sessions": 215,
+      "feature_adoption_pct": 71.6,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-023-05",
+      "customer_id": "CUS-023",
+      "event_date": "2026-07-01",
+      "active_users": 48,
+      "seats_purchased": 59,
+      "sessions": 624,
+      "feature_adoption_pct": 68.1,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-023-06",
+      "customer_id": "CUS-023",
+      "event_date": "2026-08-01",
+      "active_users": 41,
+      "seats_purchased": 59,
+      "sessions": 328,
+      "feature_adoption_pct": 72.9,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-024-01",
+      "customer_id": "CUS-024",
+      "event_date": "2026-03-01",
+      "active_users": 322,
+      "seats_purchased": 516,
+      "sessions": 5152,
+      "feature_adoption_pct": 61.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-024-02",
+      "customer_id": "CUS-024",
+      "event_date": "2026-04-01",
+      "active_users": 323,
+      "seats_purchased": 516,
+      "sessions": 4199,
+      "feature_adoption_pct": 58.6,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-024-03",
+      "customer_id": "CUS-024",
+      "event_date": "2026-05-01",
+      "active_users": 319,
+      "seats_purchased": 516,
+      "sessions": 2871,
+      "feature_adoption_pct": 57.7,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-024-04",
+      "customer_id": "CUS-024",
+      "event_date": "2026-06-01",
+      "active_users": 313,
+      "seats_purchased": 516,
+      "sessions": 5008,
+      "feature_adoption_pct": 56.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-024-05",
+      "customer_id": "CUS-024",
+      "event_date": "2026-07-01",
+      "active_users": 311,
+      "seats_purchased": 516,
+      "sessions": 4354,
+      "feature_adoption_pct": 54.7,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-024-06",
+      "customer_id": "CUS-024",
+      "event_date": "2026-08-01",
+      "active_users": 307,
+      "seats_purchased": 516,
+      "sessions": 4912,
+      "feature_adoption_pct": 50.4,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-025-01",
+      "customer_id": "CUS-025",
+      "event_date": "2026-03-01",
+      "active_users": 147,
+      "seats_purchased": 220,
+      "sessions": 882,
+      "feature_adoption_pct": 45.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-025-02",
+      "customer_id": "CUS-025",
+      "event_date": "2026-04-01",
+      "active_users": 129,
+      "seats_purchased": 220,
+      "sessions": 645,
+      "feature_adoption_pct": 40.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-025-03",
+      "customer_id": "CUS-025",
+      "event_date": "2026-05-01",
+      "active_users": 119,
+      "seats_purchased": 220,
+      "sessions": 1309,
+      "feature_adoption_pct": 37.3,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-025-04",
+      "customer_id": "CUS-025",
+      "event_date": "2026-06-01",
+      "active_users": 89,
+      "seats_purchased": 220,
+      "sessions": 445,
+      "feature_adoption_pct": 32.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-025-05",
+      "customer_id": "CUS-025",
+      "event_date": "2026-07-01",
+      "active_users": 86,
+      "seats_purchased": 220,
+      "sessions": 1032,
+      "feature_adoption_pct": 25.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-025-06",
+      "customer_id": "CUS-025",
+      "event_date": "2026-08-01",
+      "active_users": 77,
+      "seats_purchased": 220,
+      "sessions": 693,
+      "feature_adoption_pct": 19.4,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-026-01",
+      "customer_id": "CUS-026",
+      "event_date": "2026-03-01",
+      "active_users": 15,
+      "seats_purchased": 28,
+      "sessions": 150,
+      "feature_adoption_pct": 72.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-026-02",
+      "customer_id": "CUS-026",
+      "event_date": "2026-04-01",
+      "active_users": 22,
+      "seats_purchased": 28,
+      "sessions": 132,
+      "feature_adoption_pct": 73.6,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-026-03",
+      "customer_id": "CUS-026",
+      "event_date": "2026-05-01",
+      "active_users": 18,
+      "seats_purchased": 28,
+      "sessions": 252,
+      "feature_adoption_pct": 73.2,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-026-04",
+      "customer_id": "CUS-026",
+      "event_date": "2026-06-01",
+      "active_users": 18,
+      "seats_purchased": 28,
+      "sessions": 270,
+      "feature_adoption_pct": 69.7,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-026-05",
+      "customer_id": "CUS-026",
+      "event_date": "2026-07-01",
+      "active_users": 15,
+      "seats_purchased": 28,
+      "sessions": 195,
+      "feature_adoption_pct": 76.8,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-026-06",
+      "customer_id": "CUS-026",
+      "event_date": "2026-08-01",
+      "active_users": 23,
+      "seats_purchased": 28,
+      "sessions": 115,
+      "feature_adoption_pct": 73.3,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-027-01",
+      "customer_id": "CUS-027",
+      "event_date": "2026-03-01",
+      "active_users": 380,
+      "seats_purchased": 571,
+      "sessions": 6080,
+      "feature_adoption_pct": 61.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-027-02",
+      "customer_id": "CUS-027",
+      "event_date": "2026-04-01",
+      "active_users": 378,
+      "seats_purchased": 571,
+      "sessions": 4158,
+      "feature_adoption_pct": 59.9,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-027-03",
+      "customer_id": "CUS-027",
+      "event_date": "2026-05-01",
+      "active_users": 373,
+      "seats_purchased": 571,
+      "sessions": 4103,
+      "feature_adoption_pct": 57.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-027-04",
+      "customer_id": "CUS-027",
+      "event_date": "2026-06-01",
+      "active_users": 372,
+      "seats_purchased": 571,
+      "sessions": 1860,
+      "feature_adoption_pct": 57.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-027-05",
+      "customer_id": "CUS-027",
+      "event_date": "2026-07-01",
+      "active_users": 374,
+      "seats_purchased": 571,
+      "sessions": 2244,
+      "feature_adoption_pct": 52.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-027-06",
+      "customer_id": "CUS-027",
+      "event_date": "2026-08-01",
+      "active_users": 370,
+      "seats_purchased": 571,
+      "sessions": 3330,
+      "feature_adoption_pct": 50.9,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-028-01",
+      "customer_id": "CUS-028",
+      "event_date": "2026-03-01",
+      "active_users": 79,
+      "seats_purchased": 94,
+      "sessions": 711,
+      "feature_adoption_pct": 72.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-028-02",
+      "customer_id": "CUS-028",
+      "event_date": "2026-04-01",
+      "active_users": 82,
+      "seats_purchased": 94,
+      "sessions": 1312,
+      "feature_adoption_pct": 72.4,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-028-03",
+      "customer_id": "CUS-028",
+      "event_date": "2026-05-01",
+      "active_users": 78,
+      "seats_purchased": 94,
+      "sessions": 1248,
+      "feature_adoption_pct": 70.1,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-028-04",
+      "customer_id": "CUS-028",
+      "event_date": "2026-06-01",
+      "active_users": 81,
+      "seats_purchased": 94,
+      "sessions": 486,
+      "feature_adoption_pct": 71.4,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-028-05",
+      "customer_id": "CUS-028",
+      "event_date": "2026-07-01",
+      "active_users": 73,
+      "seats_purchased": 94,
+      "sessions": 438,
+      "feature_adoption_pct": 70.3,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-028-06",
+      "customer_id": "CUS-028",
+      "event_date": "2026-08-01",
+      "active_users": 82,
+      "seats_purchased": 94,
+      "sessions": 820,
+      "feature_adoption_pct": 67.1,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-029-01",
+      "customer_id": "CUS-029",
+      "event_date": "2026-03-01",
+      "active_users": 56,
+      "seats_purchased": 69,
+      "sessions": 560,
+      "feature_adoption_pct": 72.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-029-02",
+      "customer_id": "CUS-029",
+      "event_date": "2026-04-01",
+      "active_users": 49,
+      "seats_purchased": 69,
+      "sessions": 735,
+      "feature_adoption_pct": 73.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-029-03",
+      "customer_id": "CUS-029",
+      "event_date": "2026-05-01",
+      "active_users": 57,
+      "seats_purchased": 69,
+      "sessions": 684,
+      "feature_adoption_pct": 71.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-029-04",
+      "customer_id": "CUS-029",
+      "event_date": "2026-06-01",
+      "active_users": 49,
+      "seats_purchased": 69,
+      "sessions": 539,
+      "feature_adoption_pct": 76.6,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-029-05",
+      "customer_id": "CUS-029",
+      "event_date": "2026-07-01",
+      "active_users": 54,
+      "seats_purchased": 69,
+      "sessions": 648,
+      "feature_adoption_pct": 69.8,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-029-06",
+      "customer_id": "CUS-029",
+      "event_date": "2026-08-01",
+      "active_users": 49,
+      "seats_purchased": 69,
+      "sessions": 294,
+      "feature_adoption_pct": 72.5,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-030-01",
+      "customer_id": "CUS-030",
+      "event_date": "2026-03-01",
+      "active_users": 264,
+      "seats_purchased": 520,
+      "sessions": 1848,
+      "feature_adoption_pct": 45.0,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-030-02",
+      "customer_id": "CUS-030",
+      "event_date": "2026-04-01",
+      "active_users": 233,
+      "seats_purchased": 520,
+      "sessions": 1398,
+      "feature_adoption_pct": 39.9,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-030-03",
+      "customer_id": "CUS-030",
+      "event_date": "2026-05-01",
+      "active_users": 233,
+      "seats_purchased": 520,
+      "sessions": 2330,
+      "feature_adoption_pct": 37.9,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-030-04",
+      "customer_id": "CUS-030",
+      "event_date": "2026-06-01",
+      "active_users": 221,
+      "seats_purchased": 520,
+      "sessions": 1326,
+      "feature_adoption_pct": 35.9,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-030-05",
+      "customer_id": "CUS-030",
+      "event_date": "2026-07-01",
+      "active_users": 222,
+      "seats_purchased": 520,
+      "sessions": 1554,
+      "feature_adoption_pct": 32.6,
+      "source_system": "product_analytics"
+    },
+    {
+      "usage_event_id": "USE-030-06",
+      "customer_id": "CUS-030",
+      "event_date": "2026-08-01",
+      "active_users": 209,
+      "seats_purchased": 520,
+      "sessions": 3344,
+      "feature_adoption_pct": 26.0,
+      "source_system": "product_analytics"
+    }
+  ],
+  "assessments": [
+    {
+      "customer": {
+        "customer_id": "CUS-020",
+        "customer_name": "Tidal Commerce",
+        "industry": "Healthcare",
+        "segment": "SMB",
+        "employee_count": 432,
+        "region": "Latin America",
+        "account_manager_id": "AM-005",
+        "customer_status": "At Risk",
+        "created_at": "2023-01-21",
+        "account_manager_name": "Noah Williams",
+        "account_manager_email": "noah.williams@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-020",
+        "customer_id": "CUS-020",
+        "contract_start_date": "2025-09-14",
+        "contract_end_date": "2026-09-14",
+        "renewal_date": "2026-09-14",
+        "annual_contract_value": 4806.0,
+        "currency": "USD",
+        "contract_status": "Pending Renewal",
+        "auto_renew": 0
+      },
+      "risk_score": 95,
+      "risk_level": "High",
+      "factors": [
+        {
+          "name": "Declining product usage",
+          "points": 30,
+          "explanation": "Active users declined 59% from 17 to 7 in the latest month.",
+          "evidence_record_ids": [
+            "USE-020-05",
+            "USE-020-06"
+          ],
+          "recommended_action": "Schedule a usage-review meeting and agree an adoption recovery plan."
+        },
+        {
+          "name": "Low seat engagement",
+          "points": 15,
+          "explanation": "Only 26% of purchased seats were active in the latest month.",
+          "evidence_record_ids": [
+            "USE-020-06"
+          ],
+          "recommended_action": "Identify inactive teams and run targeted enablement sessions."
+        },
+        {
+          "name": "Unresolved critical support",
+          "points": 30,
+          "explanation": "1 critical ticket(s) remain unresolved.",
+          "evidence_record_ids": [
+            "TKT-020-01"
+          ],
+          "recommended_action": "Escalate to support leadership, assign an owner, and send the customer a resolution timeline."
+        },
+        {
+          "name": "Renewal approaching",
+          "points": 20,
+          "explanation": "Renewal is in 5 day(s) on 2026-09-14.",
+          "evidence_record_ids": [
+            "CON-020"
+          ],
+          "recommended_action": "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+        }
+      ],
+      "recommended_actions": [
+        "Schedule a usage-review meeting and agree an adoption recovery plan.",
+        "Identify inactive teams and run targeted enablement sessions.",
+        "Escalate to support leadership, assign an owner, and send the customer a resolution timeline.",
+        "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+      ]
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-010",
+        "customer_name": "Juniper Labs",
+        "industry": "Logistics",
+        "segment": "Mid-Market",
+        "employee_count": 1365,
+        "region": "Europe",
+        "account_manager_id": "AM-005",
+        "customer_status": "At Risk",
+        "created_at": "2022-11-23",
+        "account_manager_name": "Noah Williams",
+        "account_manager_email": "noah.williams@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-010",
+        "customer_id": "CUS-010",
+        "contract_start_date": "2025-09-27",
+        "contract_end_date": "2026-09-27",
+        "renewal_date": "2026-09-27",
+        "annual_contract_value": 15106.0,
+        "currency": "USD",
+        "contract_status": "Pending Renewal",
+        "auto_renew": 0
+      },
+      "risk_score": 95,
+      "risk_level": "High",
+      "factors": [
+        {
+          "name": "Declining product usage",
+          "points": 30,
+          "explanation": "Active users declined 33% from 27 to 18 in the latest month.",
+          "evidence_record_ids": [
+            "USE-010-05",
+            "USE-010-06"
+          ],
+          "recommended_action": "Schedule a usage-review meeting and agree an adoption recovery plan."
+        },
+        {
+          "name": "Low seat engagement",
+          "points": 15,
+          "explanation": "Only 20% of purchased seats were active in the latest month.",
+          "evidence_record_ids": [
+            "USE-010-06"
+          ],
+          "recommended_action": "Identify inactive teams and run targeted enablement sessions."
+        },
+        {
+          "name": "Unresolved critical support",
+          "points": 30,
+          "explanation": "1 critical ticket(s) remain unresolved.",
+          "evidence_record_ids": [
+            "TKT-010-01"
+          ],
+          "recommended_action": "Escalate to support leadership, assign an owner, and send the customer a resolution timeline."
+        },
+        {
+          "name": "Renewal approaching",
+          "points": 20,
+          "explanation": "Renewal is in 18 day(s) on 2026-09-27.",
+          "evidence_record_ids": [
+            "CON-010"
+          ],
+          "recommended_action": "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+        }
+      ],
+      "recommended_actions": [
+        "Schedule a usage-review meeting and agree an adoption recovery plan.",
+        "Identify inactive teams and run targeted enablement sessions.",
+        "Escalate to support leadership, assign an owner, and send the customer a resolution timeline.",
+        "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+      ]
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-005",
+        "customer_name": "Evergreen Retail",
+        "industry": "Retail",
+        "segment": "SMB",
+        "employee_count": 215,
+        "region": "North America",
+        "account_manager_id": "AM-005",
+        "customer_status": "At Risk",
+        "created_at": "2024-01-20",
+        "account_manager_name": "Noah Williams",
+        "account_manager_email": "noah.williams@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-005",
+        "customer_id": "CUS-005",
+        "contract_start_date": "2025-09-17",
+        "contract_end_date": "2026-09-17",
+        "renewal_date": "2026-09-17",
+        "annual_contract_value": 7955.0,
+        "currency": "USD",
+        "contract_status": "Pending Renewal",
+        "auto_renew": 0
+      },
+      "risk_score": 95,
+      "risk_level": "High",
+      "factors": [
+        {
+          "name": "Declining product usage",
+          "points": 30,
+          "explanation": "Active users declined 37% from 27 to 17 in the latest month.",
+          "evidence_record_ids": [
+            "USE-005-05",
+            "USE-005-06"
+          ],
+          "recommended_action": "Schedule a usage-review meeting and agree an adoption recovery plan."
+        },
+        {
+          "name": "Low seat engagement",
+          "points": 15,
+          "explanation": "Only 40% of purchased seats were active in the latest month.",
+          "evidence_record_ids": [
+            "USE-005-06"
+          ],
+          "recommended_action": "Identify inactive teams and run targeted enablement sessions."
+        },
+        {
+          "name": "Unresolved critical support",
+          "points": 30,
+          "explanation": "1 critical ticket(s) remain unresolved.",
+          "evidence_record_ids": [
+            "TKT-005-01"
+          ],
+          "recommended_action": "Escalate to support leadership, assign an owner, and send the customer a resolution timeline."
+        },
+        {
+          "name": "Renewal approaching",
+          "points": 20,
+          "explanation": "Renewal is in 8 day(s) on 2026-09-17.",
+          "evidence_record_ids": [
+            "CON-005"
+          ],
+          "recommended_action": "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+        }
+      ],
+      "recommended_actions": [
+        "Schedule a usage-review meeting and agree an adoption recovery plan.",
+        "Identify inactive teams and run targeted enablement sessions.",
+        "Escalate to support leadership, assign an owner, and send the customer a resolution timeline.",
+        "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+      ]
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-015",
+        "customer_name": "Orchid Bio",
+        "industry": "Financial Services",
+        "segment": "Enterprise",
+        "employee_count": 10556,
+        "region": "Asia Pacific",
+        "account_manager_id": "AM-005",
+        "customer_status": "At Risk",
+        "created_at": "2023-01-02",
+        "account_manager_name": "Noah Williams",
+        "account_manager_email": "noah.williams@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-015",
+        "customer_id": "CUS-015",
+        "contract_start_date": "2025-09-25",
+        "contract_end_date": "2026-09-25",
+        "renewal_date": "2026-09-25",
+        "annual_contract_value": 76908.0,
+        "currency": "USD",
+        "contract_status": "Pending Renewal",
+        "auto_renew": 0
+      },
+      "risk_score": 70,
+      "risk_level": "High",
+      "factors": [
+        {
+          "name": "Low seat engagement",
+          "points": 15,
+          "explanation": "Only 31% of purchased seats were active in the latest month.",
+          "evidence_record_ids": [
+            "USE-015-06"
+          ],
+          "recommended_action": "Identify inactive teams and run targeted enablement sessions."
+        },
+        {
+          "name": "Unresolved critical support",
+          "points": 30,
+          "explanation": "1 critical ticket(s) remain unresolved.",
+          "evidence_record_ids": [
+            "TKT-015-01"
+          ],
+          "recommended_action": "Escalate to support leadership, assign an owner, and send the customer a resolution timeline."
+        },
+        {
+          "name": "Renewal approaching",
+          "points": 20,
+          "explanation": "Renewal is in 16 day(s) on 2026-09-25.",
+          "evidence_record_ids": [
+            "CON-015"
+          ],
+          "recommended_action": "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+        },
+        {
+          "name": "High contract value",
+          "points": 5,
+          "explanation": "Annual contract value is $76,908.",
+          "evidence_record_ids": [
+            "CON-015"
+          ],
+          "recommended_action": "Create an executive account plan and involve the renewal sponsor."
+        }
+      ],
+      "recommended_actions": [
+        "Identify inactive teams and run targeted enablement sessions.",
+        "Escalate to support leadership, assign an owner, and send the customer a resolution timeline.",
+        "Confirm renewal stakeholders, commercial timeline, and success criteria this week.",
+        "Create an executive account plan and involve the renewal sponsor."
+      ]
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-025",
+        "customer_name": "Yellowtail Foods",
+        "industry": "Technology",
+        "segment": "Mid-Market",
+        "employee_count": 2640,
+        "region": "North America",
+        "account_manager_id": "AM-005",
+        "customer_status": "At Risk",
+        "created_at": "2022-12-24",
+        "account_manager_name": "Noah Williams",
+        "account_manager_email": "noah.williams@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-025",
+        "customer_id": "CUS-025",
+        "contract_start_date": "2025-09-25",
+        "contract_end_date": "2026-09-25",
+        "renewal_date": "2026-09-25",
+        "annual_contract_value": 42460.0,
+        "currency": "USD",
+        "contract_status": "Pending Renewal",
+        "auto_renew": 0
+      },
+      "risk_score": 65,
+      "risk_level": "High",
+      "factors": [
+        {
+          "name": "Low seat engagement",
+          "points": 15,
+          "explanation": "Only 35% of purchased seats were active in the latest month.",
+          "evidence_record_ids": [
+            "USE-025-06"
+          ],
+          "recommended_action": "Identify inactive teams and run targeted enablement sessions."
+        },
+        {
+          "name": "Unresolved critical support",
+          "points": 30,
+          "explanation": "1 critical ticket(s) remain unresolved.",
+          "evidence_record_ids": [
+            "TKT-025-01"
+          ],
+          "recommended_action": "Escalate to support leadership, assign an owner, and send the customer a resolution timeline."
+        },
+        {
+          "name": "Renewal approaching",
+          "points": 20,
+          "explanation": "Renewal is in 16 day(s) on 2026-09-25.",
+          "evidence_record_ids": [
+            "CON-025"
+          ],
+          "recommended_action": "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+        }
+      ],
+      "recommended_actions": [
+        "Identify inactive teams and run targeted enablement sessions.",
+        "Escalate to support leadership, assign an owner, and send the customer a resolution timeline.",
+        "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+      ]
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-030",
+        "customer_name": "Driftwood Apparel",
+        "industry": "Manufacturing",
+        "segment": "Enterprise",
+        "employee_count": 2600,
+        "region": "Europe",
+        "account_manager_id": "AM-005",
+        "customer_status": "At Risk",
+        "created_at": "2022-09-28",
+        "account_manager_name": "Noah Williams",
+        "account_manager_email": "noah.williams@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-030",
+        "customer_id": "CUS-030",
+        "contract_start_date": "2025-09-29",
+        "contract_end_date": "2026-09-29",
+        "renewal_date": "2026-09-29",
+        "annual_contract_value": 49400.0,
+        "currency": "USD",
+        "contract_status": "Pending Renewal",
+        "auto_renew": 0
+      },
+      "risk_score": 58,
+      "risk_level": "High",
+      "factors": [
+        {
+          "name": "Low seat engagement",
+          "points": 8,
+          "explanation": "Only 40% of purchased seats were active in the latest month.",
+          "evidence_record_ids": [
+            "USE-030-06"
+          ],
+          "recommended_action": "Share an adoption dashboard and propose administrator training."
+        },
+        {
+          "name": "Unresolved critical support",
+          "points": 30,
+          "explanation": "1 critical ticket(s) remain unresolved.",
+          "evidence_record_ids": [
+            "TKT-030-01"
+          ],
+          "recommended_action": "Escalate to support leadership, assign an owner, and send the customer a resolution timeline."
+        },
+        {
+          "name": "Renewal approaching",
+          "points": 20,
+          "explanation": "Renewal is in 20 day(s) on 2026-09-29.",
+          "evidence_record_ids": [
+            "CON-030"
+          ],
+          "recommended_action": "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+        }
+      ],
+      "recommended_actions": [
+        "Share an adoption dashboard and propose administrator training.",
+        "Escalate to support leadership, assign an owner, and send the customer a resolution timeline.",
+        "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+      ]
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-006",
+        "customer_name": "Fjord Manufacturing",
+        "industry": "Manufacturing",
+        "segment": "Enterprise",
+        "employee_count": 9702,
+        "region": "Europe",
+        "account_manager_id": "AM-001",
+        "customer_status": "Active",
+        "created_at": "2023-01-02",
+        "account_manager_name": "Maya Chen",
+        "account_manager_email": "maya.chen@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-006",
+        "customer_id": "CUS-006",
+        "contract_start_date": "2025-10-03",
+        "contract_end_date": "2026-10-03",
+        "renewal_date": "2026-10-03",
+        "annual_contract_value": 130977.0,
+        "currency": "USD",
+        "contract_status": "Pending Renewal",
+        "auto_renew": 1
+      },
+      "risk_score": 38,
+      "risk_level": "Medium",
+      "factors": [
+        {
+          "name": "Low seat engagement",
+          "points": 8,
+          "explanation": "Only 56% of purchased seats were active in the latest month.",
+          "evidence_record_ids": [
+            "USE-006-06"
+          ],
+          "recommended_action": "Share an adoption dashboard and propose administrator training."
+        },
+        {
+          "name": "Renewal approaching",
+          "points": 20,
+          "explanation": "Renewal is in 24 day(s) on 2026-10-03.",
+          "evidence_record_ids": [
+            "CON-006"
+          ],
+          "recommended_action": "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+        },
+        {
+          "name": "High contract value",
+          "points": 10,
+          "explanation": "Annual contract value is $130,977.",
+          "evidence_record_ids": [
+            "CON-006"
+          ],
+          "recommended_action": "Create an executive account plan and involve the renewal sponsor."
+        }
+      ],
+      "recommended_actions": [
+        "Share an adoption dashboard and propose administrator training.",
+        "Confirm renewal stakeholders, commercial timeline, and success criteria this week.",
+        "Create an executive account plan and involve the renewal sponsor."
+      ]
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-024",
+        "customer_name": "Xenon Aerospace",
+        "industry": "Manufacturing",
+        "segment": "Enterprise",
+        "employee_count": 8256,
+        "region": "Latin America",
+        "account_manager_id": "AM-004",
+        "customer_status": "Active",
+        "created_at": "2023-05-18",
+        "account_manager_name": "Elena Garcia",
+        "account_manager_email": "elena.garcia@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-024",
+        "customer_id": "CUS-024",
+        "contract_start_date": "2025-10-07",
+        "contract_end_date": "2026-10-07",
+        "renewal_date": "2026-10-07",
+        "annual_contract_value": 85140.0,
+        "currency": "USD",
+        "contract_status": "Pending Renewal",
+        "auto_renew": 1
+      },
+      "risk_score": 33,
+      "risk_level": "Medium",
+      "factors": [
+        {
+          "name": "Low seat engagement",
+          "points": 8,
+          "explanation": "Only 59% of purchased seats were active in the latest month.",
+          "evidence_record_ids": [
+            "USE-024-06"
+          ],
+          "recommended_action": "Share an adoption dashboard and propose administrator training."
+        },
+        {
+          "name": "Renewal approaching",
+          "points": 20,
+          "explanation": "Renewal is in 28 day(s) on 2026-10-07.",
+          "evidence_record_ids": [
+            "CON-024"
+          ],
+          "recommended_action": "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+        },
+        {
+          "name": "High contract value",
+          "points": 5,
+          "explanation": "Annual contract value is $85,140.",
+          "evidence_record_ids": [
+            "CON-024"
+          ],
+          "recommended_action": "Create an executive account plan and involve the renewal sponsor."
+        }
+      ],
+      "recommended_actions": [
+        "Share an adoption dashboard and propose administrator training.",
+        "Confirm renewal stakeholders, commercial timeline, and success criteria this week.",
+        "Create an executive account plan and involve the renewal sponsor."
+      ]
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-009",
+        "customer_name": "Indigo Media",
+        "industry": "Financial Services",
+        "segment": "Enterprise",
+        "employee_count": 5863,
+        "region": "North America",
+        "account_manager_id": "AM-004",
+        "customer_status": "Active",
+        "created_at": "2023-07-25",
+        "account_manager_name": "Elena Garcia",
+        "account_manager_email": "elena.garcia@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-009",
+        "customer_id": "CUS-009",
+        "contract_start_date": "2025-10-06",
+        "contract_end_date": "2026-10-06",
+        "renewal_date": "2026-10-06",
+        "annual_contract_value": 71955.0,
+        "currency": "USD",
+        "contract_status": "Pending Renewal",
+        "auto_renew": 1
+      },
+      "risk_score": 33,
+      "risk_level": "Medium",
+      "factors": [
+        {
+          "name": "Low seat engagement",
+          "points": 8,
+          "explanation": "Only 49% of purchased seats were active in the latest month.",
+          "evidence_record_ids": [
+            "USE-009-06"
+          ],
+          "recommended_action": "Share an adoption dashboard and propose administrator training."
+        },
+        {
+          "name": "Renewal approaching",
+          "points": 20,
+          "explanation": "Renewal is in 27 day(s) on 2026-10-06.",
+          "evidence_record_ids": [
+            "CON-009"
+          ],
+          "recommended_action": "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+        },
+        {
+          "name": "High contract value",
+          "points": 5,
+          "explanation": "Annual contract value is $71,955.",
+          "evidence_record_ids": [
+            "CON-009"
+          ],
+          "recommended_action": "Create an executive account plan and involve the renewal sponsor."
+        }
+      ],
+      "recommended_actions": [
+        "Share an adoption dashboard and propose administrator training.",
+        "Confirm renewal stakeholders, commercial timeline, and success criteria this week.",
+        "Create an executive account plan and involve the renewal sponsor."
+      ]
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-021",
+        "customer_name": "Umber Construction",
+        "industry": "Financial Services",
+        "segment": "Enterprise",
+        "employee_count": 13124,
+        "region": "North America",
+        "account_manager_id": "AM-001",
+        "customer_status": "Active",
+        "created_at": "2024-10-27",
+        "account_manager_name": "Maya Chen",
+        "account_manager_email": "maya.chen@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-021",
+        "customer_id": "CUS-021",
+        "contract_start_date": "2025-11-05",
+        "contract_end_date": "2026-11-05",
+        "renewal_date": "2026-11-05",
+        "annual_contract_value": 110396.0,
+        "currency": "USD",
+        "contract_status": "Pending Renewal",
+        "auto_renew": 1
+      },
+      "risk_score": 30,
+      "risk_level": "Medium",
+      "factors": [
+        {
+          "name": "Low seat engagement",
+          "points": 8,
+          "explanation": "Only 51% of purchased seats were active in the latest month.",
+          "evidence_record_ids": [
+            "USE-021-06"
+          ],
+          "recommended_action": "Share an adoption dashboard and propose administrator training."
+        },
+        {
+          "name": "Renewal approaching",
+          "points": 12,
+          "explanation": "Renewal is in 57 day(s) on 2026-11-05.",
+          "evidence_record_ids": [
+            "CON-021"
+          ],
+          "recommended_action": "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+        },
+        {
+          "name": "High contract value",
+          "points": 10,
+          "explanation": "Annual contract value is $110,396.",
+          "evidence_record_ids": [
+            "CON-021"
+          ],
+          "recommended_action": "Create an executive account plan and involve the renewal sponsor."
+        }
+      ],
+      "recommended_actions": [
+        "Share an adoption dashboard and propose administrator training.",
+        "Confirm renewal stakeholders, commercial timeline, and success criteria this week.",
+        "Create an executive account plan and involve the renewal sponsor."
+      ]
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-012",
+        "customer_name": "Lighthouse Foods",
+        "industry": "Manufacturing",
+        "segment": "Enterprise",
+        "employee_count": 4404,
+        "region": "Latin America",
+        "account_manager_id": "AM-002",
+        "customer_status": "Active",
+        "created_at": "2022-12-06",
+        "account_manager_name": "Daniel Okafor",
+        "account_manager_email": "daniel.okafor@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-012",
+        "customer_id": "CUS-012",
+        "contract_start_date": "2025-10-30",
+        "contract_end_date": "2026-10-30",
+        "renewal_date": "2026-10-30",
+        "annual_contract_value": 132120.0,
+        "currency": "USD",
+        "contract_status": "Pending Renewal",
+        "auto_renew": 1
+      },
+      "risk_score": 30,
+      "risk_level": "Medium",
+      "factors": [
+        {
+          "name": "Low seat engagement",
+          "points": 8,
+          "explanation": "Only 51% of purchased seats were active in the latest month.",
+          "evidence_record_ids": [
+            "USE-012-06"
+          ],
+          "recommended_action": "Share an adoption dashboard and propose administrator training."
+        },
+        {
+          "name": "Renewal approaching",
+          "points": 12,
+          "explanation": "Renewal is in 51 day(s) on 2026-10-30.",
+          "evidence_record_ids": [
+            "CON-012"
+          ],
+          "recommended_action": "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+        },
+        {
+          "name": "High contract value",
+          "points": 10,
+          "explanation": "Annual contract value is $132,120.",
+          "evidence_record_ids": [
+            "CON-012"
+          ],
+          "recommended_action": "Create an executive account plan and involve the renewal sponsor."
+        }
+      ],
+      "recommended_actions": [
+        "Share an adoption dashboard and propose administrator training.",
+        "Confirm renewal stakeholders, commercial timeline, and success criteria this week.",
+        "Create an executive account plan and involve the renewal sponsor."
+      ]
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-018",
+        "customer_name": "Redwood Telecom",
+        "industry": "Manufacturing",
+        "segment": "Enterprise",
+        "employee_count": 3003,
+        "region": "Europe",
+        "account_manager_id": "AM-003",
+        "customer_status": "Active",
+        "created_at": "2023-11-23",
+        "account_manager_name": "Priya Nair",
+        "account_manager_email": "priya.nair@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-018",
+        "customer_id": "CUS-018",
+        "contract_start_date": "2025-11-19",
+        "contract_end_date": "2026-11-19",
+        "renewal_date": "2026-11-19",
+        "annual_contract_value": 71643.0,
+        "currency": "USD",
+        "contract_status": "Pending Renewal",
+        "auto_renew": 1
+      },
+      "risk_score": 19,
+      "risk_level": "Low",
+      "factors": [
+        {
+          "name": "Low seat engagement",
+          "points": 8,
+          "explanation": "Only 48% of purchased seats were active in the latest month.",
+          "evidence_record_ids": [
+            "USE-018-06"
+          ],
+          "recommended_action": "Share an adoption dashboard and propose administrator training."
+        },
+        {
+          "name": "Renewal approaching",
+          "points": 6,
+          "explanation": "Renewal is in 71 day(s) on 2026-11-19.",
+          "evidence_record_ids": [
+            "CON-018"
+          ],
+          "recommended_action": "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+        },
+        {
+          "name": "High contract value",
+          "points": 5,
+          "explanation": "Annual contract value is $71,643.",
+          "evidence_record_ids": [
+            "CON-018"
+          ],
+          "recommended_action": "Create an executive account plan and involve the renewal sponsor."
+        }
+      ],
+      "recommended_actions": [
+        "Share an adoption dashboard and propose administrator training.",
+        "Confirm renewal stakeholders, commercial timeline, and success criteria this week.",
+        "Create an executive account plan and involve the renewal sponsor."
+      ]
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-003",
+        "customer_name": "Cedar Finance",
+        "industry": "Financial Services",
+        "segment": "Enterprise",
+        "employee_count": 2625,
+        "region": "Asia Pacific",
+        "account_manager_id": "AM-003",
+        "customer_status": "Active",
+        "created_at": "2024-08-23",
+        "account_manager_name": "Priya Nair",
+        "account_manager_email": "priya.nair@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-003",
+        "customer_id": "CUS-003",
+        "contract_start_date": "2025-10-23",
+        "contract_end_date": "2026-10-23",
+        "renewal_date": "2026-10-23",
+        "annual_contract_value": 72750.0,
+        "currency": "USD",
+        "contract_status": "Pending Renewal",
+        "auto_renew": 1
+      },
+      "risk_score": 17,
+      "risk_level": "Low",
+      "factors": [
+        {
+          "name": "Renewal approaching",
+          "points": 12,
+          "explanation": "Renewal is in 44 day(s) on 2026-10-23.",
+          "evidence_record_ids": [
+            "CON-003"
+          ],
+          "recommended_action": "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+        },
+        {
+          "name": "High contract value",
+          "points": 5,
+          "explanation": "Annual contract value is $72,750.",
+          "evidence_record_ids": [
+            "CON-003"
+          ],
+          "recommended_action": "Create an executive account plan and involve the renewal sponsor."
+        }
+      ],
+      "recommended_actions": [
+        "Confirm renewal stakeholders, commercial timeline, and success criteria this week.",
+        "Create an executive account plan and involve the renewal sponsor."
+      ]
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-027",
+        "customer_name": "Atlas Public Sector",
+        "industry": "Financial Services",
+        "segment": "Enterprise",
+        "employee_count": 5139,
+        "region": "Asia Pacific",
+        "account_manager_id": "AM-002",
+        "customer_status": "Active",
+        "created_at": "2024-05-11",
+        "account_manager_name": "Daniel Okafor",
+        "account_manager_email": "daniel.okafor@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-027",
+        "customer_id": "CUS-027",
+        "contract_start_date": "2025-11-13",
+        "contract_end_date": "2026-11-13",
+        "renewal_date": "2026-11-13",
+        "annual_contract_value": 72517.0,
+        "currency": "USD",
+        "contract_status": "Pending Renewal",
+        "auto_renew": 1
+      },
+      "risk_score": 11,
+      "risk_level": "Low",
+      "factors": [
+        {
+          "name": "Renewal approaching",
+          "points": 6,
+          "explanation": "Renewal is in 65 day(s) on 2026-11-13.",
+          "evidence_record_ids": [
+            "CON-027"
+          ],
+          "recommended_action": "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+        },
+        {
+          "name": "High contract value",
+          "points": 5,
+          "explanation": "Annual contract value is $72,517.",
+          "evidence_record_ids": [
+            "CON-027"
+          ],
+          "recommended_action": "Create an executive account plan and involve the renewal sponsor."
+        }
+      ],
+      "recommended_actions": [
+        "Confirm renewal stakeholders, commercial timeline, and success criteria this week.",
+        "Create an executive account plan and involve the renewal sponsor."
+      ]
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-016",
+        "customer_name": "Pioneer Legal",
+        "industry": "Logistics",
+        "segment": "Mid-Market",
+        "employee_count": 3910,
+        "region": "Latin America",
+        "account_manager_id": "AM-001",
+        "customer_status": "Active",
+        "created_at": "2024-04-30",
+        "account_manager_name": "Maya Chen",
+        "account_manager_email": "maya.chen@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-016",
+        "customer_id": "CUS-016",
+        "contract_start_date": "2025-12-02",
+        "contract_end_date": "2026-12-02",
+        "renewal_date": "2026-12-02",
+        "annual_contract_value": 38180.0,
+        "currency": "USD",
+        "contract_status": "Active",
+        "auto_renew": 1
+      },
+      "risk_score": 6,
+      "risk_level": "Low",
+      "factors": [
+        {
+          "name": "Renewal approaching",
+          "points": 6,
+          "explanation": "Renewal is in 84 day(s) on 2026-12-02.",
+          "evidence_record_ids": [
+            "CON-016"
+          ],
+          "recommended_action": "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+        }
+      ],
+      "recommended_actions": [
+        "Confirm renewal stakeholders, commercial timeline, and success criteria this week."
+      ]
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-026",
+        "customer_name": "Zenith Consulting",
+        "industry": "Healthcare",
+        "segment": "SMB",
+        "employee_count": 336,
+        "region": "Europe",
+        "account_manager_id": "AM-001",
+        "customer_status": "Active",
+        "created_at": "2023-03-19",
+        "account_manager_name": "Maya Chen",
+        "account_manager_email": "maya.chen@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-026",
+        "customer_id": "CUS-026",
+        "contract_start_date": "2025-12-26",
+        "contract_end_date": "2026-12-26",
+        "renewal_date": "2026-12-26",
+        "annual_contract_value": 2688.0,
+        "currency": "USD",
+        "contract_status": "Active",
+        "auto_renew": 1
+      },
+      "risk_score": 0,
+      "risk_level": "Low",
+      "factors": [],
+      "recommended_actions": []
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-023",
+        "customer_name": "Willow Software",
+        "industry": "Retail",
+        "segment": "SMB",
+        "employee_count": 354,
+        "region": "Asia Pacific",
+        "account_manager_id": "AM-003",
+        "customer_status": "Active",
+        "created_at": "2024-03-25",
+        "account_manager_name": "Priya Nair",
+        "account_manager_email": "priya.nair@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-023",
+        "customer_id": "CUS-023",
+        "contract_start_date": "2026-01-21",
+        "contract_end_date": "2027-01-21",
+        "renewal_date": "2027-01-21",
+        "annual_contract_value": 9617.0,
+        "currency": "USD",
+        "contract_status": "Active",
+        "auto_renew": 1
+      },
+      "risk_score": 0,
+      "risk_level": "Low",
+      "factors": [],
+      "recommended_actions": []
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-022",
+        "customer_name": "Vertex Insurance",
+        "industry": "Logistics",
+        "segment": "Mid-Market",
+        "employee_count": 1044,
+        "region": "Europe",
+        "account_manager_id": "AM-002",
+        "customer_status": "Active",
+        "created_at": "2024-08-11",
+        "account_manager_name": "Daniel Okafor",
+        "account_manager_email": "daniel.okafor@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-022",
+        "customer_id": "CUS-022",
+        "contract_start_date": "2026-02-12",
+        "contract_end_date": "2027-02-12",
+        "renewal_date": "2027-02-12",
+        "annual_contract_value": 17400.0,
+        "currency": "USD",
+        "contract_status": "Active",
+        "auto_renew": 1
+      },
+      "risk_score": 0,
+      "risk_level": "Low",
+      "factors": [],
+      "recommended_actions": []
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-019",
+        "customer_name": "Summit Hospitality",
+        "industry": "Technology",
+        "segment": "Mid-Market",
+        "employee_count": 1905,
+        "region": "Asia Pacific",
+        "account_manager_id": "AM-004",
+        "customer_status": "Active",
+        "created_at": "2025-03-14",
+        "account_manager_name": "Elena Garcia",
+        "account_manager_email": "elena.garcia@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-019",
+        "customer_id": "CUS-019",
+        "contract_start_date": "2026-02-28",
+        "contract_end_date": "2027-02-28",
+        "renewal_date": "2027-02-28",
+        "annual_contract_value": 14605.0,
+        "currency": "USD",
+        "contract_status": "Active",
+        "auto_renew": 1
+      },
+      "risk_score": 0,
+      "risk_level": "Low",
+      "factors": [],
+      "recommended_actions": []
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-017",
+        "customer_name": "Quartz Mobility",
+        "industry": "Retail",
+        "segment": "SMB",
+        "employee_count": 312,
+        "region": "North America",
+        "account_manager_id": "AM-002",
+        "customer_status": "Active",
+        "created_at": "2023-11-13",
+        "account_manager_name": "Daniel Okafor",
+        "account_manager_email": "daniel.okafor@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-017",
+        "customer_id": "CUS-017",
+        "contract_start_date": "2026-03-12",
+        "contract_end_date": "2027-03-12",
+        "renewal_date": "2027-03-12",
+        "annual_contract_value": 4344.0,
+        "currency": "USD",
+        "contract_status": "Active",
+        "auto_renew": 1
+      },
+      "risk_score": 0,
+      "risk_level": "Low",
+      "factors": [],
+      "recommended_actions": []
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-014",
+        "customer_name": "Northwind Security",
+        "industry": "Healthcare",
+        "segment": "SMB",
+        "employee_count": 250,
+        "region": "Europe",
+        "account_manager_id": "AM-004",
+        "customer_status": "Active",
+        "created_at": "2024-07-02",
+        "account_manager_name": "Elena Garcia",
+        "account_manager_email": "elena.garcia@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-014",
+        "customer_id": "CUS-014",
+        "contract_start_date": "2026-03-19",
+        "contract_end_date": "2027-03-19",
+        "renewal_date": "2027-03-19",
+        "annual_contract_value": 9950.0,
+        "currency": "USD",
+        "contract_status": "Active",
+        "auto_renew": 1
+      },
+      "risk_score": 0,
+      "risk_level": "Low",
+      "factors": [],
+      "recommended_actions": []
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-013",
+        "customer_name": "Meridian Travel",
+        "industry": "Technology",
+        "segment": "Mid-Market",
+        "employee_count": 1800,
+        "region": "North America",
+        "account_manager_id": "AM-003",
+        "customer_status": "Active",
+        "created_at": "2022-11-30",
+        "account_manager_name": "Priya Nair",
+        "account_manager_email": "priya.nair@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-013",
+        "customer_id": "CUS-013",
+        "contract_start_date": "2026-01-05",
+        "contract_end_date": "2027-01-05",
+        "renewal_date": "2027-01-05",
+        "annual_contract_value": 26100.0,
+        "currency": "USD",
+        "contract_status": "Active",
+        "auto_renew": 1
+      },
+      "risk_score": 0,
+      "risk_level": "Low",
+      "factors": [],
+      "recommended_actions": []
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-011",
+        "customer_name": "Keystone Analytics",
+        "industry": "Retail",
+        "segment": "SMB",
+        "employee_count": 612,
+        "region": "Asia Pacific",
+        "account_manager_id": "AM-001",
+        "customer_status": "Active",
+        "created_at": "2024-10-16",
+        "account_manager_name": "Maya Chen",
+        "account_manager_email": "maya.chen@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-011",
+        "customer_id": "CUS-011",
+        "contract_start_date": "2026-03-07",
+        "contract_end_date": "2027-03-07",
+        "renewal_date": "2027-03-07",
+        "annual_contract_value": 6069.0,
+        "currency": "USD",
+        "contract_status": "Active",
+        "auto_renew": 1
+      },
+      "risk_score": 0,
+      "risk_level": "Low",
+      "factors": [],
+      "recommended_actions": []
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-008",
+        "customer_name": "Harbor Education",
+        "industry": "Healthcare",
+        "segment": "SMB",
+        "employee_count": 806,
+        "region": "Latin America",
+        "account_manager_id": "AM-003",
+        "customer_status": "Active",
+        "created_at": "2025-01-17",
+        "account_manager_name": "Priya Nair",
+        "account_manager_email": "priya.nair@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-008",
+        "customer_id": "CUS-008",
+        "contract_start_date": "2026-03-05",
+        "contract_end_date": "2027-03-05",
+        "renewal_date": "2027-03-05",
+        "annual_contract_value": 6262.0,
+        "currency": "USD",
+        "contract_status": "Active",
+        "auto_renew": 1
+      },
+      "risk_score": 0,
+      "risk_level": "Low",
+      "factors": [],
+      "recommended_actions": []
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-007",
+        "customer_name": "Granite Energy",
+        "industry": "Technology",
+        "segment": "Mid-Market",
+        "employee_count": 2688,
+        "region": "Asia Pacific",
+        "account_manager_id": "AM-002",
+        "customer_status": "Active",
+        "created_at": "2025-05-23",
+        "account_manager_name": "Daniel Okafor",
+        "account_manager_email": "daniel.okafor@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-007",
+        "customer_id": "CUS-007",
+        "contract_start_date": "2026-03-26",
+        "contract_end_date": "2027-03-26",
+        "renewal_date": "2027-03-26",
+        "annual_contract_value": 36096.0,
+        "currency": "USD",
+        "contract_status": "Active",
+        "auto_renew": 1
+      },
+      "risk_score": 0,
+      "risk_level": "Low",
+      "factors": [],
+      "recommended_actions": []
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-004",
+        "customer_name": "Delta Logistics",
+        "industry": "Logistics",
+        "segment": "Mid-Market",
+        "employee_count": 1440,
+        "region": "Latin America",
+        "account_manager_id": "AM-004",
+        "customer_status": "Active",
+        "created_at": "2023-03-28",
+        "account_manager_name": "Elena Garcia",
+        "account_manager_email": "elena.garcia@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-004",
+        "customer_id": "CUS-004",
+        "contract_start_date": "2026-02-13",
+        "contract_end_date": "2027-02-13",
+        "renewal_date": "2027-02-13",
+        "annual_contract_value": 18048.0,
+        "currency": "USD",
+        "contract_status": "Active",
+        "auto_renew": 1
+      },
+      "risk_score": 0,
+      "risk_level": "Low",
+      "factors": [],
+      "recommended_actions": []
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-029",
+        "customer_name": "Cascade Robotics",
+        "industry": "Retail",
+        "segment": "SMB",
+        "employee_count": 276,
+        "region": "North America",
+        "account_manager_id": "AM-004",
+        "customer_status": "Active",
+        "created_at": "2023-07-24",
+        "account_manager_name": "Elena Garcia",
+        "account_manager_email": "elena.garcia@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-029",
+        "customer_id": "CUS-029",
+        "contract_start_date": "2026-01-14",
+        "contract_end_date": "2027-01-14",
+        "renewal_date": "2027-01-14",
+        "annual_contract_value": 13317.0,
+        "currency": "USD",
+        "contract_status": "Active",
+        "auto_renew": 1
+      },
+      "risk_score": 0,
+      "risk_level": "Low",
+      "factors": [],
+      "recommended_actions": []
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-002",
+        "customer_name": "Bluebird Health",
+        "industry": "Healthcare",
+        "segment": "SMB",
+        "employee_count": 804,
+        "region": "Europe",
+        "account_manager_id": "AM-002",
+        "customer_status": "Active",
+        "created_at": "2024-03-16",
+        "account_manager_name": "Daniel Okafor",
+        "account_manager_email": "daniel.okafor@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-002",
+        "customer_id": "CUS-002",
+        "contract_start_date": "2026-01-22",
+        "contract_end_date": "2027-01-22",
+        "renewal_date": "2027-01-22",
+        "annual_contract_value": 9112.0,
+        "currency": "USD",
+        "contract_status": "Active",
+        "auto_renew": 1
+      },
+      "risk_score": 0,
+      "risk_level": "Low",
+      "factors": [],
+      "recommended_actions": []
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-028",
+        "customer_name": "Beacon Properties",
+        "industry": "Logistics",
+        "segment": "Mid-Market",
+        "employee_count": 376,
+        "region": "Latin America",
+        "account_manager_id": "AM-003",
+        "customer_status": "Active",
+        "created_at": "2022-08-21",
+        "account_manager_name": "Priya Nair",
+        "account_manager_email": "priya.nair@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-028",
+        "customer_id": "CUS-028",
+        "contract_start_date": "2025-12-12",
+        "contract_end_date": "2026-12-12",
+        "renewal_date": "2026-12-12",
+        "annual_contract_value": 16826.0,
+        "currency": "USD",
+        "contract_status": "Active",
+        "auto_renew": 1
+      },
+      "risk_score": 0,
+      "risk_level": "Low",
+      "factors": [],
+      "recommended_actions": []
+    },
+    {
+      "customer": {
+        "customer_id": "CUS-001",
+        "customer_name": "Acme Systems",
+        "industry": "Technology",
+        "segment": "Mid-Market",
+        "employee_count": 1312,
+        "region": "North America",
+        "account_manager_id": "AM-001",
+        "customer_status": "Active",
+        "created_at": "2022-12-28",
+        "account_manager_name": "Maya Chen",
+        "account_manager_email": "maya.chen@northstar.example"
+      },
+      "contract": {
+        "contract_id": "CON-001",
+        "customer_id": "CUS-001",
+        "contract_start_date": "2026-02-08",
+        "contract_end_date": "2027-02-08",
+        "renewal_date": "2027-02-08",
+        "annual_contract_value": 27880.0,
+        "currency": "USD",
+        "contract_status": "Active",
+        "auto_renew": 1
+      },
+      "risk_score": 0,
+      "risk_level": "Low",
+      "factors": [],
+      "recommended_actions": []
+    }
+  ]
+}

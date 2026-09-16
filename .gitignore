@@ -24,3 +24,5 @@ Thumbs.db
 
 work/
 outputs/
+node_modules/
+dist/
