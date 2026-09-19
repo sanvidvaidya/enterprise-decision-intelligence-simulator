@@ -66,12 +66,20 @@ def _upsert_extract(connection, filename: str, frame: pd.DataFrame) -> None:
     identifier = SOURCE_SPECS[filename]["id"]
     prepared = _prepare_for_load(frame)
     prepared = prepared.where(pd.notna(prepared), None)
-    columns = list(prepared.columns)
+
+    # Whitelist columns strictly against the authorized schema specification
+    allowed_columns = set(SOURCE_SPECS[filename]["required"])
+    columns = [column for column in prepared.columns if column in allowed_columns]
+    if not columns or identifier not in columns:
+        raise ValueError(f"Extracted columns do not match required schema for {table_name}")
+
+    prepared = prepared[columns]
     placeholders = ", ".join("?" for _ in columns)
-    updates = ", ".join(f"{column} = excluded.{column}" for column in columns if column != identifier)
+    quoted_cols = ", ".join(f'"{column}"' for column in columns)
+    updates = ", ".join(f'"{column}" = excluded."{column}"' for column in columns if column != identifier)
     statement = (
-        f"INSERT INTO {table_name} ({', '.join(columns)}) VALUES ({placeholders}) "
-        f"ON CONFLICT({identifier}) DO UPDATE SET {updates}"
+        f'INSERT INTO "{table_name}" ({quoted_cols}) VALUES ({placeholders}) '
+        f'ON CONFLICT("{identifier}") DO UPDATE SET {updates}'
     )
     connection.executemany(statement, prepared.itertuples(index=False, name=None))
 
@@ -83,11 +91,11 @@ def _delete_records_missing_from_snapshot(connection, filename: str, frame: pd.D
     identifier = SOURCE_SPECS[filename]["id"]
     record_ids = frame[identifier].tolist()
     if not record_ids:
-        connection.execute(f"DELETE FROM {table_name}")
+        connection.execute(f'DELETE FROM "{table_name}"')
         return
     placeholders = ", ".join("?" for _ in record_ids)
     connection.execute(
-        f"DELETE FROM {table_name} WHERE {identifier} NOT IN ({placeholders})",
+        f'DELETE FROM "{table_name}" WHERE "{identifier}" NOT IN ({placeholders})',
         record_ids,
     )
 
