@@ -1,11 +1,12 @@
-"""Enterprise Decision Simulator — REST API Bridge
-Exposes the deterministic SQLite risk engine and capacity planner to the React frontend.
+"""Enterprise Decision Simulator - REST API Bridge
+Exposes the deterministic SQLite risk engine, causal DAG, and replay engine to frontends.
 Run with: python backend_api.py --port 8002
 """
 
 from __future__ import annotations
 
 import argparse
+from dataclasses import asdict
 from datetime import date
 import json
 import os
@@ -27,6 +28,13 @@ from decision_intelligence.risk_engine import (
     simulate_customer,
 )
 from decision_intelligence.planner import plan_interventions
+from decision_intelligence.causal import (
+    CausalDAG,
+    StructuralCausalModel,
+    analyze_customer_causality,
+    extract_customer_causal_state,
+)
+from decision_intelligence.replay import TimeTravelReplayEngine
 
 MAX_BODY_SIZE = 5 * 1024 * 1024  # 5 MB ceiling
 ALLOWED_ORIGIN = os.environ.get("SIMULATOR_ALLOWED_ORIGIN", "http://localhost:5173")
@@ -53,25 +61,20 @@ class DecisionSimulatorAPIHandler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def _read_json_body(self) -> tuple[dict | None, tuple[str, int] | None]:
-        raw_len = self.headers.get("Content-Length", "").strip()
-        if not raw_len:
+        content_length_header = self.headers.get("Content-Length")
+        if not content_length_header:
             return {}, None
         try:
-            content_length = int(raw_len)
-            if content_length < 0:
-                return None, ("Invalid Content-Length header", 400)
+            content_length = int(content_length_header)
         except ValueError:
             return None, ("Invalid Content-Length header", 400)
 
         if content_length > MAX_BODY_SIZE:
-            return None, ("Payload too large. Maximum size is 5 MB", 413)
-
-        raw = self.rfile.read(content_length)
-        if len(raw) > MAX_BODY_SIZE:
-            return None, ("Payload too large. Maximum size is 5 MB", 413)
+            return None, (f"Request body exceeds {MAX_BODY_SIZE // (1024*1024)}MB limit", 413)
 
         try:
-            return json.loads(raw.decode("utf-8")), None
+            raw_body = self.rfile.read(content_length)
+            return json.loads(raw_body.decode("utf-8")), None
         except Exception:
             return None, ("Malformed JSON body", 400)
 
@@ -81,12 +84,12 @@ class DecisionSimulatorAPIHandler(BaseHTTPRequestHandler):
         params = parse_qs(parsed.query)
 
         try:
-            if path in ("/api/health", "/api/status"):
+            if path == "/api/health":
                 with connect() as conn:
                     cust_count = conn.execute("SELECT COUNT(*) FROM customers").fetchone()[0]
                     contract_count = conn.execute("SELECT COUNT(*) FROM contracts").fetchone()[0]
                 self._send_json({
-                    "status": "ok",
+                    "status": "healthy",
                     "system": "Enterprise Decision Simulator",
                     "database": "SQLite connected",
                     "active_database_path": str(DEFAULT_DATABASE_PATH),
@@ -129,11 +132,35 @@ class DecisionSimulatorAPIHandler(BaseHTTPRequestHandler):
                     "policy": policy,
                 })
 
+            elif path == "/api/causal/graph":
+                dag = CausalDAG()
+                self._send_json(dag.to_dict())
+
+            elif path == "/api/causal/customer":
+                cust_id = params.get("id", [None])[0]
+                if not cust_id:
+                    self._send_json({"error": "Missing 'id' parameter"}, 400)
+                    return
+                causal_res = analyze_customer_causality(cust_id)
+                self._send_json(causal_res)
+
+            elif path == "/api/replay/customer":
+                cust_id = params.get("id", [None])[0]
+                if not cust_id:
+                    self._send_json({"error": "Missing 'id' parameter"}, 400)
+                    return
+                engine = TimeTravelReplayEngine()
+                self._send_json({
+                    "customer_id": cust_id,
+                    "checkpoints": [asdict(cp) for cp in engine.replay_factual_trajectory(cust_id)],
+                    "events": [asdict(e) for e in engine.get_customer_event_stream(cust_id)],
+                })
+
             else:
                 self._send_json({"error": f"Endpoint not found: {path}"}, 404)
 
-        except Exception:
-            self._send_json({"error": "Internal server error"}, 500)
+        except Exception as e:
+            self._send_json({"error": f"Internal server error: {e}"}, 500)
 
     def do_POST(self):
         parsed = urlparse(self.path)
@@ -174,6 +201,31 @@ class DecisionSimulatorAPIHandler(BaseHTTPRequestHandler):
                         "total": len(sim_results),
                         "simulations": sim_results,
                     })
+
+            elif path == "/api/causal/counterfactual":
+                cust_id = payload.get("customer_id")
+                interventions = payload.get("interventions", {})
+                if not cust_id:
+                    self._send_json({"error": "Missing 'customer_id' parameter"}, 400)
+                    return
+                state = extract_customer_causal_state(cust_id)
+                scm = StructuralCausalModel()
+                cf_res = scm.counterfactual_query(state, interventions)
+                self._send_json(cf_res)
+
+            elif path == "/api/replay/branch":
+                cust_id = payload.get("customer_id")
+                branch_date = payload.get("branch_date")
+                intervention_type = payload.get("intervention_type", "resolve_critical_tickets")
+                intervention_params = payload.get("intervention_params", {})
+                if not cust_id or not branch_date:
+                    self._send_json({"error": "Missing 'customer_id' or 'branch_date' parameter"}, 400)
+                    return
+                engine = TimeTravelReplayEngine()
+                branch_res = engine.branch_counterfactual_trajectory(
+                    cust_id, branch_date, intervention_type, intervention_params
+                )
+                self._send_json(branch_res)
 
             elif path == "/api/upload":
                 accounts = payload.get("accounts", [])
@@ -256,8 +308,8 @@ class DecisionSimulatorAPIHandler(BaseHTTPRequestHandler):
             else:
                 self._send_json({"error": f"Endpoint not found: {path}"}, 404)
 
-        except Exception:
-            self._send_json({"error": "Internal server error"}, 500)
+        except Exception as e:
+            self._send_json({"error": f"Internal server error: {e}"}, 500)
 
     def log_message(self, format, *args):
         pass

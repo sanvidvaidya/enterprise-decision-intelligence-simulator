@@ -195,6 +195,14 @@ _Factor-level score movement with the exact contract, usage, and support evidenc
 
 _Funded intervention portfolio under explicit hours, budget, escalation, and enablement limits._
 
+## Causal DAG and Counterfactual Time-Travel Replay
+
+In addition to deterministic risk scoring, the simulator includes:
+- **Structural Causal Model (SCM):** A 9-node, 12-edge directed acyclic graph evaluating direct and indirect causal effects, Pearl's do-calculus interventions, and root-cause attribution.
+- **Event-Stream Time-Travel Replay:** Historical state reconstruction without future data leakage, allowing counterfactual trajectory branching at historical checkpoints to evaluate protected ACV.
+
+See [Causal and Time-Travel Documentation](docs/CAUSAL_AND_TIME_TRAVEL.md) for architecture, mathematics, and REST endpoints.
+
 ## Future AI integration without weakening governance
 
 An optional future LLM could consume a read-only structured context containing customer facts, factor results, evidence IDs, approved actions, and scenario assumptions. SQLite and the deterministic engine would remain the systems of record. The model could draft meeting briefs or summarize evidence, but it would not invent risk factors, overwrite source facts, or silently change scores. Human approval, prompt/output logging, access control, and evaluation would be required before any production use.
