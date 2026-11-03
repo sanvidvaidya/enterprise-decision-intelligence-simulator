@@ -136,6 +136,8 @@ The suite verifies validation, relational integrity, risk boundaries, source evi
 - [Risk and scenario methodology](docs/METHODOLOGY.md)
 - [Limitations](docs/LIMITATIONS.md)
 - [90-second demo script](docs/DEMO_SCRIPT.md)
+- [Causal and time travel](docs/CAUSAL_AND_TIME_TRAVEL.md)
+- [Live event ingestion and action dispatch](docs/LIVE_INGESTION_AND_DISPATCH.md)
 
 ## Screenshots
 
@@ -202,6 +204,7 @@ In addition to deterministic risk scoring, the simulator includes:
 - **Event-Stream Time-Travel Replay:** Historical state reconstruction without future data leakage, allowing counterfactual trajectory branching at historical checkpoints to evaluate protected ACV.
 
 See [Causal and Time-Travel Documentation](docs/CAUSAL_AND_TIME_TRAVEL.md) for architecture, mathematics, and REST endpoints.
+See [Live Event Ingestion and Action Dispatch](docs/LIVE_INGESTION_AND_DISPATCH.md) for streaming webhooks, validation rules, and action execution.
 
 ## Future AI integration without weakening governance
 
