@@ -35,6 +35,15 @@ from decision_intelligence.causal import (
     extract_customer_causal_state,
 )
 from decision_intelligence.replay import TimeTravelReplayEngine
+from decision_intelligence.ingest_stream import (
+    ingest_usage_event,
+    ingest_support_ticket,
+    ingest_contract_event,
+)
+from decision_intelligence.dispatch import (
+    dispatch_action,
+    list_dispatch_history,
+)
 
 MAX_BODY_SIZE = 5 * 1024 * 1024  # 5 MB ceiling
 ALLOWED_ORIGIN = os.environ.get("SIMULATOR_ALLOWED_ORIGIN", "http://localhost:5173")
@@ -144,6 +153,50 @@ class DecisionSimulatorAPIHandler(BaseHTTPRequestHandler):
                 causal_res = analyze_customer_causality(cust_id)
                 self._send_json(causal_res)
 
+            elif path == "/api/dispatch/history":
+                cust_id = params.get("customer_id", params.get("id", [None]))[0]
+                limit_str = params.get("limit", ["50"])[0]
+                try:
+                    limit = min(500, max(1, int(limit_str)))
+                except ValueError:
+                    limit = 50
+                history = list_dispatch_history(customer_id=cust_id, limit=limit)
+                self._send_json({
+                    "total": len(history),
+                    "customer_id": cust_id,
+                    "dispatches": history,
+                })
+
+            elif path == "/api/dispatch/channels":
+                self._send_json({
+                    "supported_channels": [
+                        {
+                            "channel": "webhook",
+                            "description": "HTTP POST webhook event to external endpoint (Zapier, n8n, Make, custom gateway)",
+                            "required_fields": ["customer_id"],
+                            "optional_fields": ["destination", "action_id", "action_text", "simulate", "custom_data"],
+                        },
+                        {
+                            "channel": "slack",
+                            "description": "Slack Block Kit formatted alert to CS/Renewal team channel",
+                            "required_fields": ["customer_id"],
+                            "optional_fields": ["destination", "action_id", "action_text", "simulate"],
+                        },
+                        {
+                            "channel": "crm_task",
+                            "description": "Structured renewal task creation for CRM / Linear / Jira",
+                            "required_fields": ["customer_id"],
+                            "optional_fields": ["destination", "action_id", "action_text", "owner", "simulate"],
+                        },
+                        {
+                            "channel": "email",
+                            "description": "Executive risk alert email notification to account team",
+                            "required_fields": ["customer_id"],
+                            "optional_fields": ["destination", "action_text", "simulate"],
+                        },
+                    ]
+                })
+
             elif path == "/api/replay/customer":
                 cust_id = params.get("id", [None])[0]
                 if not cust_id:
@@ -226,6 +279,60 @@ class DecisionSimulatorAPIHandler(BaseHTTPRequestHandler):
                     cust_id, branch_date, intervention_type, intervention_params
                 )
                 self._send_json(branch_res)
+
+            elif path == "/api/events/ingest":
+                event_type = payload.get("event_type", "").lower()
+                event_data = payload.get("payload", payload)
+                if not event_type:
+                    # Infer event type from keys
+                    if "active_users" in event_data or "sessions" in event_data:
+                        event_type = "usage"
+                    elif "priority" in event_data or "ticket_summary" in event_data or "ticket_status" in event_data:
+                        event_type = "ticket"
+                    elif "annual_contract_value" in event_data or "contract_status" in event_data:
+                        event_type = "contract"
+                    else:
+                        self._send_json({"error": "Could not infer event_type; specify 'event_type': 'usage' | 'ticket' | 'contract'"}, 400)
+                        return
+
+                try:
+                    if event_type in ("usage", "telemetry"):
+                        res = ingest_usage_event(event_data)
+                    elif event_type in ("ticket", "support"):
+                        res = ingest_support_ticket(event_data)
+                    elif event_type in ("contract", "renewal"):
+                        res = ingest_contract_event(event_data)
+                    else:
+                        self._send_json({"error": f"Unsupported event_type '{event_type}'"}, 400)
+                        return
+                    self._send_json(asdict(res))
+                except ValueError as e:
+                    self._send_json({"error": str(e)}, 400)
+                except Exception as e:
+                    self._send_json({"error": f"Ingestion failure: {str(e)}"}, 500)
+
+            elif path == "/api/dispatch/action":
+                cust_id = payload.get("customer_id")
+                channel = payload.get("channel", "slack")
+                if not cust_id:
+                    self._send_json({"error": "Missing required 'customer_id' parameter"}, 400)
+                    return
+                try:
+                    disp = dispatch_action(
+                        customer_id=cust_id,
+                        channel=channel,
+                        destination=payload.get("destination"),
+                        action_id=payload.get("action_id"),
+                        action_text=payload.get("action_text"),
+                        owner=payload.get("owner"),
+                        simulate=payload.get("simulate", True),
+                        custom_data=payload.get("custom_data"),
+                    )
+                    self._send_json(asdict(disp))
+                except ValueError as e:
+                    self._send_json({"error": str(e)}, 400)
+                except Exception as e:
+                    self._send_json({"error": f"Dispatch failure: {str(e)}"}, 500)
 
             elif path == "/api/upload":
                 accounts = payload.get("accounts", [])
