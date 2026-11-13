@@ -5,6 +5,13 @@ Run with: python backend_api.py --port 8002
 
 from __future__ import annotations
 
+from decision_intelligence.gametheory import (
+    GameTheoreticSimulator,
+    DEFAULT_COMPETITORS,
+    VendorStrategy,
+    CompetitorCounterMove,
+)
+
 import argparse
 from dataclasses import asdict
 from datetime import date
@@ -209,6 +216,29 @@ class DecisionSimulatorAPIHandler(BaseHTTPRequestHandler):
                     "events": [asdict(e) for e in engine.get_customer_event_stream(cust_id)],
                 })
 
+            elif path == "/api/gametheory/competitors":
+                self._send_json({
+                    "competitors_count": len(DEFAULT_COMPETITORS),
+                    "competitors": [asdict(c) for c in DEFAULT_COMPETITORS]
+                })
+
+            elif path == "/api/gametheory/vulnerability":
+                cust_id = params.get("id", [None])[0]
+                if not cust_id:
+                    self._send_json({"error": "Missing 'id' parameter"}, 400)
+                    return
+                simulator = GameTheoreticSimulator()
+                vuln = simulator.assess_customer_vulnerability(cust_id)
+                if not vuln:
+                    self._send_json({"error": f"Customer '{cust_id}' not found"}, 404)
+                    return
+                self._send_json(asdict(vuln))
+
+            elif path == "/api/gametheory/equilibrium":
+                simulator = GameTheoreticSimulator()
+                eq_res = simulator.run_portfolio_simulation()
+                self._send_json(asdict(eq_res))
+
             else:
                 self._send_json({"error": f"Endpoint not found: {path}"}, 404)
 
@@ -411,6 +441,11 @@ class DecisionSimulatorAPIHandler(BaseHTTPRequestHandler):
                     "imported_count": len(assessed_accounts),
                     "customers": assessed_accounts,
                 })
+
+            elif path == "/api/gametheory/simulate":
+                simulator = GameTheoreticSimulator()
+                eq_res = simulator.run_portfolio_simulation()
+                self._send_json(asdict(eq_res))
 
             else:
                 self._send_json({"error": f"Endpoint not found: {path}"}, 404)

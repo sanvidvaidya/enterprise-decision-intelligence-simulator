@@ -138,6 +138,7 @@ The suite verifies validation, relational integrity, risk boundaries, source evi
 - [90-second demo script](docs/DEMO_SCRIPT.md)
 - [Causal and time travel](docs/CAUSAL_AND_TIME_TRAVEL.md)
 - [Live event ingestion and action dispatch](docs/LIVE_INGESTION_AND_DISPATCH.md)
+- [Game-theoretic competitor models and market equilibrium](docs/GAME_THEORETIC_COMPETITOR_MODELS.md)
 
 ## Screenshots
 
@@ -205,6 +206,7 @@ In addition to deterministic risk scoring, the simulator includes:
 
 See [Causal and Time-Travel Documentation](docs/CAUSAL_AND_TIME_TRAVEL.md) for architecture, mathematics, and REST endpoints.
 See [Live Event Ingestion and Action Dispatch](docs/LIVE_INGESTION_AND_DISPATCH.md) for streaming webhooks, validation rules, and action execution.
+See [Game-Theoretic Competitor Models](docs/GAME_THEORETIC_COMPETITOR_MODELS.md) for Nash and Minimax equilibrium analysis, CVI scoring, and competitor counter-move simulation.
 
 ## Future AI integration without weakening governance
 
