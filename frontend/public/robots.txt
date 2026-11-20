@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://enterprise-decision-intelligence-simulator.vercel.app/sitemap.xml

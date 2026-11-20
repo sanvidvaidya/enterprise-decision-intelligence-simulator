@@ -26,6 +26,10 @@ import { AppleScenarioLab } from './components/AppleScenarioLab';
 import { ApplePolicyView } from './components/ApplePolicyView';
 import { AppleCustomerSheet } from './components/AppleCustomerSheet';
 import { EnterpriseDataUploadModal, UploadedDataset } from './components/EnterpriseDataUploadModal';
+import { CausalExplorer } from './components/CausalExplorer';
+import { TimeTravelReplay } from './components/TimeTravelReplay';
+import { GameTheoryCockpit } from './components/GameTheoryCockpit';
+import { TelemetryDispatchConsole } from './components/TelemetryDispatchConsole';
 import { checkBackendHealth, uploadAccountsToBackend, BackendHealth } from './services/api';
 import { Toaster, toast } from 'sonner';
 
@@ -114,6 +118,7 @@ export const App: React.FC = () => {
   const [isUploadOpen, setIsUploadOpen] = useState<boolean>(false);
   const [selectedCustomerForDrawer, setSelectedCustomerForDrawer] = useState<CustomerAssessment | null>(null);
   const [selectedCustomerForScenario, setSelectedCustomerForScenario] = useState<CustomerAssessment | null>(null);
+  const [selectedCustomerIdForSpecialized, setSelectedCustomerIdForSpecialized] = useState<string>('CUS-020');
 
   // Account Manager lookup map
   const amMap = useMemo(() => {
@@ -164,6 +169,10 @@ export const App: React.FC = () => {
   const handleStartScenarioWithCustomer = (assessment: CustomerAssessment) => {
     setSelectedCustomerForScenario(assessment);
     setCurrentTab('SCENARIO_LAB');
+  };
+
+  const handleSelectCustomerForSpecialized = (id: string) => {
+    setSelectedCustomerIdForSpecialized(id);
   };
 
   const handleImportData = (dataset: UploadedDataset, datasetName: string) => {
@@ -254,6 +263,40 @@ export const App: React.FC = () => {
             allUsage={usage}
             allTickets={tickets}
             initialSelectedCustomer={selectedCustomerForScenario}
+          />
+        )}
+
+        {currentTab === 'CAUSAL_GRAPH' && (
+          <CausalExplorer
+            customers={customers}
+            selectedCustomerId={selectedCustomerIdForSpecialized}
+            onSelectCustomer={handleSelectCustomerForSpecialized}
+          />
+        )}
+
+        {currentTab === 'TIME_TRAVEL' && (
+          <TimeTravelReplay
+            customers={customers}
+            selectedCustomerId={selectedCustomerIdForSpecialized}
+            onSelectCustomer={handleSelectCustomerForSpecialized}
+          />
+        )}
+
+        {currentTab === 'GAME_THEORY' && (
+          <GameTheoryCockpit
+            customers={customers}
+            onSelectCustomer={(id) => {
+              handleSelectCustomerForSpecialized(id);
+              setCurrentTab('CAUSAL_GRAPH');
+            }}
+          />
+        )}
+
+        {currentTab === 'DISPATCH_STREAM' && (
+          <TelemetryDispatchConsole
+            customers={customers}
+            selectedCustomerId={selectedCustomerIdForSpecialized}
+            onSelectCustomer={handleSelectCustomerForSpecialized}
           />
         )}
 
