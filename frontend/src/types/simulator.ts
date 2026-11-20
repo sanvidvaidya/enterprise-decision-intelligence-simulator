@@ -87,4 +87,104 @@ export interface PolicyParameters {
   medium_acv_points: number;
 }
 
-export type SimulatorTab = 'LANDING' | 'COCKPIT' | 'PORTFOLIO' | 'SCENARIO_LAB' | 'GOVERNANCE';
+export type SimulatorTab = 'LANDING' | 'COCKPIT' | 'PORTFOLIO' | 'SCENARIO_LAB' | 'CAUSAL_GRAPH' | 'TIME_TRAVEL' | 'GAME_THEORY' | 'DISPATCH_STREAM' | 'GOVERNANCE';
+
+// Advanced Innovation Types: Causal DAG, Replay, Game Theory, Dispatch
+export interface CausalNode {
+  id: string;
+  label: string;
+  category: string;
+  value_type: string;
+}
+
+export interface CausalEdge {
+  source: string;
+  target: string;
+  weight: number;
+  description: string;
+}
+
+export interface CausalGraphData {
+  nodes: CausalNode[];
+  edges: CausalEdge[];
+  topological_order: string[];
+}
+
+export interface CustomerCausalState {
+  customer_id: string;
+  customer_name: string;
+  actual_risk_score: number;
+  nodes: Record<string, number>;
+  root_causes: Array<{
+    node: string;
+    label: string;
+    direct_effect: number;
+    total_effect: number;
+    contribution_pct: number;
+  }>;
+}
+
+export interface ReplayCheckpoint {
+  checkpoint_date: string;
+  customer_id: string;
+  risk_score: number;
+  risk_band: string;
+  active_users: number;
+  seat_utilization: number;
+  critical_tickets: number;
+  days_to_renewal: number;
+  events_count: number;
+}
+
+export interface CounterfactualBranch {
+  branch_id: string;
+  customer_id: string;
+  branch_date: string;
+  intervention_type: string;
+  factual_trajectory: Array<{ date: string; risk_score: number; risk_band: string }>;
+  counterfactual_trajectory: Array<{ date: string; risk_score: number; risk_band: string }>;
+  risk_delta: number;
+  churn_avoided: boolean;
+}
+
+export interface CompetitorProfile {
+  id: string;
+  name: string;
+  tier: string;
+  pricing_discount_pct: number;
+  migration_subsidy_acv_pct: number;
+  target_segments: string[];
+}
+
+export interface VulnerabilityAssessment {
+  customer_id: string;
+  customer_name: string;
+  segment: string;
+  annual_contract_value: number;
+  cvi_score: number;
+  vulnerability_tier: 'CRITICAL' | 'HIGH' | 'MODERATE' | 'LOW';
+  top_competitor_threat: string;
+  retention_recommendation: string;
+}
+
+export interface GameTheoreticEquilibrium {
+  as_of_date: string;
+  total_acv_at_risk_naive: number;
+  total_acv_at_risk_game_theoretic: number;
+  unmodeled_competitor_churn_gap: number;
+  vendor_equilibrium_strategy: string;
+  competitor_counter_move: string;
+  payoff_matrix: Record<string, Record<string, number>>;
+  vulnerable_accounts: VulnerabilityAssessment[];
+}
+
+export interface DispatchActionRecord {
+  dispatch_id: string;
+  customer_id: string;
+  channel: string;
+  action_text: string;
+  status: string;
+  recipient_target: string;
+  created_at: string;
+  payload: Record<string, any>;
+}
