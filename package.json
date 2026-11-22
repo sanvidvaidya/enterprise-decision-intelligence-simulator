@@ -1,13 +1,10 @@
 {
   "name": "enterprise-decision-intelligence-simulator",
   "private": true,
-  "workspaces": [
-    "frontend"
-  ],
   "scripts": {
     "postinstall": "npm --prefix frontend install",
     "dev": "npm --prefix frontend run dev",
-    "build": "npm --prefix frontend run build",
+    "build": "npm --prefix frontend run build && rm -rf dist && cp -r frontend/dist ./dist",
     "preview": "npm --prefix frontend run preview"
   }
 }
